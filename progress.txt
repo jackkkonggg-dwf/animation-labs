@@ -92,3 +92,18 @@ Started: Tue Jan 27 23:37:16 HKT 2026
   - Space Grotesk font provides a modern, edgy aesthetic suitable for neon/dark mode themes
   - Browser verification: localhost MCP tools not available - manual verification required
 ---
+
+## [Wed Jan 28 00:22:46 HKT 2026] - US-006
+- Added 7 unique artist cards with creative names (Neon Dreams, Cyberpulse, Midnight Wave, Digital Echo, Voltage Collective, Synth Horizon, Quantum Beats)
+- Each card has Unsplash placeholder image from concerts/music events
+- Added detailed descriptions for each artist
+- Card images use object-cover for proper sizing with neon gradient overlay
+- All quality checks passing (typecheck, build)
+- Files changed: src/components/HorizontalScroll.tsx, prd.json
+- **Learnings for future iterations:**
+  - Use `object-cover` class on images to ensure they fill their container properly while maintaining aspect ratio
+  - Unsplash source URLs for music/concert photos: use `photo-[id]?w=800&q=80` format for optimized images
+  - When adding images to cards with existing gradient backgrounds, use semi-transparent overlay (`opacity-30`) to blend them
+  - The neon gradient overlay on images adds visual consistency while still showing the image content
+  - Browser verification: localhost MCP tools not available - manual verification required
+---

@@ -38,9 +38,19 @@ const THEMES: ThemeVersion[] = [
     gradientTo: 'to-blue-900',
   },
   {
+    id: 'futuristic',
+    title: 'Futuristic',
+    subtitle: '03',
+    description: 'Cyberpunk theme with glitch effects, matrix rain, and holographic UI',
+    path: '/dwf-futuristic-theme',
+    accentColor: '#00ffff',
+    gradientFrom: 'from-cyan-400',
+    gradientTo: 'to-purple-900',
+  },
+  {
     id: 'sunset',
     title: 'Sunset',
-    subtitle: '03',
+    subtitle: '04',
     description: 'Warm color transitions with golden hour aesthetics',
     path: '#',
     accentColor: '#f97316',
@@ -50,7 +60,7 @@ const THEMES: ThemeVersion[] = [
   {
     id: 'aurora',
     title: 'Aurora',
-    subtitle: '04',
+    subtitle: '05',
     description: 'Northern lights inspired with ethereal color shifts',
     path: '#',
     accentColor: '#a855f7',
@@ -243,9 +253,9 @@ export function ThemeVersionsSection() {
                   </div>
 
                   {/* Theme status badge */}
-                  {theme.id === 'professional' && (
-                    <div className="absolute top-4 right-4 px-3 py-1 bg-amber-500/20 backdrop-blur-sm border border-amber-500/30">
-                      <span className="text-xs text-amber-400 uppercase tracking-wider font-semibold">Live</span>
+                  {theme.id === 'futuristic' && (
+                    <div className="absolute top-4 right-4 px-3 py-1 bg-cyan-500/20 backdrop-blur-sm border border-cyan-500/30">
+                      <span className="text-xs text-cyan-400 uppercase tracking-wider font-semibold">Live</span>
                     </div>
                   )}
                 </div>

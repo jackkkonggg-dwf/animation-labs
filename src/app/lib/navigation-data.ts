@@ -36,5 +36,12 @@ export const NAVIGATION_DATA: NavigationData = {
       path: '/dwf-ocean-theme',
       category: 'Showcase',
     },
+    {
+      id: 'dwf-futuristic-theme',
+      title: 'DWF Futuristic',
+      description: 'Cyberpunk theme with glitch effects, matrix rain, and holographic UI',
+      path: '/dwf-futuristic-theme',
+      category: 'Showcase',
+    },
   ],
 };

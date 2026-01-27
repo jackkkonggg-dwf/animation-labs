@@ -44,7 +44,7 @@
         "Uses existing GSAP provider pattern from src/lib/gsap-config.ts",
         "Proper cleanup function in useGSAP",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser using agent-browser skill"
       ],
       "priority": 3,
       "passes": true,
@@ -61,7 +61,7 @@
         "Copy to clipboard button",
         "Proper cleanup function",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser using agent-browser skill"
       ],
       "priority": 4,
       "passes": true,
@@ -78,7 +78,7 @@
         "Code viewer and copy button",
         "Proper cleanup",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser using agent-browser skill"
       ],
       "priority": 5,
       "passes": false,
@@ -94,7 +94,7 @@
         "Shows batch animation technique for performance",
         "Code viewer and copy button",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser using agent-browser skill"
       ],
       "priority": 6,
       "passes": false,
@@ -111,7 +111,7 @@
         "Staggered animation on characters",
         "Code viewer with copy button",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser using agent-browser skill"
       ],
       "priority": 7,
       "passes": false,
@@ -127,7 +127,7 @@
         "Shows word splitting logic",
         "Code viewer and copy button",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser using agent-browser skill"
       ],
       "priority": 8,
       "passes": false,
@@ -143,7 +143,7 @@
         "Uses background-clip text technique",
         "Code viewer and copy button",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser using agent-browser skill"
       ],
       "priority": 9,
       "passes": false,
@@ -159,7 +159,7 @@
         "Shows speed ratio configuration",
         "Code viewer and copy button",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser using agent-browser skill"
       ],
       "priority": 10,
       "passes": false,
@@ -175,7 +175,7 @@
         "Shows z-index layering with parallax",
         "Code viewer and copy button",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser using agent-browser skill"
       ],
       "priority": 11,
       "passes": false,
@@ -191,7 +191,7 @@
         "Shows hover event handling with GSAP",
         "Code viewer and copy button",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser using agent-browser skill"
       ],
       "priority": 12,
       "passes": false,
@@ -207,7 +207,7 @@
         "Shows mouse tracking with GSAP",
         "Code viewer and copy button",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser using agent-browser skill"
       ],
       "priority": 13,
       "passes": false,
@@ -223,7 +223,7 @@
         "Shows gsap.timeline() usage",
         "Code viewer and copy button",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser using agent-browser skill"
       ],
       "priority": 14,
       "passes": false,
@@ -239,7 +239,7 @@
         "Shows ScrollTrigger scrub with timeline",
         "Code viewer and copy button",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser using agent-browser skill"
       ],
       "priority": 15,
       "passes": false,
@@ -255,7 +255,7 @@
         "Shows stroke-dasharray/dashoffset technique",
         "Code viewer and copy button",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser using agent-browser skill"
       ],
       "priority": 16,
       "passes": false,
@@ -271,7 +271,7 @@
         "Shows Draggable plugin usage",
         "Code viewer and copy button",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser using agent-browser skill"
       ],
       "priority": 17,
       "passes": false,
@@ -287,7 +287,7 @@
         "Shows throwProps or inertia configuration",
         "Code viewer and copy button",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser using agent-browser skill"
       ],
       "priority": 18,
       "passes": false,
@@ -303,7 +303,7 @@
         "Shows pin: true with timeline sequence",
         "Code viewer and copy button",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser using agent-browser skill"
       ],
       "priority": 19,
       "passes": false,
@@ -319,7 +319,7 @@
         "Shows TextPlugin or manual counting",
         "Code viewer and copy button",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser using agent-browser skill"
       ],
       "priority": 20,
       "passes": false,
@@ -335,7 +335,7 @@
         "Shows GPU acceleration techniques",
         "Code viewer and copy button",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser using agent-browser skill"
       ],
       "priority": 21,
       "passes": false,
@@ -351,7 +351,7 @@
         "Shows matchMedia usage with GSAP",
         "Code viewer and copy button",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser using agent-browser skill"
       ],
       "priority": 22,
       "passes": false,
@@ -366,7 +366,7 @@
         "Each pattern has id, title, description, path, category, difficulty",
         "Pattern count is correct in navigation",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser using agent-browser skill"
       ],
       "priority": 23,
       "passes": false,
@@ -380,7 +380,7 @@
         "Demo cards show difficulty badge (green=beginner, yellow=intermediate, orange=advanced)",
         "Badges use consistent styling",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser using agent-browser skill"
       ],
       "priority": 24,
       "passes": false,
@@ -398,7 +398,7 @@
         "Filter state persists in URL params",
         "Empty state when no results",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser using agent-browser skill"
       ],
       "priority": 25,
       "passes": false,
@@ -413,7 +413,7 @@
         "Related patterns based on same category or difficulty",
         "Related patterns are clickable links",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser using agent-browser skill"
       ],
       "priority": 26,
       "passes": false,
@@ -428,7 +428,7 @@
         "Navigation shows adjacent pattern titles",
         "Navigation persists category filter if active",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser using agent-browser skill"
       ],
       "priority": 27,
       "passes": false,
@@ -444,7 +444,7 @@
         "Featured/popular patterns highlighted",
         "Category cards link to filtered view",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser using agent-browser skill"
       ],
       "priority": 28,
       "passes": false,

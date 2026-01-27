@@ -23,6 +23,17 @@
 >
 > To invoke: `/frontend-design` or use the Skill tool with `frontend-design`
 
+## Browser Testing Rule
+
+> **Use the `agent-browser` skill for any browser-based checks or testing.**
+>
+> When you need to verify visual output, test interactions, capture screenshots, or validate animations in a browser:
+> - Use the agent-browser skill for automated browser interactions
+> - Captures screenshots, videos, and traces for debugging
+> - Essential for verifying GSAP animations and scroll behaviors
+>
+> To invoke: `/agent-browser` or use the Skill tool with `agent-browser`
+
 ## Design System
 
 - **Theme**: Industrial orange with dark zinc backgrounds

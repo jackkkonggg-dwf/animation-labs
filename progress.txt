@@ -86,3 +86,24 @@ Started: Wed Jan 28 04:56:36 HKT 2026
   - Advanced stagger object form: { each: 0.15, from: "center" } or { from: "edges", grid: [rows, cols] }
   - power2.out is excellent for slide animations - smooth deceleration feels more natural than linear
 ---
+
+## [2025-01-28] - US-006
+- Created src/app/patterns/batch-reveal/page.tsx as the entry point for the batch reveal pattern page
+- Created src/components/patterns/batch-reveal-pattern.tsx with full implementation
+- Batch reveal pattern: 24 items animate with grid-based stagger starting from center
+- Live demo uses gsap.set() for initial state (scale: 0.9, opacity: 0) and gsap.to() with stagger: { amount: 0.8, from: "center", grid: [4, 6] }
+- Grid-based stagger enables spatial animation patterns that animate outward from a specific point
+- Code viewer with syntax-highlighted TypeScript/JSX code showing batch animation pattern
+- Copy to clipboard button with scan line hover effect and "Copied!" state feedback
+- Proper cleanup: gsap.killTweensOf(items) in useGSAP return function
+- 24 demo items in 6-column responsive grid (2/3/4/6 columns across breakpoints)
+- 4 key concept cards explaining: grid-based stagger, amount vs each, GPU acceleration, performance tips
+- Follows same industrial orange design system: zinc-950 background, zinc-900 cards, orange-500 accents
+- Build and typecheck passed
+- **Learnings for future iterations:**
+  - stagger: { amount: 0.8 } distributes total time across all items, ensuring consistent timing regardless of count
+  - grid: [rows, cols] tells GSAP about your layout, enabling "from: center" and other spatial stagger patterns
+  - Scale and opacity are GPU-accelerated properties - always prefer them over layout properties for smooth animations
+  - For 50+ items, use smaller amounts (0.3-0.5s) or consider staggering by rows/cols for different effects
+  - When writing JSX code in template strings, escape curly braces like {`)})`} to avoid parsing errors
+---

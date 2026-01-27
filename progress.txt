@@ -1,129 +1,27 @@
 # Ralph Progress Log
-Started: Tue Jan 27 23:37:16 HKT 2026
+Started: Wed Jan 28 04:56:36 HKT 2026
 ---
 
-## [Tue Jan 27 23:38:45 HKT 2026] - US-001
-- Initialized Next.js 16 project with TypeScript using pnpm
-- Installed GSAP v3.14.2 with ScrollTrigger plugin
-- Created GSAPProvider component to register ScrollTrigger plugin
-- Verified React 19.2.3 and TypeScript 5.9.3 versions
-- All quality checks passing (build, typecheck)
-- Files changed: package.json, src/app/layout.tsx, src/components/GSAPProvider.tsx, src/CLAUDE.md
+## [2025-01-28] - US-001
+- Created src/types/pattern.ts with Pattern, PatternCategory, Difficulty, and CodeSnippet types
+- Types provide structure for pattern metadata including id, title, description, path, category, difficulty, and code snippets
+- Build and typecheck passed
 - **Learnings for future iterations:**
-  - When importing GSAP in Next.js with TypeScript, must use `.default` for main gsap import: `const gsap = (await import('gsap')).default;`
-  - GSAP plugins like ScrollTrigger must be registered with `gsap.registerPlugin()` before use
-  - Next.js App Router requires 'use client' directive for components using GSAP
-  - The project structure uses src/ directory with app router
-  - Build and typecheck commands: `pnpm build` and `pnpm tsc --noEmit`
+  - Existing types are in src/types/ (e.g., navigation.ts) - pattern types follow this convention
+  - Build command `npm run build` handles TypeScript checking - no separate typecheck script configured
+  - Existing NavigationRoute interface has similar structure to Pattern - consider if Pattern should extend or be separate
 ---
 
-## [Tue Jan 27 23:43:12 HKT 2026] - US-002
-- Created HorizontalScroll component with full-viewport container (h-screen)
-- Added 7 card elements with consistent dimensions (60vw x 70vh using Tailwind arbitrary values)
-- Each card has placeholder gradient background image, name, and description
-- Cards use flex layout with gap-8 for horizontal spacing
-- Applied overflow-hidden on container section
-- Updated main page.tsx to use HorizontalScroll component
-- All quality checks passing (build, typecheck)
-- Files changed: src/components/HorizontalScroll.tsx, src/app/page.tsx
+## [2025-01-28] - US-002
+- Created src/lib/patterns-data.ts with PATTERN_CATEGORIES export
+- Defined 12 categories with id, title, icon (emoji), and description
+- Categories: ScrollTrigger Basics, Horizontal Scroll, Text Animations, Parallax & Depth, Page Transitions, Micro-interactions, Timelines, SVG Animations, Draggable, Advanced Scroll, Performance, Real-world Examples
+- Added helper functions: getCategoryById(), CATEGORY_GROUPS, CATEGORY_COUNT
+- Build and typecheck passed
 - **Learnings for future iterations:**
-  - Tailwind arbitrary values like `w-[60vw]` and `h-[70vh]` work for custom dimensions
-  - Use `flex-shrink-0` on items to prevent flex items from shrinking
-  - Horizontal layout needs gap spacing (gap-8) between cards for visual separation
-  - The wrapper div with `flex items-center h-full` centers cards vertically in viewport
-  - Browser verification: localhost MCP tools not available - manual verification required
----
-
-## [Tue Jan 27 23:53:28 HKT 2026] - US-003
-- Implemented GSAP horizontal scroll animation with ScrollTrigger
-- Container section pinned during scroll (pin: true, anticipatePin: 1)
-- Cards translate horizontally based on vertical scroll position
-- Scrub enabled with value of 1 for smooth scroll-follow
-- End value calculated dynamically: `scrollDistance = wrapper.scrollWidth - window.innerWidth`
-- Animation uses `ease: 'none'` for direct scroll mapping
-- Cleanup function kills all ScrollTriggers on unmount
-- All quality checks passing (typecheck, build)
-- Files changed: src/components/HorizontalScroll.tsx, prd.json
-- **Learnings for future iterations:**
-  - ScrollTrigger scrub value of 1 creates smooth scroll-follow animation
-  - `anticipatePin: 1` helps prevent visual jump when pin starts
-  - Dynamic calculation using wrapper.scrollWidth ensures all cards traverse fully
-  - The `end: () => +=${scrollDistance}` functional form allows dynamic calculation
-  - Cleanup is important: `ScrollTrigger.getAll().forEach(t => t.kill())`
-  - Browser verification: localhost MCP tools not available - manual verification required
----
-
-## [Wed Jan 28 00:12:17 HKT 2026] - US-004
-- Implemented GSAP staggered card entry animation
-- Cards animate from opacity 0, x: 100 to opacity 1, x: 0
-- 0.15s stagger delay creates cascading/fanning effect
-- Animation triggers when section enters viewport (start: 'top center')
-- Used gsap.set() for initial state, gsap.to() with stagger for animation
-- Added toggleActions: 'play none none reverse' for proper behavior
-- All quality checks passing (typecheck, build)
-- Files changed: src/components/HorizontalScroll.tsx, src/CLAUDE.md, prd.json
-- **Learnings for future iterations:**
-  - Use `gsap.set()` before animation to establish initial state for elements
-  - Query elements with `container.querySelectorAll('.class-name')` to get NodeList for GSAP
-  - GSAP stagger option accepts time value (0.15 = 150ms delay between each element)
-  - `toggleActions: 'play none none reverse'` provides good enter/exit behavior
-  - `ease: 'power2.out'` creates smooth deceleration effect for animations
-  - Browser verification: localhost MCP tools not available - manual verification required
----
-
-## [Wed Jan 28 00:14:34 HKT 2026] - US-005
-- Styled cards with dark mode neon aesthetic
-- Applied dark background theme (#0a0a0f) in globals.css
-- Added neon accent colors (cyan: #00ffff, magenta: #ff00ff, lime: #00ff00) for card gradients
-- Cards cycle through neon colors using gradient arrays
-- Added Space Grotesk font via Google Fonts for modern typography
-- Implemented rounded corners (rounded-2xl) and shadow-2xl for depth effects
-- Added hover states with neon glow effects (shadow-[0_0_30px_rgba(0,255,255,0.4)])
-- Border changes to cyan-400/50 on hover with transition-all duration-300
-- Updated metadata to reflect "GSAP Animations Showcase"
-- All quality checks passing (typecheck, build)
-- Files changed: src/app/globals.css, src/app/layout.tsx, src/components/HorizontalScroll.tsx, prd.json
-- **Learnings for future iterations:**
-  - CSS @import rules must precede all other CSS rules (Google Fonts before tailwindcss)
-  - Tailwind arbitrary values like `bg-[#1a1a2e]` and `from-[#00ffff]` work for custom colors
-  - Use `group` class on parent elements with `group-hover:` modifier for child hover effects
-  - The `group` class enables hover states that affect multiple child elements simultaneously
-  - For neon glow effects, use layered box-shadows: `box-shadow: 0 0 5px color, 0 0 20px rgba(color, 0.3)`
-  - Space Grotesk font provides a modern, edgy aesthetic suitable for neon/dark mode themes
-  - Browser verification: localhost MCP tools not available - manual verification required
----
-
-## [Wed Jan 28 00:22:46 HKT 2026] - US-006
-- Added 7 unique artist cards with creative names (Neon Dreams, Cyberpulse, Midnight Wave, Digital Echo, Voltage Collective, Synth Horizon, Quantum Beats)
-- Each card has Unsplash placeholder image from concerts/music events
-- Added detailed descriptions for each artist
-- Card images use object-cover for proper sizing with neon gradient overlay
-- All quality checks passing (typecheck, build)
-- Files changed: src/components/HorizontalScroll.tsx, prd.json
-- **Learnings for future iterations:**
-  - Use `object-cover` class on images to ensure they fill their container properly while maintaining aspect ratio
-  - Unsplash source URLs for music/concert photos: use `photo-[id]?w=800&q=80` format for optimized images
-  - When adding images to cards with existing gradient backgrounds, use semi-transparent overlay (`opacity-30`) to blend them
-  - The neon gradient overlay on images adds visual consistency while still showing the image content
-  - Browser verification: localhost MCP tools not available - manual verification required
----
-
-## [Tue Jan 28 00:31:14 HKT 2026] - US-007
-- Created fixed Header component with backdrop-blur and border
-- Added scroll progress bar using GSAP ScrollTrigger progress tracking
-- Progress bar fills from 0 to 1 as user scrolls through horizontal section
-- Header shows project title "GSAP Animations Showcase" with neon cyan accent
-- Added completion section after horizontal scroll with "You've Reached The End" message
-- Used custom event 'horizontal-scroll-progress' to communicate scroll progress between components
-- Fixed ScrollTrigger cleanup bug by properly importing in cleanup function
-- All quality checks passing (typecheck, build)
-- Files changed: src/components/Header.tsx, src/components/HorizontalScroll.tsx, src/app/page.tsx
-- **Learnings for future iterations:**
-  - Use custom events (`window.dispatchEvent(new CustomEvent(...))`) to communicate scroll progress between GSAP components and UI
-  - Fixed header uses `fixed` positioning with `z-50` to stay on top, plus `backdrop-blur-md` for frosted glass effect
-  - Progress bar implementation: use `scaleX()` transform on child div with parent having background for track
-  - GSAP ScrollTrigger `onUpdate` callback provides `self.progress` (0-1 value) for progress tracking
-  - Always import ScrollTrigger dynamically in cleanup function: `const { ScrollTrigger } = await import('gsap/ScrollTrigger')`
-  - The ScrollTrigger `id` property allows referencing specific triggers (e.g., `id: 'horizontal-scroll'`)
-  - Browser verification: localhost MCP tools not available - manual verification required
+  - Category IDs use kebab-case for consistency with URL routing
+  - Emojis are used for icons for simplicity (e.g., 📜 for ScrollTrigger Basics)
+  - Helper functions like getCategoryById() are useful for data access patterns
+  - CATEGORY_GROUPS const provides logical grouping by difficulty level
+  - Using 'as const' assertion on CATEGORY_GROUPS for type safety
 ---

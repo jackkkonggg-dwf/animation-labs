@@ -146,8 +146,8 @@
         "Verify in browser using agent-browser skill"
       ],
       "priority": 9,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Implemented with background-clip: text technique animating backgroundPosition from 0% to 100%. Uses 200% wide gradient (bg-[length:200%_auto]) for fill effect. Hero text 'SCROLL TO FILL' with 4 demo card variations: orange, fire, cool, and sunset gradients. Uses scrub: 1 for smooth scroll-linked animation with power2.inOut easing."
     },
     {
       "id": "US-010",

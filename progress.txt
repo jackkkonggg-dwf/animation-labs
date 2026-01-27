@@ -107,3 +107,23 @@ Started: Tue Jan 27 23:37:16 HKT 2026
   - The neon gradient overlay on images adds visual consistency while still showing the image content
   - Browser verification: localhost MCP tools not available - manual verification required
 ---
+
+## [Tue Jan 28 00:31:14 HKT 2026] - US-007
+- Created fixed Header component with backdrop-blur and border
+- Added scroll progress bar using GSAP ScrollTrigger progress tracking
+- Progress bar fills from 0 to 1 as user scrolls through horizontal section
+- Header shows project title "GSAP Animations Showcase" with neon cyan accent
+- Added completion section after horizontal scroll with "You've Reached The End" message
+- Used custom event 'horizontal-scroll-progress' to communicate scroll progress between components
+- Fixed ScrollTrigger cleanup bug by properly importing in cleanup function
+- All quality checks passing (typecheck, build)
+- Files changed: src/components/Header.tsx, src/components/HorizontalScroll.tsx, src/app/page.tsx
+- **Learnings for future iterations:**
+  - Use custom events (`window.dispatchEvent(new CustomEvent(...))`) to communicate scroll progress between GSAP components and UI
+  - Fixed header uses `fixed` positioning with `z-50` to stay on top, plus `backdrop-blur-md` for frosted glass effect
+  - Progress bar implementation: use `scaleX()` transform on child div with parent having background for track
+  - GSAP ScrollTrigger `onUpdate` callback provides `self.progress` (0-1 value) for progress tracking
+  - Always import ScrollTrigger dynamically in cleanup function: `const { ScrollTrigger } = await import('gsap/ScrollTrigger')`
+  - The ScrollTrigger `id` property allows referencing specific triggers (e.g., `id: 'horizontal-scroll'`)
+  - Browser verification: localhost MCP tools not available - manual verification required
+---

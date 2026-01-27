@@ -132,12 +132,17 @@ export function HorizontalScroll() {
         x: () => -scrollDistance,
         ease: 'none',
         scrollTrigger: {
+          id: 'horizontal-scroll',
           trigger: container,
           start: 'top top',
           end: () => `+=${scrollDistance}`,
           scrub: 1,
           pin: true,
           anticipatePin: 1,
+          onUpdate: (self) => {
+            // Dispatch custom event for progress tracking
+            window.dispatchEvent(new CustomEvent('horizontal-scroll-progress', { detail: self.progress }));
+          },
         },
       });
     };
@@ -146,7 +151,11 @@ export function HorizontalScroll() {
 
     // Cleanup function
     return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      const cleanup = async () => {
+        const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+        ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      };
+      cleanup();
     };
   }, []);
 

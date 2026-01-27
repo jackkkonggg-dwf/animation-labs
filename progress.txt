@@ -1,3 +1,35 @@
 # Ralph Progress Log
 Started: Tue Jan 27 23:37:16 HKT 2026
 ---
+
+## [Tue Jan 27 23:38:45 HKT 2026] - US-001
+- Initialized Next.js 16 project with TypeScript using pnpm
+- Installed GSAP v3.14.2 with ScrollTrigger plugin
+- Created GSAPProvider component to register ScrollTrigger plugin
+- Verified React 19.2.3 and TypeScript 5.9.3 versions
+- All quality checks passing (build, typecheck)
+- Files changed: package.json, src/app/layout.tsx, src/components/GSAPProvider.tsx, src/CLAUDE.md
+- **Learnings for future iterations:**
+  - When importing GSAP in Next.js with TypeScript, must use `.default` for main gsap import: `const gsap = (await import('gsap')).default;`
+  - GSAP plugins like ScrollTrigger must be registered with `gsap.registerPlugin()` before use
+  - Next.js App Router requires 'use client' directive for components using GSAP
+  - The project structure uses src/ directory with app router
+  - Build and typecheck commands: `pnpm build` and `pnpm tsc --noEmit`
+---
+
+## [Tue Jan 27 23:43:12 HKT 2026] - US-002
+- Created HorizontalScroll component with full-viewport container (h-screen)
+- Added 7 card elements with consistent dimensions (60vw x 70vh using Tailwind arbitrary values)
+- Each card has placeholder gradient background image, name, and description
+- Cards use flex layout with gap-8 for horizontal spacing
+- Applied overflow-hidden on container section
+- Updated main page.tsx to use HorizontalScroll component
+- All quality checks passing (build, typecheck)
+- Files changed: src/components/HorizontalScroll.tsx, src/app/page.tsx
+- **Learnings for future iterations:**
+  - Tailwind arbitrary values like `w-[60vw]` and `h-[70vh]` work for custom dimensions
+  - Use `flex-shrink-0` on items to prevent flex items from shrinking
+  - Horizontal layout needs gap spacing (gap-8) between cards for visual separation
+  - The wrapper div with `flex items-center h-full` centers cards vertically in viewport
+  - Browser verification: localhost MCP tools not available - manual verification required
+---

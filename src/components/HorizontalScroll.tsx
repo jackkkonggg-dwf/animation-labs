@@ -1,6 +1,7 @@
 'use client';
 
-import { useRef, useEffect, useState } from 'react';
+import { useRef, memo } from 'react';
+import { useGSAP } from '@gsap/react';
 
 interface CardProps {
   id: number;
@@ -12,42 +13,44 @@ interface CardProps {
   zIndex: number;
 }
 
-function Card({ id, name, description, image, yOffset, rotation, zIndex }: CardProps) {
-  // Vibrant, distinctive border colors - each card gets its own personality
-  const borderColors = [
-    'border-[#ff3366]', // Hot pink
-    'border-[#00ffff]', // Cyan
-    'border-[#ffeb3b]', // Bright yellow
-    'border-[#ff6b35]', // Orange
-    'border-[#a855f7]', // Purple
-    'border-[#22c55e]', // Green
-    'border-[#f472b6]', // Pink
-  ];
-  const borderColor = borderColors[(id - 1) % borderColors.length];
+// Hoist static arrays outside component to avoid recreation on every render
+const BORDER_COLORS = [
+  'border-[#ff3366]', // Hot pink
+  'border-[#00ffff]', // Cyan
+  'border-[#ffeb3b]', // Bright yellow
+  'border-[#ff6b35]', // Orange
+  'border-[#a855f7]', // Purple
+  'border-[#22c55e]', // Green
+  'border-[#f472b6]', // Pink
+] as const;
 
-  // Shadow colors matching border
-  const shadowColors = [
-    'rgba(255, 51, 102, 0.5)',
-    'rgba(0, 255, 255, 0.5)',
-    'rgba(255, 235, 59, 0.5)',
-    'rgba(255, 107, 53, 0.5)',
-    'rgba(168, 85, 247, 0.5)',
-    'rgba(34, 197, 94, 0.5)',
-    'rgba(244, 114, 182, 0.5)',
-  ];
-  const shadowColor = shadowColors[(id - 1) % shadowColors.length];
+const SHADOW_COLORS = [
+  'rgba(255, 51, 102, 0.5)',
+  'rgba(0, 255, 255, 0.5)',
+  'rgba(255, 235, 59, 0.5)',
+  'rgba(255, 107, 53, 0.5)',
+  'rgba(168, 85, 247, 0.5)',
+  'rgba(34, 197, 94, 0.5)',
+  'rgba(244, 114, 182, 0.5)',
+] as const;
 
-  // Card-specific gradient overlays for variety
-  const cardGradients = [
-    'from-pink-500/40 via-purple-500/20 to-blue-500/40',
-    'from-cyan-500/40 via-blue-500/20 to-purple-500/40',
-    'from-yellow-500/40 via-orange-500/20 to-red-500/40',
-    'from-orange-500/40 via-red-500/20 to-pink-500/40',
-    'from-purple-500/40 via-pink-500/20 to-cyan-500/40',
-    'from-green-500/40 via-cyan-500/20 to-blue-500/40',
-    'from-pink-500/40 via-rose-500/20 to-orange-500/40',
-  ];
-  const gradientClass = cardGradients[(id - 1) % cardGradients.length];
+const CARD_GRADIENTS = [
+  'from-pink-500/40 via-purple-500/20 to-blue-500/40',
+  'from-cyan-500/40 via-blue-500/20 to-purple-500/40',
+  'from-yellow-500/40 via-orange-500/20 to-red-500/40',
+  'from-orange-500/40 via-red-500/20 to-pink-500/40',
+  'from-purple-500/40 via-pink-500/20 to-cyan-500/40',
+  'from-green-500/40 via-cyan-500/20 to-blue-500/40',
+  'from-pink-500/40 via-rose-500/20 to-orange-500/40',
+] as const;
+
+// Hoist SVG texture to module level to avoid recreation on every render
+const NOISE_TEXTURE_URL = 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\'/%3E%3C/svg%3E")';
+
+const Card = memo(function Card({ id, name, description, image, yOffset, rotation, zIndex }: CardProps) {
+  const borderColor = BORDER_COLORS[(id - 1) % BORDER_COLORS.length];
+  const shadowColor = SHADOW_COLORS[(id - 1) % SHADOW_COLORS.length];
+  const gradientClass = CARD_GRADIENTS[(id - 1) % CARD_GRADIENTS.length];
 
   return (
     <div
@@ -130,7 +133,7 @@ function Card({ id, name, description, image, yOffset, rotation, zIndex }: CardP
       </div>
     </div>
   );
-}
+});
 
 // Card data with organic randomness baked in
 const cards: CardProps[] = [
@@ -201,14 +204,11 @@ const cards: CardProps[] = [
 
 // Hero section with brutalist concert poster aesthetic
 function Hero() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   return (
-    <section className="relative h-screen w-full bg-black overflow-hidden flex items-center justify-center">
+    <section
+      className="relative h-screen w-full bg-black overflow-hidden flex items-center justify-center"
+      suppressHydrationWarning
+    >
       {/* Animated gradient mesh background */}
       <div className="absolute inset-0 opacity-30">
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#ff3366] rounded-full blur-[150px] animate-pulse"></div>
@@ -227,19 +227,18 @@ function Hero() {
 
       {/* Noise grain texture */}
       <div className="absolute inset-0 opacity-[0.03]" style={{
-        backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noise)"/%3E%3C/svg%3E")',
+        backgroundImage: NOISE_TEXTURE_URL,
       }}></div>
 
       {/* Main content */}
       <div className="relative z-10 text-center px-6 max-w-6xl mx-auto">
         {/* Small label above */}
         <div
-          className={`
+          className="
             inline-flex items-center gap-3 mb-8 overflow-hidden
-            transition-all duration-1000 ease-out
-            ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}
-          `}
-          style={{ transitionDelay: '200ms' }}
+            animate-in fade-in slide-in-from-top-4 duration-1000 ease-out
+          "
+          style={{ animationDelay: '200ms' }}
         >
           <span className="w-12 h-px bg-gradient-to-r from-transparent to-[#ff3366]"></span>
           <span className="text-[#ff3366] text-sm font-bold tracking-[0.3em] uppercase">New Collection 2024</span>
@@ -248,13 +247,12 @@ function Hero() {
 
         {/* Main title - brutalist stacked */}
         <h1
-          className={`
+          className="
             font-black text-white leading-[0.85] tracking-tight mb-6
-            transition-all duration-1000 ease-out
-            ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}
-          `}
+            animate-in fade-in slide-in-from-bottom-8 duration-1000 ease-out
+          "
           style={{
-            transitionDelay: '400ms',
+            animationDelay: '400ms',
             fontFamily: 'system-ui, -apple-system, sans-serif',
             fontSize: 'clamp(4rem, 15vw, 12rem)',
           }}
@@ -269,12 +267,11 @@ function Hero() {
 
         {/* Subtitle with glow */}
         <p
-          className={`
+          className="
             text-xl md:text-2xl text-zinc-400 font-light mb-12 max-w-2xl mx-auto
-            transition-all duration-1000 ease-out
-            ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}
-          `}
-          style={{ transitionDelay: '600ms' }}
+            animate-in fade-in slide-in-from-bottom-8 duration-1000 ease-out
+          "
+          style={{ animationDelay: '600ms' }}
         >
           Discover <span className="text-[#00ffff] font-semibold">7 groundbreaking artists</span> redefining{' '}
           <span className="text-[#ffeb3b] font-semibold">electronic music</span>
@@ -282,12 +279,11 @@ function Hero() {
 
         {/* CTA buttons */}
         <div
-          className={`
+          className="
             flex flex-col sm:flex-row items-center justify-center gap-4
-            transition-all duration-1000 ease-out
-            ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}
-          `}
-          style={{ transitionDelay: '800ms' }}
+            animate-in fade-in slide-in-from-bottom-8 duration-1000 ease-out
+          "
+          style={{ animationDelay: '800ms' }}
         >
           <a
             href="#collection"
@@ -313,12 +309,11 @@ function Hero() {
 
       {/* Scroll indicator */}
       <div
-        className={`
+        className="
           absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2
-          transition-all duration-1000 ease-out
-          ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}
-        `}
-        style={{ transitionDelay: '1000ms' }}
+          animate-in fade-in slide-in-from-bottom-4 duration-1000 ease-out
+        "
+        style={{ animationDelay: '1000ms' }}
       >
         <span className="text-white/40 text-xs tracking-[0.2em] uppercase">Scroll to explore</span>
         <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center pt-2">
@@ -351,70 +346,57 @@ export function HorizontalScroll() {
   const containerRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const initAnimation = async () => {
-      const gsap = (await import('gsap')).default;
-      const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+  useGSAP(async () => {
+    const gsap = (await import('gsap')).default;
+    const { ScrollTrigger } = await import('gsap/ScrollTrigger');
 
-      gsap.registerPlugin(ScrollTrigger);
+    gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-      const container = containerRef.current;
-      const wrapper = wrapperRef.current;
-      const cards = container?.querySelectorAll('.horizontal-scroll-card');
+    const container = containerRef.current;
+    const wrapper = wrapperRef.current;
+    const cards = container?.querySelectorAll('.horizontal-scroll-card');
 
-      if (!container || !wrapper || !cards || cards.length === 0) return;
+    if (!container || !wrapper || !cards || cards.length === 0) return;
 
-      // Calculate the scroll distance based on wrapper width minus viewport width
-      const scrollDistance = wrapper.scrollWidth - window.innerWidth;
+    // Calculate the scroll distance based on wrapper width minus viewport width
+    const scrollDistance = wrapper.scrollWidth - window.innerWidth;
 
-      // Set initial state for cards (invisible and offset from the right)
-      gsap.set(cards, { opacity: 0, x: 100 });
+    // Set initial state for cards (invisible and offset from the right)
+    gsap.set(cards, { opacity: 0, x: 100 });
 
-      // Create staggered entry animation for cards
-      gsap.to(cards, {
-        opacity: 1,
-        x: 0,
-        duration: 0.8,
-        stagger: 0.15,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: container,
-          start: 'top center',
-          toggleActions: 'play none none reverse',
+    // Create staggered entry animation for cards
+    gsap.to(cards, {
+      opacity: 1,
+      x: 0,
+      duration: 0.8,
+      stagger: 0.15,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: container,
+        start: 'top center',
+        toggleActions: 'play none none reverse',
+      },
+    });
+
+    // Create the horizontal scroll animation
+    gsap.to(wrapper, {
+      x: () => -scrollDistance,
+      ease: 'none',
+      scrollTrigger: {
+        id: 'horizontal-scroll',
+        trigger: container,
+        start: 'top top',
+        end: () => `+=${scrollDistance}`,
+        scrub: 1,
+        pin: true,
+        anticipatePin: 1,
+        onUpdate: (self) => {
+          // Dispatch custom event for progress tracking
+          window.dispatchEvent(new CustomEvent('horizontal-scroll-progress', { detail: self.progress }));
         },
-      });
-
-      // Create the horizontal scroll animation
-      gsap.to(wrapper, {
-        x: () => -scrollDistance,
-        ease: 'none',
-        scrollTrigger: {
-          id: 'horizontal-scroll',
-          trigger: container,
-          start: 'top top',
-          end: () => `+=${scrollDistance}`,
-          scrub: 1,
-          pin: true,
-          anticipatePin: 1,
-          onUpdate: (self) => {
-            // Dispatch custom event for progress tracking
-            window.dispatchEvent(new CustomEvent('horizontal-scroll-progress', { detail: self.progress }));
-          },
-        },
-      });
-    };
-
-    initAnimation();
-
-    // Cleanup function
-    return () => {
-      const cleanup = async () => {
-        const { ScrollTrigger } = await import('gsap/ScrollTrigger');
-        ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-      };
-      cleanup();
-    };
-  }, []);
+      },
+    });
+  }, { scope: containerRef });
 
   return (
     <>

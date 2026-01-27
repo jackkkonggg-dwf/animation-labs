@@ -6,9 +6,10 @@ interface CardProps {
   id: number;
   name: string;
   description: string;
+  image: string;
 }
 
-function Card({ id, name, description }: CardProps) {
+function Card({ id, name, description, image }: CardProps) {
   // Neon colors cycle through cyan, magenta, lime
   const neonColors = [
     'from-[#00ffff] to-[#00cccc]',
@@ -26,9 +27,14 @@ function Card({ id, name, description }: CardProps) {
       className="horizontal-scroll-card group flex-shrink-0 w-[60vw] h-[70vh] bg-[#1a1a2e] rounded-2xl overflow-hidden border border-white/10 shadow-2xl hover:shadow-[0_0_30px_rgba(0,255,255,0.4)] hover:border-cyan-400/50 transition-all duration-300"
       data-card-id={id}
     >
-      <div className={`w-full h-1/2 bg-gradient-to-br ${gradientClass} flex items-center justify-center relative overflow-hidden`}>
+      <div className="w-full h-1/2 relative overflow-hidden">
+        <img
+          src={image}
+          alt={name}
+          className="w-full h-full object-cover"
+        />
+        <div className={`absolute inset-0 bg-gradient-to-br ${gradientClass} opacity-30`}></div>
         <div className="absolute inset-0 bg-black/20"></div>
-        <span className="relative text-6xl text-black font-bold tracking-tighter">#{id}</span>
       </div>
       <div className="p-8 bg-[#1a1a2e]">
         <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors duration-300">{name}</h3>
@@ -39,13 +45,48 @@ function Card({ id, name, description }: CardProps) {
 }
 
 const cards: CardProps[] = [
-  { id: 1, name: 'Artist 1', description: 'Description for artist 1' },
-  { id: 2, name: 'Artist 2', description: 'Description for artist 2' },
-  { id: 3, name: 'Artist 3', description: 'Description for artist 3' },
-  { id: 4, name: 'Artist 4', description: 'Description for artist 4' },
-  { id: 5, name: 'Artist 5', description: 'Description for artist 5' },
-  { id: 6, name: 'Artist 6', description: 'Description for artist 6' },
-  { id: 7, name: 'Artist 7', description: 'Description for artist 7' },
+  {
+    id: 1,
+    name: 'Neon Dreams',
+    description: 'Electronic soundscapes that transport you to digital realms. Creating sonic experiences since 2019.',
+    image: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80',
+  },
+  {
+    id: 2,
+    name: 'Cyberpulse',
+    description: 'Futuristic beats and synthwave rhythms. The pulse of tomorrow\'s music scene today.',
+    image: 'https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=800&q=80',
+  },
+  {
+    id: 3,
+    name: 'Midnight Wave',
+    description: 'Dark electronic atmospheres meets infectious melodies. Soundtracking your late night drives.',
+    image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&q=80',
+  },
+  {
+    id: 4,
+    name: 'Digital Echo',
+    description: 'Ambient textures and glitch-influenced production. Where nature meets technology.',
+    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80',
+  },
+  {
+    id: 5,
+    name: 'Voltage Collective',
+    description: 'High-energy electronic ensemble pushing boundaries of live performance and production.',
+    image: 'https://images.unsplash.com/photo-1506157786151-b8491531f063?w=800&q=80',
+  },
+  {
+    id: 6,
+    name: 'Synth Horizon',
+    description: 'Retro-futuristic sounds with modern production. The past reimagined for the future.',
+    image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&q=80',
+  },
+  {
+    id: 7,
+    name: 'Quantum Beats',
+    description: 'Experimental electronic music exploring the intersection of science and sound.',
+    image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=800&q=80',
+  },
 ];
 
 export function HorizontalScroll() {

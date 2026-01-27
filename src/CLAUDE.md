@@ -143,3 +143,47 @@ export function GSAPProvider() {
 ```
 
 **Note**: For new code, prefer the centralized config pattern above over dynamic imports.
+
+## Orphaned Next.js Dev Processes
+
+**Issue**: When using background tasks or running dev servers, orphaned `next-server` and build processes can accumulate and consume memory/CPU.
+
+### Finding Orphaned Processes
+
+```bash
+# Find all Next.js processes
+ps aux | grep -E "(next-server|next dev)" | grep -v grep
+
+# Find related build processes
+ps aux | grep -E "\.next/dev" | grep -v grep
+```
+
+### Cleaning Up Orphaned Processes
+
+```bash
+# Kill all next-server processes
+pkill -f "next-server"
+
+# Kill all Next.js dev servers
+pkill -f "next dev"
+
+# Kill related build processes
+pkill -f "webpack-loaders.*animations"
+pkill -f "postcss.*animations"
+
+# Force kill by PID if needed
+kill -9 <PID>
+```
+
+### Prevention
+
+When running background dev servers with Bash tool using `run_in_background=true`:
+- Store the returned `shell_id` or `task_id`
+- Use `TaskStop` with the ID to terminate when done
+- Or manually kill the process group after completion
+
+Example cleanup command:
+```bash
+# Clean up all Next.js processes from this project
+ps aux | grep -E "next-server" | grep animations | awk '{print $2}' | xargs kill -9 2>/dev/null
+```

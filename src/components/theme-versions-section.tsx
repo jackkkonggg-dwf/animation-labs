@@ -18,9 +18,19 @@ interface ThemeVersion {
 
 const THEMES: ThemeVersion[] = [
   {
+    id: 'professional',
+    title: 'Professional',
+    subtitle: '01',
+    description: 'Finance-inspired design with trust, sophistication, and institutional elegance',
+    path: '/dwf-professional-theme',
+    accentColor: '#d4af37',
+    gradientFrom: 'from-amber-600',
+    gradientTo: 'to-slate-900',
+  },
+  {
     id: 'ocean',
     title: 'Ocean',
-    subtitle: '01',
+    subtitle: '02',
     description: 'Wave-inspired animations with fluid motion and deep blue gradients',
     path: '/dwf-ocean-theme',
     accentColor: '#0ea5e9',
@@ -30,7 +40,7 @@ const THEMES: ThemeVersion[] = [
   {
     id: 'sunset',
     title: 'Sunset',
-    subtitle: '02',
+    subtitle: '03',
     description: 'Warm color transitions with golden hour aesthetics',
     path: '#',
     accentColor: '#f97316',
@@ -40,7 +50,7 @@ const THEMES: ThemeVersion[] = [
   {
     id: 'aurora',
     title: 'Aurora',
-    subtitle: '03',
+    subtitle: '04',
     description: 'Northern lights inspired with ethereal color shifts',
     path: '#',
     accentColor: '#a855f7',
@@ -233,9 +243,9 @@ export function ThemeVersionsSection() {
                   </div>
 
                   {/* Theme status badge */}
-                  {theme.id === 'ocean' && (
-                    <div className="absolute top-4 right-4 px-3 py-1 bg-cyan-500/20 backdrop-blur-sm border border-cyan-500/30">
-                      <span className="text-xs text-cyan-400 uppercase tracking-wider font-semibold">Live</span>
+                  {theme.id === 'professional' && (
+                    <div className="absolute top-4 right-4 px-3 py-1 bg-amber-500/20 backdrop-blur-sm border border-amber-500/30">
+                      <span className="text-xs text-amber-400 uppercase tracking-wider font-semibold">Live</span>
                     </div>
                   )}
                 </div>

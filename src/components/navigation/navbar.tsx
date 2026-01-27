@@ -52,11 +52,11 @@ export function Navbar() {
                 <div className="absolute inset-0 bg-orange-500 transform rotate-45 group-hover:rotate-[225deg] transition-transform duration-500" />
                 <span className="relative z-10 text-black font-black text-sm">G</span>
               </div>
-              <div className="flex flex-col">
+              <div className="flex flex-row items-baseline gap-2">
                 <h1 className="text-sm md:text-base font-black text-white tracking-tight uppercase leading-none">
                   GSAP<span className="text-orange-500">.</span>
                 </h1>
-                <span className="text-[8px] text-zinc-500 uppercase tracking-[0.2em]">Showcase</span>
+                <span className="text-xs text-zinc-500 uppercase tracking-[0.2em]">Showcase</span>
               </div>
             </div>
           </Link>

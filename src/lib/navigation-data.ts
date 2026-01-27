@@ -23,6 +23,13 @@ export const NAVIGATION_DATA: NavigationData = {
       category: 'Scroll',
     },
     {
+      id: 'dwf-professional-theme',
+      title: 'DWF Professional',
+      description: 'Finance-inspired professional design with institutional elegance',
+      path: '/dwf-professional-theme',
+      category: 'Showcase',
+    },
+    {
       id: 'dwf-ocean-theme',
       title: 'DWF Ocean Theme',
       description: 'Wave-themed GSAP animations - Digital Wave Finance showcase',

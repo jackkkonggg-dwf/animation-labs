@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 
 interface CardProps {
   id: number;
@@ -38,6 +38,45 @@ const cards: CardProps[] = [
 export function HorizontalScroll() {
   const containerRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const initAnimation = async () => {
+      const gsap = (await import('gsap')).default;
+      const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      const container = containerRef.current;
+      const wrapper = wrapperRef.current;
+
+      if (!container || !wrapper) return;
+
+      // Calculate the scroll distance based on wrapper width minus viewport width
+      // This ensures all cards traverse fully across the viewport
+      const scrollDistance = wrapper.scrollWidth - window.innerWidth;
+
+      // Create the horizontal scroll animation
+      gsap.to(wrapper, {
+        x: () => -scrollDistance,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: container,
+          start: 'top top',
+          end: () => `+=${scrollDistance}`,
+          scrub: 1,
+          pin: true,
+          anticipatePin: 1,
+        },
+      });
+    };
+
+    initAnimation();
+
+    // Cleanup function
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
+  }, []);
 
   return (
     <section

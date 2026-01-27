@@ -3,8 +3,8 @@
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from '@/app/lib/gsap-config';
-import { TEXT_SECTIONS, type LayoutType } from '@/app/data/text-sections';
-import type { TextSection } from '@/app/data/text-sections';
+import { TEXT_SECTIONS, type LayoutType } from '../_data';
+import type { TextSection } from '../_data';
 
 // ============================================================================
 // UTILITY FUNCTIONS - Vanilla JS Text Splitting

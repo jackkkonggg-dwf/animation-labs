@@ -48,12 +48,30 @@ export function HorizontalScroll() {
 
       const container = containerRef.current;
       const wrapper = wrapperRef.current;
+      const cards = container?.querySelectorAll('.horizontal-scroll-card');
 
-      if (!container || !wrapper) return;
+      if (!container || !wrapper || !cards || cards.length === 0) return;
 
       // Calculate the scroll distance based on wrapper width minus viewport width
       // This ensures all cards traverse fully across the viewport
       const scrollDistance = wrapper.scrollWidth - window.innerWidth;
+
+      // Set initial state for cards (invisible and offset)
+      gsap.set(cards, { opacity: 0, x: 100 });
+
+      // Create staggered entry animation for cards
+      gsap.to(cards, {
+        opacity: 1,
+        x: 0,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: container,
+          start: 'top center',
+          toggleActions: 'play none none reverse',
+        },
+      });
 
       // Create the horizontal scroll animation
       gsap.to(wrapper, {

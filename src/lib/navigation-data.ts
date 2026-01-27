@@ -22,5 +22,12 @@ export const NAVIGATION_DATA: NavigationData = {
       path: '/text-effects',
       category: 'Scroll',
     },
+    {
+      id: 'dwf-ocean-theme',
+      title: 'DWF Ocean Theme',
+      description: 'Wave-themed GSAP animations - Digital Wave Finance showcase',
+      path: '/dwf-ocean-theme',
+      category: 'Showcase',
+    },
   ],
 };

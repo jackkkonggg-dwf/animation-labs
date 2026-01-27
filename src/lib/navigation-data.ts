@@ -15,5 +15,12 @@ export const NAVIGATION_DATA: NavigationData = {
       path: '/horizontal-scroll',
       category: 'Scroll',
     },
+    {
+      id: 'text-effects',
+      title: 'Text Effects',
+      description: 'Kinetic typography with scroll-triggered animations',
+      path: '/text-effects',
+      category: 'Scroll',
+    },
   ],
 };

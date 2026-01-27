@@ -178,8 +178,8 @@
         "Verify in browser using agent-browser skill"
       ],
       "priority": 11,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Implemented with 3 layers at progressive speeds: background (0.2x, y: -100), mid-ground (0.5x, y: -50), foreground (1.0x, y: 50). Uses z-index layering (10/20/30) for proper stacking. Live demo features 700px container with 'FAR' background, 'MID' mid-ground, and 'DEPTH' foreground card. Includes opacity variations for atmospheric perspective effect."
     },
     {
       "id": "US-012",

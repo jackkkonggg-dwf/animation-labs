@@ -193,3 +193,27 @@ Started: Wed Jan 28 04:56:36 HKT 2026
   - scrub: true makes animation reversible - scrolling back up plays the animation in reverse
   - The parallax container needs explicit height (e.g., h-[600px]) to have scroll distance for the effect
 ---
+
+## [2025-01-28] - US-011
+- Created src/app/patterns/multi-layer-parallax/page.tsx as the entry point for the multi-layer parallax pattern
+- Created src/components/patterns/multi-layer-parallax-pattern.tsx with full implementation
+- Multi-layer parallax pattern: 3 layers moving at progressive speeds create immersive 3D depth effect
+- Layer 1 (Background): 0.2x speed, y: -100, z-index: 10, "FAR" text with 10% opacity
+- Layer 2 (Mid-ground): 0.5x speed, y: -50, z-index: 20, "MID" text with floating geometric shapes
+- Layer 3 (Foreground): 1.0x speed, y: 50, z-index: 30, "DEPTH" card with full opacity
+- Uses scrub: true for scroll-linked animation and ease: 'none' for direct 1:1 relationship
+- Code viewer with syntax-highlighted TypeScript/JSX code showing multi-layer parallax pattern
+- Copy to clipboard button with scan line hover effect and "Copied!" state feedback
+- Proper cleanup: gsap.killTweensOf() for all three layers in useGSAP return function
+- 3 speed comparison cards showing: Background (0.2x), Mid-Ground (0.5x), Foreground (1.0x)
+- 4 key concept cards explaining: z-index layering, speed gradients, opacity variations, movement direction
+- Follows same industrial orange design system: zinc-950 background, zinc-900 cards, orange-500 accents
+- Build and typecheck passed
+- Note: agent-browser skill was unavailable for this session - manual browser verification recommended
+- **Learnings for future iterations:**
+  - Z-index layering is critical for multi-layer parallax: use progressive values (10/20/30) for proper stacking
+  - Progressive speed ratios (0.2x, 0.5x, 1.0x) create convincing depth - larger gaps = more pronounced 3D effect
+  - Opacity variations enhance atmospheric perspective: distant layers (10%), mid-layers (30%), foreground (100%)
+  - Background and mid-ground should move upward (negative y) while foreground can move downward (positive y) for contrast
+  - Container height of 700px provides sufficient scroll distance for the parallax effect to be noticeable
+  - Each layer needs a unique class name (.parallax-layer-bg, .parallax-layer-mid, .parallax-layer-fg) for GSAP targeting

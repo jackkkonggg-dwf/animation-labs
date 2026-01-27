@@ -149,3 +149,47 @@ Started: Wed Jan 28 04:56:36 HKT 2026
   - power2.out is ideal for word animations - smooth deceleration feels more polished than back.out for text
   - Dev server was running on port 3000 from a different directory - used PORT=3001 for correct project
 ---
+## [2025-01-28] - US-009
+- Created src/app/patterns/text-fill/page.tsx as the entry point for the text fill animation pattern
+- Created src/components/patterns/text-fill-pattern.tsx with full implementation
+- Text fill animation: uses background-clip: text technique with animated backgroundPosition
+- Live demo animates backgroundPosition from 0% to 100% as user scrolls, creating a color-fill effect
+- Gradient is set to 200% width (bg-[length:200%_auto]) to allow the fill animation to work
+- Uses scrub: 1 in ScrollTrigger for smooth scroll-linked animation with power2.inOut easing
+- Hero text: "SCROLL TO FILL" with orange-amber gradient
+- Four demo cards showing gradient variations: orange (vibrant), fire (multi-stop), cool (cyan-blue), sunset (pink-purple-indigo)
+- 4 key concept cards explaining: background-clip: text, 200% background size, scrub animation, background-position
+- Follows same industrial orange design system: zinc-950 background, zinc-900 cards, orange-500 accents
+- Build and typecheck passed, browser verified
+- **Learnings for future iterations:**
+  - The background-clip: text technique requires text-transparent and bg-clip-text classes to work
+  - Set bg-[length:200%_auto] to make the gradient twice as wide as the text, enabling the fill animation
+  - backgroundPosition: '0% 50%' shows the start of the gradient (gray/transparent), '100% 50%' shows the end (full color)
+  - scrub: 1 creates smooth scroll-linked animation with 1 second of "catch up" lag for polished feel
+  - power2.inOut provides smooth acceleration and deceleration - ideal for fill effects
+  - Multi-stop gradients (via-orange-500 via-amber-500) create richer color transitions
+  - The initial style={{ backgroundPosition: '0% 50%' }} is critical - without it, the text starts already filled
+---
+## [2025-01-28] - US-010
+- Created src/app/patterns/simple-parallax/page.tsx as the entry point for the simple parallax pattern page
+- Created src/components/patterns/simple-parallax-pattern.tsx with full implementation
+- Simple parallax pattern: background moves at 50% speed (y: -200) while foreground moves at normal speed (y: 50)
+- Live demo uses gsap.to() with scrub: true for scroll-linked animation and ease: 'none' for direct 1:1 relationship
+- Background has grid pattern overlay and "BG" text, foreground has centered card with orange accent corners
+- Speed ratio of 0.5 creates convincing depth perception - background moves upward (-200px) while foreground moves slightly downward (50px)
+- Code viewer with syntax-highlighted TypeScript/JSX code showing parallax animation pattern
+- Copy to clipboard button with scan line hover effect and "Copied!" state feedback
+- Proper cleanup: gsap.killTweensOf(background) and gsap.killTweensOf(foreground) in useGSAP return function
+- 3 info cards showing: Speed Ratio (0.5), Y-Translation (-200px), Scrub Mode (true)
+- 4 key concept cards explaining: speed ratio (0.5 = 50% speed), scrub: true (direct scroll link), y-axis movement (opposite directions), ease: "none" (no easing for parallax)
+- Follows same industrial orange design system: zinc-950 background, zinc-900 cards, orange-500 accents
+- Build and typecheck passed
+- **Learnings for future iterations:**
+  - Parallax requires moving layers at different speeds - use y translation with scrub: true
+  - Background should move opposite to scroll direction (negative y) while foreground can move with scroll (positive y) or stay stable
+  - Always use ease: "none" for parallax - easing would break the direct 1:1 scroll relationship
+  - Speed ratio of 0.3-0.5 creates subtle depth, 0.1-0.2 creates dramatic depth (but can cause dizziness)
+  - For multi-layer parallax, use different y values for each layer: far (0.2), mid (0.5), near (1.0)
+  - scrub: true makes animation reversible - scrolling back up plays the animation in reverse
+  - The parallax container needs explicit height (e.g., h-[600px]) to have scroll distance for the effect
+---

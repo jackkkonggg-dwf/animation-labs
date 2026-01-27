@@ -52,3 +52,21 @@ Started: Tue Jan 27 23:37:16 HKT 2026
   - Cleanup is important: `ScrollTrigger.getAll().forEach(t => t.kill())`
   - Browser verification: localhost MCP tools not available - manual verification required
 ---
+
+## [Wed Jan 28 00:12:17 HKT 2026] - US-004
+- Implemented GSAP staggered card entry animation
+- Cards animate from opacity 0, x: 100 to opacity 1, x: 0
+- 0.15s stagger delay creates cascading/fanning effect
+- Animation triggers when section enters viewport (start: 'top center')
+- Used gsap.set() for initial state, gsap.to() with stagger for animation
+- Added toggleActions: 'play none none reverse' for proper behavior
+- All quality checks passing (typecheck, build)
+- Files changed: src/components/HorizontalScroll.tsx, src/CLAUDE.md, prd.json
+- **Learnings for future iterations:**
+  - Use `gsap.set()` before animation to establish initial state for elements
+  - Query elements with `container.querySelectorAll('.class-name')` to get NodeList for GSAP
+  - GSAP stagger option accepts time value (0.15 = 150ms delay between each element)
+  - `toggleActions: 'play none none reverse'` provides good enter/exit behavior
+  - `ease: 'power2.out'` creates smooth deceleration effect for animations
+  - Browser verification: localhost MCP tools not available - manual verification required
+---

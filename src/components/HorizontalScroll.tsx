@@ -9,16 +9,29 @@ interface CardProps {
 }
 
 function Card({ id, name, description }: CardProps) {
+  // Neon colors cycle through cyan, magenta, lime
+  const neonColors = [
+    'from-[#00ffff] to-[#00cccc]',
+    'from-[#ff00ff] to-[#cc00cc]',
+    'from-[#00ff00] to-[#00cc00]',
+    'from-[#00ffff] to-[#00cccc]',
+    'from-[#ff00ff] to-[#cc00cc]',
+    'from-[#00ff00] to-[#00cc00]',
+    'from-[#00ffff] to-[#00cccc]',
+  ];
+  const gradientClass = neonColors[(id - 1) % neonColors.length];
+
   return (
     <div
-      className="horizontal-scroll-card flex-shrink-0 w-[60vw] h-[70vh] bg-zinc-800 rounded-2xl overflow-hidden border border-zinc-700"
+      className="horizontal-scroll-card group flex-shrink-0 w-[60vw] h-[70vh] bg-[#1a1a2e] rounded-2xl overflow-hidden border border-white/10 shadow-2xl hover:shadow-[0_0_30px_rgba(0,255,255,0.4)] hover:border-cyan-400/50 transition-all duration-300"
       data-card-id={id}
     >
-      <div className="w-full h-1/2 bg-gradient-to-br from-zinc-700 to-zinc-900 flex items-center justify-center">
-        <span className="text-6xl text-zinc-600 font-bold">#{id}</span>
+      <div className={`w-full h-1/2 bg-gradient-to-br ${gradientClass} flex items-center justify-center relative overflow-hidden`}>
+        <div className="absolute inset-0 bg-black/20"></div>
+        <span className="relative text-6xl text-black font-bold tracking-tighter">#{id}</span>
       </div>
-      <div className="p-8">
-        <h3 className="text-2xl font-bold text-white mb-2">{name}</h3>
+      <div className="p-8 bg-[#1a1a2e]">
+        <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors duration-300">{name}</h3>
         <p className="text-zinc-400">{description}</p>
       </div>
     </div>

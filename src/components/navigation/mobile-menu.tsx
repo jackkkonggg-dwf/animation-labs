@@ -112,14 +112,7 @@ export function MobileMenu({ isOpen, onToggle }: MobileMenuProps) {
         {/* Industrial grid pattern overlay */}
         <div
           ref={gridPatternRef}
-          className="absolute inset-0 opacity-0"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(255, 107, 0, 0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255, 107, 0, 0.1) 1px, transparent 1px)
-            `,
-            backgroundSize: '40px 40px',
-          }}
+          className="absolute inset-0 opacity-0 grid-pattern-overlay"
         />
 
         <div

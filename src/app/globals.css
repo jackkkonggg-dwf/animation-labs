@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 
@@ -36,4 +37,52 @@ body {
 
 .neon-glow-lime {
   box-shadow: 0 0 5px var(--neon-lime), 0 0 20px rgba(0, 255, 0, 0.3);
+}
+
+/* ============================================================================
+   Animation Utilities
+   ============================================================================ */
+
+/* GPU acceleration for transforms */
+.gpu-accelerated {
+  transform: translateZ(0);
+}
+
+/* Grid pattern overlay - 40px cells with orange tint */
+.grid-pattern-overlay {
+  background-image:
+    linear-gradient(rgba(255, 107, 0, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 107, 0, 0.1) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Grid pattern overlay - 50px cells (for demo grid) */
+.grid-pattern-overlay-lg {
+  background-image:
+    linear-gradient(rgba(255, 107, 0, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 107, 0, 0.3) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Grid pattern overlay - 60px cells (for hero sections) */
+.grid-pattern-overlay-xl {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Scan line animation for hover effects */
+@keyframes scan {
+  0% { left: -10%; }
+  100% { left: 110%; }
+}
+
+.animate-scan {
+  animation: scan 1.5s ease-in-out infinite;
+}
+
+/* Noise texture overlay */
+.noise-texture {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
 }

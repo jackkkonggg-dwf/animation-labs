@@ -19,9 +19,6 @@ export function DemoGrid() {
 
     if (!container || !cards || cards.length === 0) return;
 
-    // Track ScrollTriggers for cleanup
-    const triggers: ScrollTrigger[] = [];
-
     // Animate title with aggressive entrance
     gsap.fromTo(
       titleRef.current,
@@ -52,7 +49,6 @@ export function DemoGrid() {
 
     // Cleanup function
     return () => {
-      triggers.forEach((trigger) => trigger.kill());
       gsap.killTweensOf(cards);
     };
   }, {});
@@ -60,16 +56,7 @@ export function DemoGrid() {
   return (
     <section ref={containerRef} className="min-h-screen bg-zinc-950 pt-32 md:pt-40 pb-16 px-4 md:px-6 relative overflow-hidden">
       {/* Background grid pattern */}
-      <div
-        className="absolute inset-0 opacity-[0.02]"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(255, 107, 0, 0.3) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 107, 0, 0.3) 1px, transparent 1px)
-          `,
-          backgroundSize: '50px 50px',
-        }}
-      />
+      <div className="absolute inset-0 opacity-[0.02] grid-pattern-overlay-lg" />
 
       {/* Diagonal accent stripe */}
       <div className="absolute top-0 right-0 w-[1px] h-96 bg-gradient-to-b from-orange-500/50 via-orange-500/20 to-transparent" />
@@ -124,15 +111,6 @@ export function DemoGrid() {
 
                 {/* Content */}
                 <div className="relative z-10 h-full p-6 flex flex-col">
-                  {/* Category badge - industrial styling */}
-                  {route.category && (
-                    <div className="mb-4">
-                      <span className="inline-block px-2 py-1 bg-zinc-800 border border-orange-500/30 text-[10px] font-bold text-orange-500 uppercase tracking-wider">
-                        {route.category}
-                      </span>
-                    </div>
-                  )}
-
                   {/* Title */}
                   <h3 className="text-2xl font-black text-white mb-2 uppercase tracking-tight group-hover:text-orange-500 transition-colors duration-300">
                     {route.title}
@@ -166,7 +144,7 @@ export function DemoGrid() {
 
                 {/* Scan line effect on hover */}
                 <div className="absolute inset-0 overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="absolute top-0 bottom-0 left-0 w-[2px] bg-white/20 skew-x-[-12deg] animate-[scan_1.5s_ease-in-out_infinite]" />
+                  <div className="absolute top-0 bottom-0 left-0 w-[2px] bg-white/20 skew-x-[-12deg] animate-scan" />
                 </div>
               </div>
             </Link>
@@ -174,19 +152,12 @@ export function DemoGrid() {
         </div>
 
         {/* Empty state when no demos */}
-        {routes.length === 0 && (
+        {routes.length === 0 ? (
           <div className="text-center py-20 border-2 border-dashed border-zinc-800">
             <p className="text-zinc-600 text-sm uppercase tracking-wider">No demos available</p>
           </div>
-        )}
+        ) : null}
       </div>
-
-      <style>{`
-        @keyframes scan {
-          0% { left: -10%; }
-          100% { left: 110%; }
-        }
-      `}</style>
     </section>
   );
 }

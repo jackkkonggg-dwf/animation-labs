@@ -45,3 +45,24 @@ Started: Wed Jan 28 04:56:36 HKT 2026
   - Code viewer should include a "Copied!" state with timeout reset for better UX
   - useGSAP cleanup should call gsap.killTweensOf() with the same selector used for animation
 ---
+
+## [2025-01-28] - US-004
+- Created src/app/patterns/scale-reveal/page.tsx as the entry point for the scale reveal pattern page
+- Created src/components/patterns/scale-reveal-pattern.tsx with full implementation
+- Scale reveal pattern: elements scale up from 0.8 to 1 with elastic.out(1, 0.5) easing
+- Live demo uses gsap.set() for initial state (scale: 0.8, opacity: 0) and gsap.to() with stagger: 0.12
+- Elastic easing creates spring-like bounce effect with overshoot: first param (1) controls amplitude, second (0.5) controls decay
+- Code viewer with syntax-highlighted TypeScript/JSX code showing scale animation pattern
+- Copy to clipboard button with scan line hover effect and "Copied!" state feedback
+- Proper cleanup: gsap.killTweensOf(cards) in useGSAP return function
+- 6 demo cards explaining elastic easing concepts: ELASTIC EASING, SCALE RANGE, OVERSHOOT, OSCILLATION, COMBINE WITH FADE, PERFORMANCE
+- 4 key concept cards explaining: elastic easing parameters, duration importance, scale start point, combining animations
+- Follows same industrial orange design system: zinc-950 background, zinc-900 cards, orange-500 accents, corner accents, diagonal stripes
+- Build and typecheck passed, browser verified
+- **Learnings for future iterations:**
+  - Elastic easing needs more time (0.8s+) than other easings to complete the bounce animation
+  - Starting scale at 0.8 creates room for the overshoot effect (can go up to ~1.05)
+  - Scale animations are GPU-accelerated and very performant - good choice for many elements
+  - Elastic.out(1, 0.5) parameters: first is amplitude (overshoot), second is decay (settle speed)
+  - Scale works beautifully combined with opacity fade for enhanced depth perception
+---

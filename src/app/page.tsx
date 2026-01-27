@@ -1,5 +1,5 @@
-import { Header } from "@/components/Header";
-import { HorizontalScroll } from "@/components/HorizontalScroll";
+import { Header } from "@/components/header";
+import { HorizontalScroll } from "@/components/horizontal-scroll";
 
 export default function Home() {
   return (

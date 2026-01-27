@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { GSAPProvider } from "@/components/GSAPProvider";
+import { GSAPProvider } from "@/providers/gsap-provider";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",

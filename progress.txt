@@ -70,3 +70,25 @@ Started: Tue Jan 27 23:37:16 HKT 2026
   - `ease: 'power2.out'` creates smooth deceleration effect for animations
   - Browser verification: localhost MCP tools not available - manual verification required
 ---
+
+## [Wed Jan 28 00:14:34 HKT 2026] - US-005
+- Styled cards with dark mode neon aesthetic
+- Applied dark background theme (#0a0a0f) in globals.css
+- Added neon accent colors (cyan: #00ffff, magenta: #ff00ff, lime: #00ff00) for card gradients
+- Cards cycle through neon colors using gradient arrays
+- Added Space Grotesk font via Google Fonts for modern typography
+- Implemented rounded corners (rounded-2xl) and shadow-2xl for depth effects
+- Added hover states with neon glow effects (shadow-[0_0_30px_rgba(0,255,255,0.4)])
+- Border changes to cyan-400/50 on hover with transition-all duration-300
+- Updated metadata to reflect "GSAP Animations Showcase"
+- All quality checks passing (typecheck, build)
+- Files changed: src/app/globals.css, src/app/layout.tsx, src/components/HorizontalScroll.tsx, prd.json
+- **Learnings for future iterations:**
+  - CSS @import rules must precede all other CSS rules (Google Fonts before tailwindcss)
+  - Tailwind arbitrary values like `bg-[#1a1a2e]` and `from-[#00ffff]` work for custom colors
+  - Use `group` class on parent elements with `group-hover:` modifier for child hover effects
+  - The `group` class enables hover states that affect multiple child elements simultaneously
+  - For neon glow effects, use layered box-shadows: `box-shadow: 0 0 5px color, 0 0 20px rgba(color, 0.3)`
+  - Space Grotesk font provides a modern, edgy aesthetic suitable for neon/dark mode themes
+  - Browser verification: localhost MCP tools not available - manual verification required
+---

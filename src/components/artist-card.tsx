@@ -61,7 +61,7 @@ export const ArtistCard = memo(function ArtistCard({ id, name, description, imag
         `}
       >
         {/* Image section */}
-        <div className="w-full h-[55%] relative overflow-hidden">
+        <div className="w-full h-[55%] relative overflow-hidden rounded-t-3xl">
           <img
             src={image}
             alt={name}

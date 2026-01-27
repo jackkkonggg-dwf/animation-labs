@@ -10,7 +10,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "GSAP Animations Showcase",
-  description: "Horizontal scroll animation with neon aesthetic",
+  description: "Collection of GSAP-powered animation demos",
 };
 
 export default function RootLayout({

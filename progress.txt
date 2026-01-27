@@ -66,3 +66,23 @@ Started: Wed Jan 28 04:56:36 HKT 2026
   - Elastic.out(1, 0.5) parameters: first is amplitude (overshoot), second is decay (settle speed)
   - Scale works beautifully combined with opacity fade for enhanced depth perception
 ---
+## [2025-01-28] - US-005
+- Created src/app/patterns/staggered-reveal/page.tsx as the entry point for the staggered reveal pattern page
+- Created src/components/patterns/staggered-reveal-pattern.tsx with full implementation
+- Staggered reveal pattern: elements slide in from left (x: -100 to 0) with 0.15s stagger delay between each
+- Live demo uses gsap.set() for initial state (x: -100, opacity: 0) and gsap.to() with stagger: 0.15, power2.out easing
+- power2.out easing provides smooth deceleration that feels natural for slide-in effects
+- Code viewer with syntax-highlighted TypeScript/JSX code showing stagger animation pattern
+- Copy to clipboard button with scan line hover effect and "Copied!" state feedback
+- Proper cleanup: gsap.killTweensOf(cards) in useGSAP return function
+- 8 demo cards in 4-column grid explaining stagger concepts: STAGGER DELAY, SEQUENCE ORDER, SLIDE DIRECTION, FADE COMBINATION, EASING CHOICE, GRID LAYOUTS, TIMING CONTROL, LARGE COLLECTIONS
+- 4 key concept cards explaining: stagger value, direction control, grid layouts, advanced stagger options (from, grid)
+- Follows same industrial orange design system: zinc-950 background, zinc-900 cards, orange-500 accents, corner accents, diagonal stripes
+- Build and typecheck passed, browser verified
+- **Learnings for future iterations:**
+  - Stagger delay of 0.15s creates a balanced cascade - lower (0.1) for faster, higher (0.3) for more dramatic effects
+  - x: -100 creates left-to-right slide-in; x: 100 creates right-to-left; y for vertical movement
+  - Stagger naturally follows DOM order in CSS Grid - left to right, top to bottom
+  - Advanced stagger object form: { each: 0.15, from: "center" } or { from: "edges", grid: [rows, cols] }
+  - power2.out is excellent for slide animations - smooth deceleration feels more natural than linear
+---

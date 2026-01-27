@@ -107,3 +107,45 @@ Started: Wed Jan 28 04:56:36 HKT 2026
   - For 50+ items, use smaller amounts (0.3-0.5s) or consider staggering by rows/cols for different effects
   - When writing JSX code in template strings, escape curly braces like {`)})`} to avoid parsing errors
 ---
+
+## [2025-01-28] - US-007
+- Created src/app/patterns/char-text-reveal/page.tsx as the entry point for the character text reveal pattern
+- Created src/components/patterns/char-text-reveal-pattern.tsx with full implementation
+- Character-by-character text reveal: splits text into inline-block spans, then animates with stagger
+- Live demo uses gsap.set() for initial state (y: 100, opacity: 0) and gsap.to() with stagger: 0.03
+- back.out(1.7) easing creates spring-like overshoot - each character "bounces" into place
+- splitText() helper function: text.split('') creates array, map() wraps each char in span with inline-block
+- Space handling: char === ' ' ? '\u00A0' : char preserves spacing (non-breaking space for whitespace)
+- Hero text: "KINETIC" in white, "TYPOGRAPHY" with orange-amber gradient
+- Two demo cards showing "Quick Reveal" and "Spring Effect" variations
+- 4 key concept cards explaining: inline-block requirement, stagger value tuning, back.out easing, space handling
+- Follows same industrial orange design system: zinc-950 background, zinc-900 cards, orange-500 accents
+- Build and typecheck passed, browser verified
+- **Learnings for future iterations:**
+  - Character spans MUST have inline-block display for y-axis transforms to work (inline would ignore vertical translation)
+  - Stagger value of 0.03 (30ms per char) creates fast, smooth character reveals - adjust 0.02-0.05 for different speeds
+  - back.out(1.7) parameters: 1.7 is the overshoot amount - higher = more bounce, lower = more subtle
+  - Spaces collapse in inline flex layouts - use \u00A0 (non-breaking space) or &nbsp; to preserve spacing
+  - For text with gradients, use bg-gradient-to-r with bg-clip-text and text-transparent classes
+---
+## [2025-01-28] - US-008
+- Created src/app/patterns/word-text-reveal/page.tsx as the entry point for the word text reveal pattern
+- Created src/components/patterns/word-text-reveal-pattern.tsx with full implementation
+- Word-by-word text reveal: splits text by spaces into inline-block spans, then animates with stagger
+- Live demo uses gsap.set() for initial state (y: 50, opacity: 0) and gsap.to() with stagger: 0.15
+- power2.out easing provides smooth deceleration that feels natural for word animations
+- splitText() helper function: text.split(' ') creates array, map() wraps each word in span with inline-block and whitespace-nowrap
+- Whitespace preservation: {i < arr.length - 1 && ' '} pattern adds spaces back after each word except the last
+- Hero text: "WORD BY WORD REVEAL ANIMATION" in uppercase
+- Four demo cards showing variations: "Capture Attention", "Create Impact", "Tell Your Story", "Engage Users"
+- 4 key concept cards explaining: word-level splitting, stagger value tuning, whitespace preservation, power2.out easing
+- Follows same industrial orange design system: zinc-950 background, zinc-900 cards, orange-500 accents
+- Build and typecheck passed, browser verified (24 word-reveal elements found on page)
+- **Learnings for future iterations:**
+  - Word spans need inline-block AND whitespace-nowrap to prevent words from breaking across lines during animation
+  - Stagger value of 0.15 (150ms per word) creates dramatic word reveals - larger than character reveals (0.03) since fewer elements
+  - When using .split(' '), spaces are removed and must be added back with conditional rendering
+  - The pattern {i < arr.length - 1 && ' '} adds space after all words except the last to avoid trailing space
+  - power2.out is ideal for word animations - smooth deceleration feels more polished than back.out for text
+  - Dev server was running on port 3000 from a different directory - used PORT=3001 for correct project
+---

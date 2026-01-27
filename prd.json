@@ -114,8 +114,8 @@
         "Verify in browser using agent-browser skill"
       ],
       "priority": 7,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Implemented with character-by-character split using inline-block spans. Uses stagger: 0.03 (30ms per char) with back.out(1.7) easing for spring-like overshoot bounce effect. Live demo features 'KINETIC TYPOGRAPHY' hero text with gradient fill and multiple example cards."
     },
     {
       "id": "US-008",
@@ -130,8 +130,8 @@
         "Verify in browser using agent-browser skill"
       ],
       "priority": 8,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Implemented with word-by-word split using text.split(' ') and inline-block spans. Uses stagger: 0.15 (150ms per word) with power2.out easing for smooth deceleration. Hero text 'WORD BY WORD REVEAL ANIMATION' with 4 demo cards showing variations. Whitespace preservation using {i < arr.length - 1 && ' '} pattern."
     },
     {
       "id": "US-009",

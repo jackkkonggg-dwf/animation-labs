@@ -43,5 +43,19 @@ export const NAVIGATION_DATA: NavigationData = {
       path: '/dwf-futuristic-theme',
       category: 'Showcase',
     },
+    {
+      id: 'dwf-brutalist-theme',
+      title: 'DWF Brutalist',
+      description: 'Bold brutalist design with marquee text, raw typography, and high-contrast aesthetics',
+      path: '/dwf-brutalist-theme',
+      category: 'Showcase',
+    },
+    {
+      id: 'dwf-zen-theme',
+      title: 'DWF Zen',
+      description: 'Minimalist Japanese-inspired design with cherry blossoms and elegant data visualization',
+      path: '/dwf-zen-theme',
+      category: 'Showcase',
+    },
   ],
 };

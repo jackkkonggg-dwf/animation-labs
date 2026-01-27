@@ -25,3 +25,23 @@ Started: Wed Jan 28 04:56:36 HKT 2026
   - CATEGORY_GROUPS const provides logical grouping by difficulty level
   - Using 'as const' assertion on CATEGORY_GROUPS for type safety
 ---
+
+## [2025-01-28] - US-003
+- Created src/app/patterns/fade-reveal/page.tsx as the entry point for the pattern page
+- Created src/components/patterns/fade-reveal-pattern.tsx with full implementation
+- Pattern page structure: Header (title, description, badges), Live Demo (6 animated cards), Code Viewer (syntax highlighted), Key Concepts (4 explanation cards), Footer CTA
+- Live demo uses gsap.set() for initial state (opacity: 0, y: 60) and gsap.to() with stagger: 0.15 for fade reveal animation
+- Code viewer includes inline syntax-highlighted JSX using colored span elements
+- Copy to clipboard button with visual feedback (scan line effect on hover, "Copied!" state)
+- Proper cleanup in useGSAP return function: gsap.killTweensOf(elements)
+- Follows industrial orange design system: zinc-950 background, zinc-900 cards, orange-500 accent
+- Visual motifs: corner accents, diagonal stripe decorations, scan line effects, grid pattern overlays
+- Build and typecheck passed, browser verified
+- **Learnings for future iterations:**
+  - Pattern pages should follow this structure: Header → Live Demo → Code Viewer → Key Concepts → CTA
+  - Use separate span elements for syntax highlighting rather than complex nested braces to avoid JSX parsing issues
+  - The scan line animation uses @keyframes scan defined in globals.css with animate-scan class
+  - Grid pattern overlays use the grid-pattern-overlay class from globals.css
+  - Code viewer should include a "Copied!" state with timeout reset for better UX
+  - useGSAP cleanup should call gsap.killTweensOf() with the same selector used for animation
+---

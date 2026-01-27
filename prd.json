@@ -162,8 +162,8 @@
         "Verify in browser using agent-browser skill"
       ],
       "priority": 10,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Implemented with background moving at 50% speed (y: -200) while foreground moves at normal speed (y: 50). Live demo in 600px container with grid pattern background and centered foreground card. Uses scrub: true for scroll-linked animation and ease: 'none' for direct 1:1 relationship."
     },
     {
       "id": "US-011",

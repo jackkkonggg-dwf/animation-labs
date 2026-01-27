@@ -1,5 +1,5 @@
-import { Navbar } from '@/components/navigation/navbar';
-import { HorizontalScroll } from '@/components/horizontal-scroll';
+import { Navbar } from '@/app/components/navigation/navbar';
+import { HorizontalScroll } from './_components/horizontal-scroll';
 
 export default function HorizontalScrollPage() {
   return (

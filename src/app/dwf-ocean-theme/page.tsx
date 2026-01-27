@@ -1,4 +1,4 @@
-import { DWFOceanTheme } from '@/components/dwf-ocean-theme';
+import { DWFOceanThemeClient } from './page-client';
 
 export const metadata = {
   title: 'DWF Ocean Theme - GSAP Animation Showcase',
@@ -6,5 +6,5 @@ export const metadata = {
 };
 
 export default function DWFOceanThemePage() {
-  return <DWFOceanTheme />;
+  return <DWFOceanThemeClient />;
 }

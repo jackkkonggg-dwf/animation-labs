@@ -1,4 +1,4 @@
-import { DWFEProfessionalTheme } from '@/components/dwf-professional-theme';
+import { DWFEProfessionalThemeClient } from './page-client';
 
 export const metadata = {
   title: 'DWF Professional - Institutional Digital Asset Solutions',
@@ -6,5 +6,5 @@ export const metadata = {
 };
 
 export default function DWFProfessionalThemePage() {
-  return <DWFEProfessionalTheme />;
+  return <DWFEProfessionalThemeClient />;
 }

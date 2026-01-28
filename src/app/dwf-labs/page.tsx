@@ -792,7 +792,7 @@ export default function DWFLabsPage() {
             ].map((item) => (
               <div
                 key={item.name}
-                className="portfolio-card group relative aspect-square bg-zinc-900 border border-zinc-800 p-4 flex flex-col items-center justify-center hover:border-orange-500/50 transition-all duration-200 cursor-pointer"
+                className="portfolio-card group relative aspect-square bg-zinc-900 border border-zinc-800 p-4 flex flex-col items-center justify-center hover:border-orange-500 hover:scale-105 transition-all duration-200 cursor-pointer"
               >
                 {/* Corner accent */}
                 <div className="absolute top-2 left-2 w-4 h-4 border-t border-l border-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
@@ -801,9 +801,9 @@ export default function DWFLabsPage() {
                 {/* Number badge */}
                 <div className="absolute top-3 right-3 text-xs font-mono text-orange-500/40">{item.num}</div>
 
-                {/* Logo placeholder */}
-                <div className="w-16 h-16 bg-zinc-800 rounded-lg flex items-center justify-center text-zinc-600 group-hover:bg-orange-500 group-hover:text-black transition-colors duration-200">
-                  <span className="text-xs font-bold">{item.name.slice(0, 2)}</span>
+                {/* Logo placeholder - grayscale to orange-500 on hover */}
+                <div className="w-16 h-16 bg-zinc-800 rounded-lg flex items-center justify-center grayscale group-hover:grayscale-0 transition-all duration-200">
+                  <span className="text-xs font-bold text-zinc-600 group-hover:text-orange-500 transition-colors duration-200">{item.name.slice(0, 2)}</span>
                 </div>
 
                 {/* Name */}

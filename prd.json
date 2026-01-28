@@ -247,8 +247,8 @@
         "Verify in browser using agent-browser skill"
       ],
       "priority": 16,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Implemented hover effects: grayscale to orange-500, scale-105, border zinc-800 to orange-500, corner opacity 0 to 1, duration-200"
     },
     {
       "id": "US-017",

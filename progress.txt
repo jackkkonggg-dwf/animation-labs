@@ -132,3 +132,23 @@ Started: Thu Jan 29 01:07:23 HKT 2026
   - Browser verification: scroll through the full pin range to verify progress bar reaches 100%
   - agent-browser eval returns strings - use JSON.stringify() for complex objects
   - The badge text content toggle in onToggle requires querySelector inside the callback (DOM must be queried each time)
+
+## [2026-01-29] - US-009
+- Implemented Services staggered card reveal animation in `src/app/dwf-labs/page.tsx`
+- Added card reveal animation to existing servicesRef useGSAP hook (same as US-008)
+- 3 service cards with class `.service-card`: Market Making (chart icon), OTC Trading (exchange icon), Ventures (rocket icon)
+- Initial state: y: 100, opacity: 0, scale: 0.9
+- Animate to: y: 0, opacity: 1, scale: 1
+- Stagger: 0.3s per card, ease: back.out(1.2), duration: 0.8s
+- ScrollTrigger: start: 'top center', toggleActions: 'play none none reverse'
+- Browser verified: cards start at opacity 0/scale 0.9/y 100, animate to opacity 1/scale 1/y 0 with stagger
+- Cleanup: killTweensOf on serviceCards in return function
+- Files changed: `src/app/dwf-labs/page.tsx`, `prd.json`
+- **Learnings for future iterations:**
+  - Service cards already existed in HTML from US-003 with `.service-card` class
+  - Card reveal animation uses ScrollTrigger with toggleActions: 'play none none reverse' for enter/exit behavior
+  - start: 'top center' triggers animation when services section enters viewport center
+  - The card reveal is in the same useGSAP hook as the pin animation (US-008) since they operate on the same section
+  - back.out(1.2) creates subtle overshoot for snappy feel (less aggressive than back.out(1.7) used for hero text)
+  - stagger: 0.3s means each card animates 300ms after the previous one
+  - Agent-browser verification: check computed styles for opacity and transform matrix before/after animation

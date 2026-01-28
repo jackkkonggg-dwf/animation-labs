@@ -153,6 +153,24 @@ export default function DWFLabsPage() {
     // Track all ScrollTriggers for cleanup
     const triggers: ScrollTrigger[] = [];
 
+    // US-009: Services staggered card reveal
+    const serviceCards = services.querySelectorAll('.service-card');
+    gsap.set(serviceCards, { y: 100, opacity: 0, scale: 0.9 });
+
+    gsap.to(serviceCards, {
+      y: 0,
+      opacity: 1,
+      scale: 1,
+      duration: 0.8,
+      stagger: 0.3,
+      ease: 'back.out(1.2)',
+      scrollTrigger: {
+        trigger: services,
+        start: 'top center',
+        toggleActions: 'play none none reverse',
+      },
+    });
+
     // Pin the services section for 3000px of scroll
     const pinTrigger = ScrollTrigger.create({
       trigger: services,
@@ -197,6 +215,7 @@ export default function DWFLabsPage() {
     return () => {
       triggers.forEach((t) => t.kill());
       gsap.killTweensOf(progressFill);
+      gsap.killTweensOf(serviceCards);
     };
   }, { scope: servicesRef });
 

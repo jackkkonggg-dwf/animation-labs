@@ -51,8 +51,8 @@
         "Verify in browser using agent-browser skill"
       ],
       "priority": 3,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Created test page at src/app/test-debug-mode/ for verification"
     },
     {
       "id": "US-004",
@@ -70,8 +70,8 @@
         "Verify in browser using agent-browser skill"
       ],
       "priority": 4,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Created test page at src/app/test-advanced-demo-indicator/ for verification"
     },
     {
       "id": "US-005",

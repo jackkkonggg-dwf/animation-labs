@@ -31,3 +31,45 @@ Started: Wed Jan 28 20:57:54 HKT 2026
   - Playwright chromium must be installed separately via `pnpm dlx playwright install chromium`
   - The component should be exportable from a barrel file (e.g., src/components/index.ts) for easier imports in future demos
 ---
+
+## [2026-01-28] - US-003
+- Created DebugModeToggle component at src/components/DebugModeToggle.tsx
+- React context (DebugModeProvider) for global debug mode state management
+- Toggle switch for enabling/disabling ScrollTrigger markers via ScrollTrigger.defaults()
+- Scroll position and velocity tracking using requestAnimationFrame with delta time calculation
+- Debug info panel shows: trigger element, start/end positions, scrub status, progress percentage, active state
+- Collapsible panel with persistent button when collapsed - matches PerformanceMetrics pattern
+- Matches design system with zinc-900/95 backgrounds, orange-500 accents, corner accents
+- Test page created at src/app/test-debug-mode/ with multiple ScrollTrigger examples (basic trigger, scrub, pin, timeline)
+- Browser verification completed via agent-browser - debug panel opens, toggle works, markers appear, scroll velocity updates
+- Build and typecheck passed successfully
+- **Learnings for future iterations:**
+  - ScrollTrigger.defaults({ markers: true }) sets markers for all ScrollTrigger instances globally
+  - ScrollTrigger.refresh() must be called after changing defaults to update existing triggers
+  - ScrollTrigger.getAll() returns array of ScrollTrigger instances - internal properties like .trigger, .start, .end, .scrub, .progress, .isActive are available but not fully typed
+  - For scroll velocity: calculate (deltaY / deltaTime) where deltaTime is in milliseconds - gives px/ms
+  - Use eslint-disable-next-line comment for intentional `any` types when accessing internal GSAP properties
+  - The DebugModeProvider context pattern allows components like DebugModeToggle to be used anywhere without prop drilling
+---
+
+## [2026-01-28] - US-004
+- Created AdvancedDemoIndicator component at src/components/AdvancedDemoIndicator.tsx
+- React context (ActivePluginsProvider) for global plugin state management
+- Fixed overlay showing active GSAP plugins with custom SVG icons for 12 plugins: Core, ScrollTrigger, Draggable, SplitText, MorphSVG, MotionPath, DrawSVG, ScrambleText, ScrollTo, Observer, Inertia, ScrollSmoother
+- Tracks animation state: playing, paused, reversed, idle using gsap.globalTimeline.paused(), reversed(), and isActive()
+- Plugin grid highlights active plugins in orange with border, inactive plugins are dimmed
+- Pattern types legend with color coding: Scroll (blue), Interactive (purple), Timeline (orange), Text (green)
+- Collapsible panel with persistent button showing active count when collapsed
+- Shows ScrollTrigger count and global timeline status in footer
+- Matches design system with zinc-900/95 backgrounds, orange-500 accents, corner accents
+- Test page created at src/app/test-advanced-demo-indicator/ with Timeline demo (play/pause/reverse controls) and ScrollTrigger demo
+- Browser verification completed via agent-browser - screenshots captured showing collapsed, expanded, playing, paused, and reversed states
+- Build and typecheck passed successfully
+- **Learnings for future iterations:**
+  - Use React.Context for global state when multiple components need to share plugin/animation state
+  - Animation state detection: gsap.globalTimeline.paused() returns boolean, reversed() returns boolean, check active animations with globalTimeline.getChildren().some(t => t.isActive())
+  - For plugin tracking, use a Set<string> for O(1) add/delete/has operations
+  - Import ReactElement type explicitly for typing icon Record: `import type { ReactElement } from 'react'`
+  - When using useRef with types, always provide initial value: `useRef<NodeJS.Timeout | undefined>(undefined)`
+  - pnpm dlx agent-browser@latest requires the version specifier for fresh installs, and browser should be closed after use with `agent-browser close`
+---

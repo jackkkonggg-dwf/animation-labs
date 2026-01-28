@@ -152,3 +152,21 @@ Started: Thu Jan 29 01:07:23 HKT 2026
   - back.out(1.2) creates subtle overshoot for snappy feel (less aggressive than back.out(1.7) used for hero text)
   - stagger: 0.3s means each card animates 300ms after the previous one
   - Agent-browser verification: check computed styles for opacity and transform matrix before/after animation
+---
+
+## [2026-01-29] - US-010
+- Implemented Services icon animations with color transform in `src/app/dwf-labs/page.tsx`
+- 3 service icons (.service-icon svg) animate with scale 1→1.2, rotation 0→360deg, color zinc-700→orange-500
+- Animation stagger: 0.2s per icon, ease: back.out(1), duration: 0.6s
+- Same ScrollTrigger as card reveal (start: 'top center', toggleActions: 'play none none reverse')
+- Initial state: gsap.set with color: '#3f3f46' (zinc-700)
+- Animate to: scale: 1.2, rotation: 360, color: '#f97316' (orange-500)
+- Browser verified: icons reach scale 1.2, orange-500 color, rotation complete (360° = 0° visually)
+- Cleanup: killTweensOf on serviceIcons in return function
+- Files changed: `src/app/dwf-labs/page.tsx`, `prd.json`
+- **Learnings for future iterations:**
+  - Service icons are SVG elements inside .service-icon divs, queryable via `.service-icon svg`
+  - GSAP color property requires hex codes, not Tailwind class names (zinc-700 = '#3f3f46', orange-500 = '#f97316')
+  - Rotation of 360° completes at same visual position as 0°, transform matrix shows scale 1.2
+  - Icon animation shares same ScrollTrigger as card reveal for synchronized timing
+  - When animating SVG elements, use the SVG element itself (not wrapper div) for rotation/scale to center correctly

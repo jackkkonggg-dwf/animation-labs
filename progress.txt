@@ -217,3 +217,27 @@ Started: Wed Jan 28 04:56:36 HKT 2026
   - Background and mid-ground should move upward (negative y) while foreground can move downward (positive y) for contrast
   - Container height of 700px provides sufficient scroll distance for the parallax effect to be noticeable
   - Each layer needs a unique class name (.parallax-layer-bg, .parallax-layer-mid, .parallax-layer-fg) for GSAP targeting
+
+## [2025-01-28] - US-012
+- Created src/app/patterns/button-hover/page.tsx as the entry point for the button hover pattern
+- Created src/components/patterns/button-hover-pattern.tsx with full implementation
+- Button hover pattern: Three interactive button styles using mouseenter/mouseleave events
+- Scale+Shadow: Uses back.out(1.7) elastic easing with scale: 1.05 and animated boxShadow (0 4px → 0 20px 40px with orange glow)
+- Magnetic: Uses gsap.quickTo() for high-performance cursor tracking - button follows mouse with 0.3x magnetic strength
+- Icon Animation: Combines subtle button scale (1.02) with icon translate (x: 8) and rotate (45deg) for playful effect
+- Proper event listener cleanup: removeEventListener() + gsap.killTweensOf() in useGSAP return function
+- Live demo section with 3 cards showing each button style with emoji icons and descriptive labels
+- Code viewer with syntax-highlighted TypeScript/JSX code
+- Copy to clipboard button with scan line hover effect
+- 4 key concept cards explaining: hover events (mouseenter vs mouseover), quickTo performance, cleanup importance, easing choices
+- Follows same industrial orange design system: zinc-950 background, zinc-900 cards, orange-500 accents
+- Build and typecheck passed, browser verified
+- **Learnings for future iterations:**
+  - mouseenter/mouseleave don't bubble - use these instead of mouseover/mouseout for hover effects to prevent unwanted animations
+  - gsap.quickTo() creates cached, performant tweens ideal for high-frequency updates like mouse tracking - much faster than gsap.to() in mousemove
+  - For magnetic effects, calculate mouse offset from center: (mouse - center) * strength, where 0.2-0.5 is typical strength range
+  - back.out(1.7) creates playful overshoot for CTAs - the 1.7 value controls bounce amount (higher = more bounce)
+  - power2.out is professional and smooth - use for more conservative interfaces
+  - Always remove event listeners in cleanup - forgotten listeners cause memory leaks and zombie animations
+  - Icon animations work best when combined with subtle button scale - the icon gets more dramatic transform (translate + rotate) while button gets subtle scale
+---

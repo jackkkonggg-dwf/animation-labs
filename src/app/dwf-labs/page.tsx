@@ -18,6 +18,7 @@ export default function DWFLabsPage() {
   const servicesRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
   const portfolioRef = useRef<HTMLDivElement>(null);
+  const marqueeRowRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
     const hero = heroRef.current;
@@ -415,6 +416,25 @@ export default function DWFLabsPage() {
     };
   }, { scope: portfolioRef });
 
+  // US-015: Portfolio infinite horizontal marquee
+  useGSAP(() => {
+    const marqueeRow = marqueeRowRef.current;
+    if (!marqueeRow) return;
+
+    // Animate xPercent from 0 to -50 for seamless infinite loop
+    // The marquee contains duplicated content, so moving -50% creates perfect loop
+    gsap.to(marqueeRow, {
+      xPercent: -50,
+      duration: 20,
+      ease: 'none',
+      repeat: -1,
+    });
+
+    return () => {
+      gsap.killTweensOf(marqueeRow);
+    };
+  }, { scope: marqueeRowRef });
+
   return (
     <main className="min-h-screen bg-zinc-950">
       {/* Section 1: Hero - Kinetic Text Reveal + Multi-Layer Parallax */}
@@ -798,7 +818,7 @@ export default function DWFLabsPage() {
           <div className="portfolio-marquee overflow-hidden relative">
             <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-zinc-950 to-transparent z-10" />
             <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-zinc-950 to-transparent z-10" />
-            <div className="marquee-row flex items-center gap-8 whitespace-nowrap py-8">
+            <div ref={marqueeRowRef} className="marquee-row flex items-center gap-8 whitespace-nowrap py-8">
               {[
                 'TRON', 'Algorand', 'Notcoin', 'Mantle', 'Jupiter', 'TON', 'Gala', 'Celo',
                 'Fetch.ai', 'YGG', 'Beam', 'Sonic', 'WLFI', 'Vaultek', 'Floki',

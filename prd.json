@@ -232,8 +232,8 @@
         "Verify in browser using agent-browser skill"
       ],
       "priority": 15,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Marquee animation: xPercent 0→-50, duration: 20s, ease: none, repeat: -1 (infinite loop). Verified leftward scrolling in browser."
     },
     {
       "id": "US-016",

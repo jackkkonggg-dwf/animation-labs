@@ -20,6 +20,9 @@ export default function DWFLabsPage() {
     const hero = heroRef.current;
     if (!hero) return;
 
+    // Track all ScrollTriggers for cleanup
+    const triggers: ScrollTrigger[] = [];
+
     // US-004: Hero character text reveal animation
     const titleChars = hero.querySelectorAll('.hero-title span');
     gsap.set(titleChars, { y: 100, opacity: 0, rotation: -5 });
@@ -47,9 +50,79 @@ export default function DWFLabsPage() {
       delay: 0.3, // Delay after character reveal
     });
 
+    // US-006: Hero multi-layer parallax background
+    const layer1 = hero.querySelector('.parallax-layer-1');
+    const layer2 = hero.querySelector('.parallax-layer-2');
+    const layer3 = hero.querySelector('.parallax-layer-3');
+    const layer4 = hero.querySelector('.parallax-layer-4');
+
+    // Layer 1: Grid pattern - slowest (speed: 0.2)
+    if (layer1) {
+      gsap.to(layer1, {
+        y: 100,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: hero,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1,
+        },
+      });
+    }
+
+    // Layer 2: Crypto symbols (circles, hexagons, lines) - slow (speed: 0.5)
+    if (layer2) {
+      gsap.to(layer2, {
+        y: 250,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: hero,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1,
+        },
+      });
+    }
+
+    // Layer 3: Data particles - medium (speed: 0.8)
+    if (layer3) {
+      gsap.to(layer3, {
+        y: 400,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: hero,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1,
+        },
+      });
+    }
+
+    // Layer 4: Text/content - fastest (speed: 1.0)
+    if (layer4) {
+      gsap.to(layer4, {
+        y: 500,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: hero,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 1,
+        },
+      });
+    }
+
+    // Collect ScrollTriggers for cleanup
+    ScrollTrigger.getAll().forEach((trigger) => {
+      if (trigger.trigger === hero || hero.contains(trigger.trigger as Element)) {
+        triggers.push(trigger);
+      }
+    });
+
     return () => {
       gsap.killTweensOf(titleChars);
       gsap.killTweensOf(taglineWords);
+      triggers.forEach((t) => t.kill());
     };
   }, { scope: heroRef });
   return (
@@ -63,10 +136,10 @@ export default function DWFLabsPage() {
         {/* Parallax background layers */}
         <div className="absolute inset-0 pointer-events-none">
           {/* Layer 1: Grid Pattern */}
-          <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'linear-gradient(rgba(249, 115, 22, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(249, 115, 22, 0.1) 1px, transparent 1px)', backgroundSize: '50px 50px' }} />
+          <div className="parallax-layer-1 absolute inset-0 opacity-10" style={{ backgroundImage: 'linear-gradient(rgba(249, 115, 22, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(249, 115, 22, 0.1) 1px, transparent 1px)', backgroundSize: '50px 50px' }} />
 
           {/* Layer 2: Floating Geometric Shapes */}
-          <div className="absolute inset-0" aria-hidden="true">
+          <div className="parallax-layer-2 absolute inset-0" aria-hidden="true">
             {/* Circles representing coins */}
             <div className="absolute top-1/4 left-1/4 w-32 h-32 rounded-full border-2 border-zinc-800 opacity-20" />
             <div className="absolute bottom-1/3 right-1/4 w-24 h-24 rounded-full border-2 border-zinc-800 opacity-20" />
@@ -87,7 +160,7 @@ export default function DWFLabsPage() {
           </div>
 
           {/* Layer 3: Data Particles */}
-          <div className="absolute inset-0" aria-hidden="true">
+          <div className="parallax-layer-3 absolute inset-0" aria-hidden="true">
             <div className="absolute top-1/4 left-1/2 w-1 h-1 bg-orange-500 rounded-full opacity-30" />
             <div className="absolute top-1/3 left-1/3 w-1 h-1 bg-zinc-700 rounded-full opacity-40" />
             <div className="absolute top-2/3 right-1/4 w-1 h-1 bg-zinc-700 rounded-full opacity-40" />
@@ -96,7 +169,7 @@ export default function DWFLabsPage() {
         </div>
 
         {/* Content Layer */}
-        <div className="relative z-10 text-center px-4 max-w-6xl mx-auto">
+        <div className="parallax-layer-4 relative z-10 text-center px-4 max-w-6xl mx-auto">
           {/* Character reveal: DWF LABS */}
           <h1 className="hero-title text-6xl md:text-8xl lg:text-9xl font-black text-white tracking-tighter uppercase mb-6">
             <span className="inline-block">D</span>

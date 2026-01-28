@@ -79,8 +79,8 @@
         "Verify in browser using agent-browser skill"
       ],
       "priority": 5,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Word reveal animation: y: 50→0, opacity: 0→1, stagger: 0.15s per word, delay: 0.3s after character reveal, ease: power2.out, duration: 0.6s"
     },
     {
       "id": "US-006",
@@ -95,8 +95,8 @@
         "Verify in browser using agent-browser skill"
       ],
       "priority": 6,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "4-layer parallax: Layer1 (grid) y:100, Layer2 (shapes) y:250, Layer3 (particles) y:400, Layer4 (content) y:500, scrub:1, ease: none"
     },
     {
       "id": "US-007",

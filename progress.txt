@@ -69,3 +69,45 @@ Started: Thu Jan 29 01:07:23 HKT 2026
   - Browser console shows pre-existing hydration error (not related to GSAP changes)
   - agent-browser eval can verify animation state by checking computed styles
 ---
+
+## [2026-01-29] - US-005
+- Implemented Hero tagline word reveal animation in `src/app/dwf-labs/page.tsx`
+- Tagline already had word-level span elements from US-003 (7 words: New, Generation, Web3, Investor, &, Market, Maker)
+- Added word reveal animation in same useGSAP hook as character reveal
+- Initial state: y: 50, opacity: 0
+- Animate to: y: 0, opacity: 1
+- Stagger: 0.15s per word with 0.3s delay after character reveal starts
+- Easing: power2.out, duration: 0.6s
+- Cleanup: killTweensOf on taglineWords in return function
+- Browser verified: all 7 words reach opacity 1 at origin (transform matrix identity)
+- Files changed: `src/app/dwf-labs/page.tsx`, `prd.json`
+- **Learnings for future iterations:**
+  - The word reveal animation shares the same useGSAP hook as character reveal (keeps related animations together)
+  - Delay timing: 0.3s delay after character reveal gives visual separation between title and tagline
+  - The stagger creates a cascading effect: each word appears 0.15s after the previous
+  - power2.out is smoother than back.out for text (less "bounce" effect)
+  - Browser eval can verify animation state by checking computed styles on all span elements
+  - Use `Array.from()` with map in eval to get structured data from multiple elements
+---
+
+## [2026-01-29] - US-006
+- Implemented Hero multi-layer parallax background animation in `src/app/dwf-labs/page.tsx`
+- Added parallax-layer-1 through parallax-layer-4 CSS classes to existing HTML layers
+- Layer 1 (grid pattern): y: 100px, speed: 0.2
+- Layer 2 (crypto symbols - circles, hexagons, lines): y: 250px, speed: 0.5
+- Layer 3 (data particles): y: 400px, speed: 0.8
+- Layer 4 (text/content): y: 500px, speed: 1.0
+- All layers use scrub: 1 for smooth catch-up effect, ease: none
+- ScrollTrigger start: 'top top', end: 'bottom top'
+- Cleanup: Collect all ScrollTriggers in array, kill in return function
+- Typecheck passed, browser verified (all 4 parallax layers present in compiled HTML)
+- Files changed: `src/app/dwf-labs/page.tsx`, `prd.json`
+- **Learnings for future iterations:**
+  - Parallax layers already existed in HTML from US-003, just needed GSAP animations
+  - Different y distances create relative speed effect: larger y = faster apparent movement
+  - scrub: 1 creates smooth catch-up effect tied to scroll position
+  - ease: none prevents easing from interfering with the scroll-synced animation
+  - ScrollTrigger cleanup requires tracking instances created in the useGSAP hook
+  - Use `ScrollTrigger.getAll()` with trigger/contains check to find relevant instances
+  - agent-browser session flag (--session) prevents browser conflicts between commands
+---

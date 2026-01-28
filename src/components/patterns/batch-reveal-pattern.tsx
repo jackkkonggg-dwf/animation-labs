@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from '@/lib/gsap-config';
+import { RelatedPatterns } from '@/components/patterns/related-patterns';
 
 // ============================================================================
 // PATTERN HEADER COMPONENT
@@ -187,6 +188,7 @@ function CodeViewer() {
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from '@/lib/gsap-config';
+import { RelatedPatterns } from '@/components/patterns/related-patterns';
 
 export function BatchRevealComponent() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -538,6 +540,9 @@ export function BatchRevealPattern() {
       <LiveDemo />
       <CodeViewer />
       <PatternNotes />
+
+      {/* Related Patterns */}
+      <RelatedPatterns currentPatternId="batch-reveal" />
 
       {/* Footer CTA */}
       <section className="relative border-t border-orange-500/20 bg-zinc-900/30">

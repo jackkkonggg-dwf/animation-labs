@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import { Draggable, gsap } from '@/lib/gsap-config';
+import { RelatedPatterns } from '@/components/patterns/related-patterns';
 
 // ============================================================================
 // PATTERN HEADER COMPONENT
@@ -847,6 +848,9 @@ export function DraggableMomentumPattern() {
       <LiveDemo />
       <CodeViewerWithCopy />
       <PatternNotes />
+
+      {/* Related Patterns */}
+      <RelatedPatterns currentPatternId="draggable-momentum" />
 
       {/* Footer CTA */}
       <section className="relative border-t border-orange-500/20 bg-zinc-900/30">

@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from '@/lib/gsap-config';
+import { RelatedPatterns } from '@/components/patterns/related-patterns';
 
 // ============================================================================
 // PATTERN HEADER COMPONENT
@@ -603,6 +604,9 @@ export function StaggeredRevealPattern() {
       <LiveDemo />
       <CodeViewer />
       <PatternNotes />
+
+      {/* Related Patterns */}
+      <RelatedPatterns currentPatternId="staggered-reveal" />
 
       {/* Footer CTA */}
       <section className="relative border-t border-orange-500/20 bg-zinc-900/30">

@@ -5,6 +5,7 @@ import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 import { RelatedPatterns } from '@/components/patterns/related-patterns';
 import { PatternNavigation } from '@/components/patterns/pattern-navigation';
+import { splitTextToWords } from '@/lib/text-split-utils-react';
 
 // ============================================================================
 // PATTERN HEADER COMPONENT
@@ -120,15 +121,6 @@ function LiveDemo() {
     };
   }, { scope: containerRef });
 
-  // Helper function to split text into word spans
-  const splitText = (text: string) => {
-    return text.split(' ').map((word, index) => (
-      <span key={index} className="word-reveal inline-block whitespace-nowrap">
-        {word}{index < text.split(' ').length - 1 && ' '}
-      </span>
-    ));
-  };
-
   return (
     <section className="relative border-b border-zinc-800">
       {/* Grid pattern overlay */}
@@ -148,14 +140,14 @@ function LiveDemo() {
         {/* Hero headline */}
         <div className="mb-16">
           <h2 className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-tight tracking-tighter">
-            {splitText('WORD BY WORD REVEAL ANIMATION')}
+            {splitTextToWords('WORD BY WORD REVEAL ANIMATION', 'word-reveal')}
           </h2>
         </div>
 
         {/* Subheadline */}
         <div className="mb-16">
           <p className="text-xl md:text-2xl text-zinc-400 font-light leading-relaxed">
-            {splitText('Each word animates independently with dramatic timing for maximum impact.')}
+            {splitTextToWords('Each word animates independently with dramatic timing for maximum impact.', 'word-reveal')}
           </p>
         </div>
 
@@ -166,7 +158,7 @@ function LiveDemo() {
               Dramatic
             </p>
             <h3 className="text-2xl md:text-3xl font-black text-white uppercase">
-              {splitText('Capture Attention')}
+              {splitTextToWords('Capture Attention', 'word-reveal')}
             </h3>
           </div>
 
@@ -175,7 +167,7 @@ function LiveDemo() {
               Balanced
             </p>
             <h3 className="text-2xl md:text-3xl font-black text-white uppercase">
-              {splitText('Create Impact')}
+              {splitTextToWords('Create Impact', 'word-reveal')}
             </h3>
           </div>
 
@@ -184,7 +176,7 @@ function LiveDemo() {
               Expressive
             </p>
             <h3 className="text-2xl md:text-3xl font-black text-white uppercase">
-              {splitText('Tell Your Story')}
+              {splitTextToWords('Tell Your Story', 'word-reveal')}
             </h3>
           </div>
 
@@ -193,7 +185,7 @@ function LiveDemo() {
               Dynamic
             </p>
             <h3 className="text-2xl md:text-3xl font-black text-white uppercase">
-              {splitText('Engage Users')}
+              {splitTextToWords('Engage Users', 'word-reveal')}
             </h3>
           </div>
         </div>

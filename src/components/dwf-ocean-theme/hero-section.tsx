@@ -5,6 +5,7 @@ import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 import { HERO_DATA, WAVE_ANIMATION_CONFIG } from '@/data/dwf-homepage-data';
 import { calculateWaveYOffset } from '@/lib/wave-utils';
+import { splitElementToChars } from '@/lib/text-split-utils';
 
 /**
  * Hero Section - Ocean Wave Theme
@@ -118,24 +119,7 @@ export function HeroSection() {
     }
 
     // Text splitting for wave reveal
-    const splitTextIntoChars = (element: HTMLElement): HTMLSpanElement[] => {
-      const text = element.textContent ?? '';
-      const chars: HTMLSpanElement[] = [];
-      element.innerHTML = '';
-      text.split('').forEach((char) => {
-        const span = document.createElement('span');
-        span.textContent = char === ' ' ? '\u00A0' : char;
-        span.className = 'hero-char';
-        span.style.display = 'inline-block';
-        span.style.position = 'relative';
-        span.style.opacity = '0';
-        element.appendChild(span);
-        chars.push(span);
-      });
-      return chars;
-    };
-
-    const chars = splitTextIntoChars(title);
+    const chars = splitElementToChars(title);
 
     gsap.set(chars, (i: number) => {
       const yOffset = calculateWaveYOffset(

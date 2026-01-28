@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { GSAPProvider } from "@/providers/gsap-provider";
+import { Navbar } from "@/components/navigation/navbar";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -24,7 +25,8 @@ export default function RootLayout({
         className={`${geistMono.variable} antialiased`}
       >
         <GSAPProvider />
-        {children}
+        <Navbar />
+        <div className="pt-[72px]">{children}</div>
       </body>
     </html>
   );

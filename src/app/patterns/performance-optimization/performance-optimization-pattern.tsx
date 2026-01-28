@@ -152,6 +152,7 @@ function LiveDemo() {
       scrollTrigger: {
         trigger: container,
         start: 'top 80%',
+        end: 'bottom 70%',
         toggleActions: 'play none none reverse',
       },
     });
@@ -319,6 +320,7 @@ export function OptimizedAnimation() {
       scrollTrigger: {
         trigger: container,
         start: 'top 80%',
+        end: 'bottom 70%',
         toggleActions: 'play none none reverse',
       },
     });

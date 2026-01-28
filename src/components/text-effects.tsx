@@ -5,53 +5,11 @@ import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 import { TEXT_SECTIONS, type LayoutType } from '@/data/text-sections';
 import type { TextSection } from '@/data/text-sections';
+import { splitElementToChars, splitElementToWords } from '@/lib/text-split-utils';
 
 // ============================================================================
-// UTILITY FUNCTIONS - Vanilla JS Text Splitting
+// ANIMATION CREATORS
 // ============================================================================
-
-/**
- * Split text into character spans for character-level animation
- * Preserves spaces as non-breaking spaces
- */
-function splitToChars(element: HTMLElement): void {
-  const text = element.textContent ?? '';
-  const chars = text.split('').map((char) => {
-    const span = document.createElement('span');
-    span.textContent = char === ' ' ? '\u00A0' : char;
-    span.className = 'char';
-    span.style.display = 'inline-block';
-    span.style.position = 'relative';
-    return span;
-  });
-  element.innerHTML = '';
-  chars.forEach((char) => element.appendChild(char));
-}
-
-/**
- * Split text into word spans for word-level animation
- * Preserves spacing between words
- */
-function splitToWords(element: HTMLElement): void {
-  const text = element.textContent ?? '';
-  const words = text.split(' ').map((word) => {
-    const span = document.createElement('span');
-    span.textContent = word;
-    span.className = 'word';
-    span.style.display = 'inline-block';
-    return span;
-  });
-  element.innerHTML = '';
-  words.forEach((word, i) => {
-    element.appendChild(word);
-    if (i < words.length - 1) {
-      const space = document.createElement('span');
-      space.innerHTML = '&nbsp;';
-      space.style.display = 'inline-block';
-      element.appendChild(space);
-    }
-  });
-}
 
 // ============================================================================
 // ANIMATION CREATORS
@@ -121,9 +79,9 @@ function createScaleAnimation(
 
   // Split text into words for stagger effect
   textLines.forEach((line) => {
-    splitToWords(line as HTMLElement);
+    splitElementToWords(line as HTMLElement);
   });
-  const words = container.querySelectorAll('.word');
+  const words = container.querySelectorAll('.word-split');
 
   // Set initial state
   gsap.set(words, { opacity: 0, scale: 0.5, filter: 'blur(10px)' });
@@ -234,9 +192,9 @@ function createCharStaggerAnimation(
 
   // Split each line into characters
   textLines.forEach((line) => {
-    splitToChars(line as HTMLElement);
+    splitElementToChars(line as HTMLElement);
   });
-  const chars = container.querySelectorAll('.char');
+  const chars = container.querySelectorAll('.char-split');
 
   // Set initial state
   gsap.set(chars, {
@@ -297,9 +255,9 @@ function createWordRevealAnimation(
 
   // Split text into words
   textLines.forEach((line) => {
-    splitToWords(line as HTMLElement);
+    splitElementToWords(line as HTMLElement);
   });
-  const words = container.querySelectorAll('.word');
+  const words = container.querySelectorAll('.word-split');
 
   // Set initial state - more dramatic/obvious
   gsap.set(words, { opacity: 0, x: -80, skewX: -25, scale: 0.8 });
@@ -388,8 +346,8 @@ function TextEffectSection({ section }: TextEffectSectionProps) {
     return () => {
       result.triggers.forEach((t) => t.kill());
       gsap.killTweensOf('.text-line');
-      gsap.killTweensOf('.word');
-      gsap.killTweensOf('.char');
+      gsap.killTweensOf('.word-split');
+      gsap.killTweensOf('.char-split');
     };
   }, [section.animationType]);
 

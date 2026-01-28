@@ -1,4 +1,3 @@
-import { Navbar } from "@/components/navigation/navbar";
 import { CategoryGrid } from "@/components/navigation/category-grid";
 import { DemoGrid } from "@/components/navigation/demo-grid";
 import { ThemeVersionsSection } from "@/components/theme-versions-section";
@@ -7,10 +6,9 @@ import { Suspense } from "react";
 export default function Home() {
   return (
     <main className="min-h-screen bg-zinc-950">
-      <Navbar />
-      <Suspense fallback={<CategoryGridFallback />}>
+      {/* <Suspense fallback={<CategoryGridFallback />}>
         <CategoryGrid />
-      </Suspense>
+      </Suspense> */}
       <Suspense fallback={<DemoGridFallback />}>
         <DemoGrid />
       </Suspense>

@@ -5,6 +5,7 @@ import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 import { RelatedPatterns } from '@/components/patterns/related-patterns';
 import { PatternNavigation } from '@/components/patterns/pattern-navigation';
+import { splitTextToChars } from '@/lib/text-split-utils-react';
 
 // ============================================================================
 // PATTERN HEADER COMPONENT
@@ -120,15 +121,6 @@ function LiveDemo() {
     };
   }, { scope: containerRef });
 
-  // Helper function to split text into character spans
-  const splitText = (text: string) => {
-    return text.split('').map((char, index) => (
-      <span key={index} className="char-reveal inline-block">
-        {char === ' ' ? '\u00A0' : char}
-      </span>
-    ));
-  };
-
   return (
     <section className="relative border-b border-zinc-800">
       {/* Grid pattern overlay */}
@@ -148,17 +140,17 @@ function LiveDemo() {
         {/* Hero headline */}
         <div className="mb-16">
           <h2 className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-none tracking-tighter">
-            {splitText('KINETIC')}
+            {splitTextToChars('KINETIC', 'char-reveal')}
           </h2>
           <h2 className="text-5xl md:text-7xl lg:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-500 leading-none tracking-tighter mt-2">
-            {splitText('TYPOGRAPHY')}
+            {splitTextToChars('TYPOGRAPHY', 'char-reveal')}
           </h2>
         </div>
 
         {/* Subheadline */}
         <div className="mb-16">
           <p className="text-xl md:text-2xl text-zinc-400 font-light leading-relaxed">
-            {splitText('Each character animates independently with precise timing control.')}
+            {splitTextToChars('Each character animates independently with precise timing control.', 'char-reveal')}
           </p>
         </div>
 
@@ -169,7 +161,7 @@ function LiveDemo() {
               Fast Stagger
             </p>
             <h3 className="text-2xl md:text-3xl font-black text-white uppercase">
-              {splitText('Quick Reveal')}
+              {splitTextToChars('Quick Reveal', 'char-reveal')}
             </h3>
           </div>
 
@@ -178,7 +170,7 @@ function LiveDemo() {
               With Bounce
             </p>
             <h3 className="text-2xl md:text-3xl font-black text-white uppercase">
-              {splitText('Spring Effect')}
+              {splitTextToChars('Spring Effect', 'char-reveal')}
             </h3>
           </div>
         </div>

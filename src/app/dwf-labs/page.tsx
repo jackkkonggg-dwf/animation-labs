@@ -34,8 +34,22 @@ export default function DWFLabsPage() {
       delay: 0.2,
     });
 
+    // US-005: Hero tagline word reveal animation
+    const taglineWords = hero.querySelectorAll('.hero-tagline span');
+    gsap.set(taglineWords, { y: 50, opacity: 0 });
+
+    gsap.to(taglineWords, {
+      y: 0,
+      opacity: 1,
+      duration: 0.6,
+      stagger: 0.15,
+      ease: 'power2.out',
+      delay: 0.3, // Delay after character reveal
+    });
+
     return () => {
       gsap.killTweensOf(titleChars);
+      gsap.killTweensOf(taglineWords);
     };
   }, { scope: heroRef });
   return (

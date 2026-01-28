@@ -5,8 +5,8 @@ import { useGSAP } from '@gsap/react';
 import { gsap } from '@/lib/gsap-config';
 
 export default function TimelineOrchestrationPage() {
-  const masterTimelineRef = useRef<gsap.CoreTimeline | null>(null);
-  const childTimelinesRef = useRef<gsap.CoreTimeline[]>([]);
+  const masterTimelineRef = useRef<ReturnType<typeof gsap.timeline> | null>(null);
+  const childTimelinesRef = useRef<ReturnType<typeof gsap.timeline>[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const scrubberRef = useRef<HTMLDivElement>(null);
   const scrubberHandleRef = useRef<HTMLDivElement>(null);
@@ -120,7 +120,7 @@ export default function TimelineOrchestrationPage() {
 
         // Find current label
         const labels = masterTl.getLabelsArray();
-        const currentLabelObj = labels.find((label) => {
+        const currentLabelObj = labels.find((label: { label: string; time: number }) => {
           const labelTime = label.time / masterTl.duration();
           return progress >= labelTime && progress < labelTime + 0.15;
         });

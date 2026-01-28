@@ -188,3 +188,28 @@ Started: Wed Jan 28 20:57:54 HKT 2026
   - The linesClass option in SplitText creates wrapper divs with overflow hidden for reveal effects
   - For 3D text effects on scroll, set perspective on the container element via style={{ perspective: '1000px' }}
 ---
+
+## [2026-01-28] - US-010
+- Created Gesture Scroll Hybrid demo at src/app/advanced-patterns/gesture-scroll/page.tsx
+- CursorTrailSection: Mouse-follow cursor with 8 trailing elements using gsap.quickTo(), cascading lag (0.1-0.64s), real-time position display
+- VelocityScrollSection: useScrollState hook for velocity tracking, visual meter with color-coding (green>50, yellow 30-50, red<30 FPS), cards scale based on scroll speed
+- DirectionScrollSection: Scroll direction awareness with different animations for up vs down, circle rotation and color change, cards slide in opposite directions
+- SwipeGestureSection: useSwipeCallback for gesture recognition, 4-direction swipe animations with elastic reset
+- PinchZoomSection: useGestureRecognizer for pinch support (not useSwipeCallback which omits pinch callbacks), real-time scale display
+- HoverInterruptSection: Hover states interrupt continuous animations (rotation, pulse, color cycle), pauses on hover with scale/rotation change
+- ObserverSection: Observer plugin for scroll direction tracking (onUp/onDown) and pointer tracking (3D tilt on hover)
+- Build and typecheck passed successfully
+- Browser verification completed via agent-browser - 7 screenshots captured of all sections
+- **Learnings for future iterations:**
+  - gsap.quickTo() is optimized for high-frequency updates like mouse tracking - skips unit conversion, relative values, function-based values, plugin parsing
+  - quickTo() returns a function with a `.tween` property for accessing the Tween instance, but TypeScript doesn't recognize this type - cleanup happens automatically
+  - useSwipeCallback omits pinch-related callbacks (onPinch, onPinchStart, onPinchEnd) - use useGestureRecognizer for full gesture support
+  - useGestureRecognizer requires RefObject<HTMLElement> but passing RefObject<HTMLDivElement> requires type cast with eslint-disable
+  - Observer.create() type 'scroll' supports onUp/onDown/onLeft/onRight for directional callbacks
+  - Observer.create() type 'pointer' supports onMove/onHover but NOT onHoverStart/onHoverEnd - use React onMouseEnter/onMouseLeave instead
+  - Observer callbacks receive `self` parameter with properties that may be undefined (e.g., self.x, self.y) - always check before using
+  - For 3D tilt effects on hover, combine Observer.onMove for tilt calculation with React onMouseEnter/onMouseLeave for state changes
+  - Hover interrupt pattern: Store tween references in variables, call .pause() on hover and .resume() on leave
+  - ScrollTrigger.create() with onUpdate callback is useful for continuous updates based on scroll state
+  - When using container.querySelectorAll() with Observer, loop through elements and create individual Observers for each
+---

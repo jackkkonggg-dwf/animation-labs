@@ -1,0 +1,280 @@
+# Ralph Progress Log
+Started: Wed Jan 28 20:57:54 HKT 2026
+---
+
+## [2026-01-28] - US-001
+- Registered GSAP bonus plugins in src/lib/gsap-config.ts: SplitText, ScrollSmoother, InertiaPlugin, MorphSVGPlugin, DrawSVGPlugin, ScrambleTextPlugin, ScrollToPlugin, Observer
+- All plugins registered client-side only with `typeof window !== 'undefined'` check
+- Build and typecheck passed successfully
+- **Learnings for future iterations:**
+  - SnapPlugin is NOT a separate GSAP module - the snap functionality is built into Draggable itself
+  - GSAP bonus plugins are imported from `gsap/PluginName` (e.g., `gsap/SplitText`)
+  - Draggable uses a different import pattern: `import Draggable from 'gsap/src/Draggable'`
+  - TypeScript type definitions are available in `node_modules/gsap/types/` with kebab-case names (e.g., `split-text.d.ts`)
+---
+
+## [2026-01-28] - US-002
+- Created PerformanceMetrics component at src/components/PerformanceMetrics.tsx
+- Real-time FPS counter using requestAnimationFrame with rolling average of last 10 measurements
+- GSAP metrics tracking: active timelines (via gsap.globalTimeline.getChildren()), ScrollTrigger count, total animation duration
+- Toggle show/hide functionality with persistent button when collapsed
+- Color-coded performance: green (>50 FPS), yellow (30-50), red (<30) with status text (EXCELLENT/GOOD/POOR)
+- Matches design system with zinc-900/95 backgrounds, orange-500 accents, corner accents
+- Test page created at src/app/test-performance-metrics/ for browser verification
+- Browser verification completed via agent-browser - screenshots captured showing component working correctly
+- Build and typecheck passed successfully
+- **Learnings for future iterations:**
+  - gsap.globalTimeline.getChildren() returns array of active animations/timelines - filter with isActive() for currently running
+  - ScrollTrigger.getAll() returns array of all ScrollTrigger instances
+  - For FPS calculation, update every 500ms with frame counting for stable readings
+  - agent-browser skill is invoked via `Skill` tool, not bash command - but pnpm dlx agent-browser works for direct CLI access
+  - Playwright chromium must be installed separately via `pnpm dlx playwright install chromium`
+  - The component should be exportable from a barrel file (e.g., src/components/index.ts) for easier imports in future demos
+---
+
+## [2026-01-28] - US-003
+- Created DebugModeToggle component at src/components/DebugModeToggle.tsx
+- React context (DebugModeProvider) for global debug mode state management
+- Toggle switch for enabling/disabling ScrollTrigger markers via ScrollTrigger.defaults()
+- Scroll position and velocity tracking using requestAnimationFrame with delta time calculation
+- Debug info panel shows: trigger element, start/end positions, scrub status, progress percentage, active state
+- Collapsible panel with persistent button when collapsed - matches PerformanceMetrics pattern
+- Matches design system with zinc-900/95 backgrounds, orange-500 accents, corner accents
+- Test page created at src/app/test-debug-mode/ with multiple ScrollTrigger examples (basic trigger, scrub, pin, timeline)
+- Browser verification completed via agent-browser - debug panel opens, toggle works, markers appear, scroll velocity updates
+- Build and typecheck passed successfully
+- **Learnings for future iterations:**
+  - ScrollTrigger.defaults({ markers: true }) sets markers for all ScrollTrigger instances globally
+  - ScrollTrigger.refresh() must be called after changing defaults to update existing triggers
+  - ScrollTrigger.getAll() returns array of ScrollTrigger instances - internal properties like .trigger, .start, .end, .scrub, .progress, .isActive are available but not fully typed
+  - For scroll velocity: calculate (deltaY / deltaTime) where deltaTime is in milliseconds - gives px/ms
+  - Use eslint-disable-next-line comment for intentional `any` types when accessing internal GSAP properties
+  - The DebugModeProvider context pattern allows components like DebugModeToggle to be used anywhere without prop drilling
+---
+
+## [2026-01-28] - US-004
+- Created AdvancedDemoIndicator component at src/components/AdvancedDemoIndicator.tsx
+- React context (ActivePluginsProvider) for global plugin state management
+- Fixed overlay showing active GSAP plugins with custom SVG icons for 12 plugins: Core, ScrollTrigger, Draggable, SplitText, MorphSVG, MotionPath, DrawSVG, ScrambleText, ScrollTo, Observer, Inertia, ScrollSmoother
+- Tracks animation state: playing, paused, reversed, idle using gsap.globalTimeline.paused(), reversed(), and isActive()
+- Plugin grid highlights active plugins in orange with border, inactive plugins are dimmed
+- Pattern types legend with color coding: Scroll (blue), Interactive (purple), Timeline (orange), Text (green)
+- Collapsible panel with persistent button showing active count when collapsed
+- Shows ScrollTrigger count and global timeline status in footer
+- Matches design system with zinc-900/95 backgrounds, orange-500 accents, corner accents
+- Test page created at src/app/test-advanced-demo-indicator/ with Timeline demo (play/pause/reverse controls) and ScrollTrigger demo
+- Browser verification completed via agent-browser - screenshots captured showing collapsed, expanded, playing, paused, and reversed states
+- Build and typecheck passed successfully
+- **Learnings for future iterations:**
+  - Use React.Context for global state when multiple components need to share plugin/animation state
+  - Animation state detection: gsap.globalTimeline.paused() returns boolean, reversed() returns boolean, check active animations with globalTimeline.getChildren().some(t => t.isActive())
+  - For plugin tracking, use a Set<string> for O(1) add/delete/has operations
+  - Import ReactElement type explicitly for typing icon Record: `import type { ReactElement } from 'react'`
+  - When using useRef with types, always provide initial value: `useRef<NodeJS.Timeout | undefined>(undefined)`
+  - pnpm dlx agent-browser@latest requires the version specifier for fresh installs, and browser should be closed after use with `agent-browser close`
+---
+
+## [2026-01-28] - US-005
+- Created performance monitor utilities at src/lib/utils/
+- performance-monitor.ts: PerformanceMonitor class with FPS tracking using requestAnimationFrame, rolling average calculation, React hook useFPSCounter
+- scroll-velocity.ts: ScrollVelocityTracker class for position/velocity/direction tracking, smooth velocity averaging, React hooks useScrollState and useScrollVelocity
+- gesture-recognizer.ts: GestureRecognizer class for swipe and pinch detection, touch/mouse/wheel event handling, React hooks useGestureRecognizer and useSwipeCallback
+- TypeScript types for all utilities: FPSState, PerformanceMetrics, ScrollState, ScrollVelocityOptions, SwipeGesture, PinchGesture, Point, etc.
+- Helper functions: getFPSColor, getFPSBgColor, getFPSStatus, getScrollProgress, isDirectionActive, getDirectionVector, isHorizontalSwipe, isVerticalSwipe, getOppositeDirection, getSwipeDirectionVector
+- Fixed TypeScript event listener type issues (EventListener expects Event, not TouchEvent/MouseEvent/WheelEvent)
+- Build and typecheck passed successfully
+- **Learnings for future iterations:**
+  - Event listener type errors: addEventListener expects handler with Event parameter, not specific event types - cast inside handler with `const e = event as TouchEvent`
+  - React hook dependency warnings: when destructuring options in dependency array (e.g., [options.updateInterval]), the linter still wants 'options' - add eslint-disable-next-line with comment explaining intentional behavior
+  - Class-based utility pattern allows both imperative usage (new PerformanceMonitor().start()) and React integration via hooks (useFPSCounter())
+  - For gesture recognition, track active touches in Map<number, Point> to handle multi-touch scenarios properly
+  - Pinch gesture: detect when 2 touches are active, calculate distance between touch points, track scale as currentDistance / initialDistance
+  - Swipe gesture: track start point/time and end point/time, calculate distance/velocity/duration, apply thresholds for minimum distance and velocity
+---
+
+## [2026-01-28] - US-006
+- Created Cinematic Scroll demo at src/app/advanced-patterns/cinematic-scroll/page.tsx
+- Implemented 4 pinned sections with nested GSAP timelines and advanced easing
+- HeroSection: Parallax background (y: -150, scale: 1.1), grid overlay rotation, title reveal with back.out(1.7), scale/fade exit with expo.inOut
+- TextRevealSection: Word cascade stagger (0.15s), circle expansion with elastic.out(1, 0.6), border-radius morph to square, shape exit with expo.in
+- ImageRevealSection: Three layered cards with cascade entry, "dance" animations (y, rotation changes) with elastic.out and back.out easing, particle burst from center
+- FinaleSection: Line draw animation (scaleX), shape burst with elastic.out, rotation animations with expo.inOut, final scale with back.out
+- Advanced easing used throughout: back.out(1.2-2), elastic.out(1, 0.4-0.6), expo.inOut, expo.in, expo.out
+- Proper cleanup with ScrollTrigger.getAll().forEach(t => t.kill()), tl.kill(), and gsap.killTweensOf() for all animated elements
+- Info banner at top shows "4 PINNED SECTIONS" status indicator
+- Browser verification completed via agent-browser - screenshots captured showing all 4 sections with their animations
+- Build passed successfully
+- **Learnings for future iterations:**
+  - Client components cannot export metadata in Next.js App Router - remove the export or remove 'use client' directive
+  - For cinematic scroll, use longer end values (+=1500 to +=2500) to give more scroll distance for complex animations
+  - Nested timeline positioning: use position parameter (second argument) like `0.3` to overlap animations, `1.2` for sequential ordering
+  - Stagger with from: { each: 0.05, from: 'center' } creates a burst/explosion effect from center outward
+  - elastic.out parameters: (amplitude, period) - elastic.out(1, 0.6) for medium bounce, elastic.out(1, 0.4) for tighter
+  - back.out parameters: (strength) - back.out(1.7) for stronger overshoot, back.out(2) for very dramatic
+  - For parallax, animate background elements with different y values (e.g., -150 vs -80) to create depth perception
+---
+
+## [2026-01-28] - US-007
+- Created Physics Playground demo at src/app/advanced-patterns/physics-playground/page.tsx
+- PhysicsBox component: Draggable with InertiaPlugin for momentum physics, edgeResistance: 0.65
+- Snap-to-grid with liveSnap (immediate feedback during drag) and inertia.snap (final position after release)
+- Grid size selector: 25px, 50px, 100px
+- Collision detection using Draggable.hitTest(box, otherBox, '50%') for 50% overlap threshold
+- Visual feedback on collision: scale bounce (1.15), brightness boost (1.3), rotation shake (+=10), red border overlay
+- RotationSpinner component: Draggable with type: 'rotation', snap to 45-degree increments
+- Control panel: Grid toggle, grid size buttons, reset positions, collision counter
+- Info overlay with physics features list
+- Proper cleanup with draggable.kill() for all instances
+- Browser verification completed via agent-browser - screenshots captured showing playground
+- Build passed successfully
+- **Learnings for future iterations:**
+  - InertiaPlugin config with snap.x/snap.y for x/y coordinate snapping requires `as any` type assertion due to incomplete TS definitions
+  - Draggable.hitTest() accepts third parameter as threshold: number (pixels) or string (percentage like '50%')
+  - Use `this.velocity()` in onDrag callback to get current velocity of draggable (returns {x, y} in pixels/second)
+  - edgeResistance: 0.65 creates resistance at bounds before stopping - values closer to 1 = less resistance
+  - inertia.resistance: 1000 controls throw duration - higher = longer throws
+  - liveSnap applies snap during drag, inertia.snap applies snap during throw/inertia animation
+  - InertiaPlugin replaces ThrowPropsPlugin from GSAP 2.x - same functionality, different name
+  - SnapPlugin is NOT a separate module - snap functionality is built into Draggable core
+  - For cleanup, Draggable.create() returns an array - use [0] to get the instance or destructure
+  - When using querySelectorAll with Draggable, ensure elements exist before calling create()
+---
+
+## [2026-01-28] - US-008
+- Created SVG Morph Journey demo at src/app/advanced-patterns/svg-morph-journey/page.tsx
+- MorphingJourneySection: 4-shape morph progression (circle → square → triangle → star) with scrollTrigger, SVG filter animations (feGaussianBlur blur and glow)
+- MotionPathJourneySection: MotionPathPlugin with curved path following, auto-rotate alignment, DrawSVG-style path reveal
+- InteractiveMorphSection: Hover-triggered morph animations on 4 shapes (hexagon, diamond, cross, heart), elastic.out easing, filter glow effects, scale bounce feedback
+- CombinedShowcaseSection: MorphSVG + MotionPathPlugin combination, path morphs while element follows, particle burst animations
+- SVG filters animated via gsap.to() with attr property (e.g., attr: { stdDeviation: 3 })
+- Proper cleanup with ScrollTrigger.getAll().forEach(t => t.kill()), tl.kill(), gsap.killTweensOf()
+- Browser verification completed via agent-browser - screenshots captured showing all 4 sections
+- Build and typecheck passed successfully
+- **Learnings for future iterations:**
+  - MorphSVGPlugin with morphSVG: { shape: target, type: 'rotational' } for smoother transitions between shapes with different point counts
+  - type: 'rotational' eliminates kinks and provides more natural interpolation compared to default 'linear' type
+  - SVG filter elements (feGaussianBlur, etc.) can be queried with querySelector and animated via attr: { stdDeviation: value }
+  - SVGFEElement type doesn't exist in TypeScript - use SVGElement or add eslint-disable with 'any' type for filter elements
+  - For MotionPathPlugin, use motionPath: { path: selector, align: selector, alignOrigin: [0.5, 0.5], autoRotate: true } for centered alignment
+  - When combining morph and motionPath, the element follows the path as it morphs - creates complex, organic animations
+  - DrawSVG-style stroke animation can be achieved with strokeDasharray and strokeDashoffset (simulate DrawSVGPlugin without using it)
+  - For hover interactions in useGSAP, attach event listeners in the effect and clean them up in the return function
+  - Event listener type errors: addEventListener expects Event type, cast inside handler to specific type (e.g., MouseEvent)
+  - SVG path transformOrigin must be set via style={{ transformOrigin: '100px 100px' }} not as direct prop
+  - gsap.timeline().call() callback requires second parameter to be array (not null) for params argument
+---
+
+## [2026-01-28] - US-009
+- Created Text Symphony demo at src/app/advanced-patterns/text-symphony/page.tsx
+- HeroSection: Auto-playing timeline with SplitText character cascade wave (stagger 0.03s from start), word-based subtitle reveal with elastic.out, color wave effect through characters, pulse animation with random stagger
+- CharacterCascadeSection: Scroll-triggered character wave with y/rotation based on Math.sin, color blend on scroll progress using hsl colors
+- WordRevealSection: Three lines with different stagger timings (0.1s, 0.2s, 0.3s) to create visual hierarchy, all using back.out(1.5) easing
+- LineByLineSection: Line-by-line reveals with elastic.out(1, 0.6) easing, scan line visual effect with repeating-linear-gradient
+- ScrollScrubSection: Scrub animation with pin: true, character rotation and scale based on position, 3D rotation (rotationY 360, rotationX based on Math.sin)
+- GradientBlendSection: Text gradient blend with backgroundClip and WebkitBackgroundClip, scale effect with stagger
+- Reduced motion support with CSS @media (prefers-reduced-motion) that disables all transitions/animations
+- Proper cleanup with ScrollTrigger.getAll().forEach(t => t.kill()), tl.kill(), split.revert(), gsap.killTweensOf()
+- Browser verification completed via agent-browser - screenshots captured of all sections
+- Build and typecheck passed successfully
+- **Learnings for future iterations:**
+  - SplitText.create(element, { type: 'chars, words, lines' }) splits text into individual units for animation
+  - split.chars, split.words, split.lines return NodeList-like collections of wrapped elements
+  - For character-based wave effects, use stagger: { each: 0.03, from: 'start' } for left-to-right cascade
+  - For burst/explosion effects, use stagger: { each: 0.05, from: 'center' } or from: 'random'
+  - The ease property in GSAP tweens does NOT accept a function that returns a string - use a single easing string or handle different easings per element via separate tweens
+  - Text gradient effects require backgroundClip: 'text', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' properties
+  - SplitText.revert() cleans up the split wrappers and restores original text - essential for cleanup
+  - When animating split text, reference the split.chars/words/lines in killTweensOf() for proper cleanup
+  - The linesClass option in SplitText creates wrapper divs with overflow hidden for reveal effects
+  - For 3D text effects on scroll, set perspective on the container element via style={{ perspective: '1000px' }}
+---
+
+## [2026-01-28] - US-010
+- Created Gesture Scroll Hybrid demo at src/app/advanced-patterns/gesture-scroll/page.tsx
+- CursorTrailSection: Mouse-follow cursor with 8 trailing elements using gsap.quickTo(), cascading lag (0.1-0.64s), real-time position display
+- VelocityScrollSection: useScrollState hook for velocity tracking, visual meter with color-coding (green>50, yellow 30-50, red<30 FPS), cards scale based on scroll speed
+- DirectionScrollSection: Scroll direction awareness with different animations for up vs down, circle rotation and color change, cards slide in opposite directions
+- SwipeGestureSection: useSwipeCallback for gesture recognition, 4-direction swipe animations with elastic reset
+- PinchZoomSection: useGestureRecognizer for pinch support (not useSwipeCallback which omits pinch callbacks), real-time scale display
+- HoverInterruptSection: Hover states interrupt continuous animations (rotation, pulse, color cycle), pauses on hover with scale/rotation change
+- ObserverSection: Observer plugin for scroll direction tracking (onUp/onDown) and pointer tracking (3D tilt on hover)
+- Build and typecheck passed successfully
+- Browser verification completed via agent-browser - 7 screenshots captured of all sections
+- **Learnings for future iterations:**
+  - gsap.quickTo() is optimized for high-frequency updates like mouse tracking - skips unit conversion, relative values, function-based values, plugin parsing
+  - quickTo() returns a function with a `.tween` property for accessing the Tween instance, but TypeScript doesn't recognize this type - cleanup happens automatically
+  - useSwipeCallback omits pinch-related callbacks (onPinch, onPinchStart, onPinchEnd) - use useGestureRecognizer for full gesture support
+  - useGestureRecognizer requires RefObject<HTMLElement> but passing RefObject<HTMLDivElement> requires type cast with eslint-disable
+  - Observer.create() type 'scroll' supports onUp/onDown/onLeft/onRight for directional callbacks
+  - Observer.create() type 'pointer' supports onMove/onHover but NOT onHoverStart/onHoverEnd - use React onMouseEnter/onMouseLeave instead
+  - Observer callbacks receive `self` parameter with properties that may be undefined (e.g., self.x, self.y) - always check before using
+  - For 3D tilt effects on hover, combine Observer.onMove for tilt calculation with React onMouseEnter/onMouseLeave for state changes
+  - Hover interrupt pattern: Store tween references in variables, call .pause() on hover and .resume() on leave
+  - ScrollTrigger.create() with onUpdate callback is useful for continuous updates based on scroll state
+  - When using container.querySelectorAll() with Observer, loop through elements and create individual Observers for each
+---
+
+## [2026-01-28] - US-011
+- Created Timeline Orchestration demo at src/app/advanced-patterns/timeline-orchestration/page.tsx
+- Master timeline with 6 child timelines: introTl, spinTl, bounceTl, scaleTl, colorTl, finaleTl
+- Timeline labels for precise sequencing using tl.addLabel('labelName') and position parameter '>'
+- Position parameter '>' places next animation immediately after previous one
+- Timeline callbacks: onStart, onUpdate (tracks progress + current label), onComplete, onReverseComplete
+- Progress control: play, pause, reverse, restart buttons with isPlaying state tracking
+- Scrubber for manual timeline control: drag-to-scrub with mousedown/mousemove/mouseup event handlers
+- Nested timelines with independent control: each section has play/pause/reverse buttons
+- Timeline restart capability from specific labels via play('labelName') method
+- getLabelsArray() returns array of labels with time - used for current label detection
+- Current label detection logic: compare timeline progress with label.time / tl.duration()
+- Info banner shows: master timeline status, current label, progress percentage
+- Each demo card shows individual animation (fade+scale, rotation, bounce, scale pulse, color cycle, staggered burst)
+- Matches design system with zinc-900/95 backgrounds, orange-500 accents
+- Browser verification completed via agent-browser - screenshot captured
+- Build and lint passed successfully
+- **Learnings for future iterations:**
+  - When using position parameter '>' in timeline, it references the end time of the most recently added animation
+  - Timeline label can be used with play('labelName') to jump to and play from a specific label
+  - getLabelsArray() returns objects with { label: string, time: number } - divide time by duration() for progress ratio
+  - Child timelines should be created with { paused: true } and then added to master timeline with .add(childTl.play())
+  - For scrubber functionality, pause timeline on mousedown, update progress on mousemove, release on mouseup
+  - onUpdate callback fires frequently - use it for UI updates but avoid expensive operations
+  - Timeline progress() returns 0-1 value, time() returns seconds, duration() returns total duration in seconds
+  - Scrubber drag logic: calculate x relative to container bounds, then progress = x / width, clamp to 0-1
+  - When adding child timelines to master, use childTl.play() which returns the timeline - master waits for child to complete
+  - For state tracking in callbacks, setIsPlaying state helps keep UI in sync with timeline state
+
+## [2026-01-28] - US-012
+- Created Advanced Patterns gallery page at src/app/advanced-patterns/page.tsx
+- Gallery grid layout with 5 demo cards (cinematic-scroll, svg-morph-journey, text-symphony, gesture-scroll, timeline-orchestration)
+- Each demo card shows: title, description, category badge, GSAP features as tags, preview thumbnail icon
+- Category filter chips: Scroll-based (blue), Interactive (purple), Timeline-heavy (orange), Mixed (pink)
+- Filter buttons show count per category, active filter displayed as removable chip
+- Cards use hover animation (scale + shadow) matching design system with corner accents and scan line effect
+- Links to all 6 demo pages via Next.js Link component
+- Fixed TypeScript error in timeline-orchestration: changed `gsap.CoreTimeline` to `ReturnType<typeof gsap.timeline>` for proper type inference
+- Fixed TypeScript error for label parameter in getLabelsArray().find() - added explicit type annotation `{ label: string; time: number }`
+- Browser verification completed via agent-browser - screenshots captured showing gallery page
+- Build and typecheck passed successfully
+- **Learnings for future iterations:**
+  - For gallery pages, use useMemo for filtering demos to avoid recalculating on every render
+  - Category badge styles can be consolidated into a single function with switch statement for cleaner code
+  - The scan line effect is achieved with a CSS animation using a skewed div translating across the container
+  - GSAP timeline type: use `ReturnType<typeof gsap.timeline>` instead of trying to import a Timeline type from gsap
+  - When using find() on getLabelsArray() result, add explicit type annotation for the parameter: `(label: { label: string; time: number }) => ...`
+  - The demo cards follow the same pattern as the main DemoGrid component but with category filtering instead of difficulty
+
+## [2026-01-28] - US-013
+- Updated src/lib/navigation-data.ts with Advanced Patterns gallery route
+- Added navigation entry at /advanced-patterns with title "Advanced Patterns" and category "Advanced"
+- Navigation entry now appears in mobile menu and home page navigation
+- Lint passed with 0 errors (only pre-existing warnings)
+- Browser verification completed - Advanced Patterns link is visible in navigation menu and page loads correctly (HTTP 200)
+- Screenshot captured showing navigation entry on home page
+- **Learnings for future iterations:**
+  - Navigation routes are added to NAVIGATION_DATA.routes array in src/lib/navigation-data.ts
+  - Each route requires: id, title, description, path, and optional category/difficulty
+  - The mobile menu component reads from NAVIGATION_DATA.homeRoute + NAVIGATION_DATA.routes
+  - The home page DemoGrid also reads from NAVIGATION_DATA.routes to display pattern cards
+  - agent-browser can be unreliable with background processes - simpler approach is to verify with curl for HTTP status and take screenshots
+  - For browser verification, ensure dev server is running before launching agent-browser
+---

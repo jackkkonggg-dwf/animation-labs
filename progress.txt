@@ -170,3 +170,24 @@ Started: Thu Jan 29 01:07:23 HKT 2026
   - Rotation of 360° completes at same visual position as 0°, transform matrix shows scale 1.2
   - Icon animation shares same ScrollTrigger as card reveal for synchronized timing
   - When animating SVG elements, use the SVG element itself (not wrapper div) for rotation/scale to center correctly
+
+## [2026-01-29] - US-011
+- Implemented Stats count up animation in `src/app/dwf-labs/page.tsx`
+- Added `statsRef` with useRef to track Stats section DOM element
+- Created separate useGSAP hook with scope: statsRef for proper cleanup
+- Counters animate: 0 to 800 (Projects), 0 to 10 (CMC Top 100), 0 to 20 (CMC Top 1000)
+- Duration: 2 seconds, easing: power2.out, snap: { value: 1 } for whole integers
+- ScrollTrigger: start: 'top center', toggleActions: 'play none none reverse'
+- Each counter uses a counterObj with value property, onUpdate updates textContent with Math.round(counterObj.value)
+- Target values read from data-target attributes on .stat-value elements
+- Typecheck passed
+- Files changed: `src/app/dwf-labs/page.tsx`, `prd.json`
+- **Learnings for future iterations:**
+  - For counting up numbers, animate a proxy object (counterObj) rather than the DOM element directly
+  - Use onUpdate callback to update the actual DOM textContent with the current animated value
+  - snap: { value: 1 } ensures numbers only show whole integers (no decimals)
+  - data-target attributes on elements store the final target value for the animation
+  - parseInt() converts the string from dataset.target to a number for GSAP to animate
+  - Math.round() in onUpdate ensures the displayed value is always an integer
+  - ToggleActions: 'play none none reverse' allows the animation to reverse when scrolling back up
+---

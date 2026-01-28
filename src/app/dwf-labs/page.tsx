@@ -285,6 +285,52 @@ export default function DWFLabsPage() {
     };
   }, { scope: statsRef });
 
+  // US-012: Stats scrub timeline and icon transforms
+  useGSAP(() => {
+    const stats = statsRef.current;
+    if (!stats) return;
+
+    // Track all ScrollTriggers for cleanup
+    const triggers: ScrollTrigger[] = [];
+
+    // Get all stat icon SVG elements
+    const statIcons = stats.querySelectorAll('.stat-icon svg');
+
+    // Create timeline with scrub linked to scroll position
+    const iconTimeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: stats,
+        start: 'top center',
+        end: 'bottom center',
+        scrub: 1, // Smooth catch-up to scroll position
+      },
+    });
+
+    // Animate icons: scale 1.0 → 1.3, rotation 0deg → 45deg, zinc-700 → orange-500
+    iconTimeline.to(statIcons, {
+      scale: 1.3,
+      rotation: 45,
+      color: '#f97316', // orange-500
+      duration: 1,
+      stagger: 0.2,
+      ease: 'power2.out',
+    });
+
+    // Collect ScrollTriggers for cleanup
+    ScrollTrigger.getAll().forEach((trigger) => {
+      if (trigger.trigger === stats || stats.contains(trigger.trigger as Element)) {
+        if (!triggers.includes(trigger)) {
+          triggers.push(trigger);
+        }
+      }
+    });
+
+    return () => {
+      triggers.forEach((t) => t.kill());
+      gsap.killTweensOf(statIcons);
+    };
+  }, { scope: statsRef });
+
   return (
     <main className="min-h-screen bg-zinc-950">
       {/* Section 1: Hero - Kinetic Text Reveal + Multi-Layer Parallax */}

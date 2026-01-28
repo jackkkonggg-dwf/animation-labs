@@ -1,0 +1,242 @@
+{
+  "project": "GSAP Advanced Patterns Showcase",
+  "branchName": "ralph/gsap-advanced-patterns",
+  "description": "Expert-level GSAP demo gallery showcasing complex composition of multiple animation patterns with educational visual indicators, performance metrics, and debug modes",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Register GSAP bonus plugins (all free with 3.13+)",
+      "description": "As a developer, I need all GSAP bonus plugins registered since they are now free with GSAP 3.13+.",
+      "acceptanceCriteria": [
+        "Update src/lib/gsap-config.ts to register: SplitText, ScrollSmoother, InertiaPlugin, MorphSVGPlugin, DrawSVGPlugin, ScrambleTextPlugin, ScrollToPlugin, SnapPlugin, Observer",
+        "All plugins registered client-side only (`typeof window !== 'undefined'`)",
+        "Add TypeScript types for all new plugins",
+        "Typecheck passes"
+      ],
+      "priority": 1,
+      "passes": true,
+      "notes": "Note: SnapPlugin was not added as it's not a separate module - snap functionality is built into Draggable"
+    },
+    {
+      "id": "US-002",
+      "title": "Create PerformanceMetrics component",
+      "description": "As a developer, I want real-time performance metrics to understand animation efficiency.",
+      "acceptanceCriteria": [
+        "Create src/components/PerformanceMetrics.tsx",
+        "Real-time FPS counter using requestAnimationFrame",
+        "Animation duration display per active timeline",
+        "ScrollTrigger instances count",
+        "Toggle to show/hide metrics",
+        "Color-coded performance: green (>50 FPS), yellow (30-50), red (<30)",
+        "Matches design system (zinc backgrounds, orange accents)",
+        "Typecheck passes",
+        "Verify in browser using agent-browser skill"
+      ],
+      "priority": 2,
+      "passes": true,
+      "notes": "Created test page at src/app/test-performance-metrics/ for verification"
+    },
+    {
+      "id": "US-003",
+      "title": "Create DebugModeToggle component",
+      "description": "As a developer, I want debug mode to see ScrollTrigger markers and understand trigger boundaries.",
+      "acceptanceCriteria": [
+        "Create src/components/DebugModeToggle.tsx",
+        "Toggle switch for enabling/disabling debug mode",
+        "When enabled: show ScrollTrigger markers via markers: true on triggers",
+        "Show current scroll position and velocity",
+        "Debug info panel shows: trigger element, start/end positions, scrub status",
+        "Matches design system",
+        "Typecheck passes",
+        "Verify in browser using agent-browser skill"
+      ],
+      "priority": 3,
+      "passes": true,
+      "notes": "Created test page at src/app/test-debug-mode/ for verification"
+    },
+    {
+      "id": "US-004",
+      "title": "Create AdvancedDemoIndicator component",
+      "description": "As a developer, I want to see which GSAP features are active at any time.",
+      "acceptanceCriteria": [
+        "Create src/components/AdvancedDemoIndicator.tsx",
+        "Fixed overlay showing active GSAP plugins with icons",
+        "Highlight plugin when animation using it is active",
+        "Legend with color coding for different pattern types",
+        "Current animation state (playing, paused, reversed)",
+        "Collapsible to avoid obscuring demo",
+        "Matches design system",
+        "Typecheck passes",
+        "Verify in browser using agent-browser skill"
+      ],
+      "priority": 4,
+      "passes": true,
+      "notes": "Created test page at src/app/test-advanced-demo-indicator/ for verification"
+    },
+    {
+      "id": "US-005",
+      "title": "Create performance monitor utility",
+      "description": "As a developer, I need utility functions for performance monitoring and gesture detection.",
+      "acceptanceCriteria": [
+        "Create src/lib/utils/performance-monitor.ts with FPS counter using requestAnimationFrame",
+        "Create src/lib/utils/scroll-velocity.ts for calculating scroll speed",
+        "Create src/lib/utils/gesture-recognizer.ts for swipe and pinch detection",
+        "TypeScript types for all utilities",
+        "Typecheck passes"
+      ],
+      "priority": 5,
+      "passes": true,
+      "notes": "Created class-based utilities with React hooks: PerformanceMonitor, ScrollVelocityTracker, GestureRecognizer. Helper functions for FPS color/status, swipe direction, scroll progress."
+    },
+    {
+      "id": "US-006",
+      "title": "Create Cinematic Scroll demo route",
+      "description": "As a developer, I want to see complex pinned scroll sequences with multiple timelines.",
+      "acceptanceCriteria": [
+        "Create src/app/advanced-patterns/cinematic-scroll/page.tsx",
+        "Implement 3-4 pinned sections that auto-scroll through content",
+        "Each section has multiple timelines: parallax backgrounds, text reveals, image reveals",
+        "Use advanced easing: back.out, elastic.out, expo.inOut",
+        "Nested timelines with precise timing control",
+        "Cleanup on unmount with ScrollTrigger.kill()",
+        "Typecheck passes",
+        "Verify in browser using agent-browser skill"
+      ],
+      "priority": 6,
+      "passes": true,
+      "notes": "Created 4 pinned sections: HeroSection (parallax bg, title scale/fade), TextRevealSection (word cascade, circle morph), ImageRevealSection (3 layered cards), FinaleSection (shape burst). Browser verified with screenshots."
+    },
+    {
+      "id": "US-007",
+      "title": "Create Physics Playground demo route",
+      "description": "As a developer, I want to see Draggable combined with physics animations.",
+      "acceptanceCriteria": [
+        "Create src/app/advanced-patterns/physics-playground/page.tsx",
+        "Draggable elements with InertiaPlugin for momentum",
+        "ThrowPropsPlugin for realistic physics",
+        "Snap-to-grid functionality with SnapPlugin",
+        "Collision detection between draggable elements",
+        "Visual feedback on collision (scale bounce, color shift)",
+        "Proper cleanup of all Draggable instances",
+        "Typecheck passes",
+        "Verify in browser using agent-browser skill"
+      ],
+      "priority": 7,
+      "passes": true,
+      "status": "removed",
+      "notes": "Created PhysicsBox components with InertiaPlugin momentum, liveSnap grid snapping, rotation spinner with 45deg snap, collision detection with Draggable.hitTest(), visual feedback animations. Note: ThrowPropsPlugin is replaced by InertiaPlugin in GSAP 3+. SnapPlugin is built into Draggable, not a separate module. DEMO REMOVED."
+    },
+    {
+      "id": "US-008",
+      "title": "Create SVG Morph Journey demo route",
+      "description": "As a developer, I want to see MorphSVG and MotionPath combined.",
+      "acceptanceCriteria": [
+        "Create src/app/advanced-patterns/svg-morph-journey/page.tsx",
+        "MorphSVGPlugin for shape transitions between 3-4 states",
+        "MotionPathPlugin for elements following morphing paths",
+        "DrawSVG-style path animations combined with morphing",
+        "Scroll-triggered morph progression",
+        "Hover interaction that triggers independent morph animations",
+        "SVG filters (blur, glow) animated with morph",
+        "Cleanup kills all morph instances",
+        "Typecheck passes",
+        "Verify in browser using agent-browser skill"
+      ],
+      "priority": 8,
+      "passes": true,
+      "notes": "Created 4 sections: MorphingJourney (circle→square→triangle→star with SVG filters), MotionPathJourney (curved path following), InteractiveMorph (hover-triggered morphs), CombinedShowcase (morph+motion path+particles). Browser verified with screenshots."
+    },
+    {
+      "id": "US-009",
+      "title": "Create Text Symphony demo route",
+      "description": "As a developer, I want to see advanced text animations with SplitText.",
+      "acceptanceCriteria": [
+        "Create src/app/advanced-patterns/text-symphony/page.tsx",
+        "Character-based stagger animations on scroll (cascade wave effects) using SplitText",
+        "Word-based reveals with different timings per section",
+        "Line-by-line text reveals with custom easing",
+        "Scroll-linked text scrub (text animates as user scrolls)",
+        "Auto-playing timeline for hero text with complex choreography",
+        "Text blends color/gradient on scroll progress",
+        "Reduced motion support with CSS @media (prefers-reduced-motion)",
+        "Typecheck passes",
+        "Verify in browser using agent-browser skill"
+      ],
+      "priority": 9,
+      "passes": true,
+      "notes": "Created 6 sections: Hero (auto-playing character cascade + color wave + pulse), CharacterCascade (scroll wave + color blend), WordReveal (3 lines with 0.1s/0.2s/0.3s stagger), LineByLine (elastic easing), ScrollScrub (3D rotation on scroll), GradientBlend (color blend). Browser verified with screenshots."
+    },
+    {
+      "id": "US-010",
+      "title": "Create Gesture Scroll Hybrid demo route",
+      "description": "As a developer, I want to see gestures combined with scroll-based animations.",
+      "acceptanceCriteria": [
+        "Create src/app/advanced-patterns/gesture-scroll/page.tsx",
+        "Mouse-follow cursor with trail effect (multiple trailing elements)",
+        "Scroll velocity detection for dynamic animation speed",
+        "Scroll direction awareness (different animations for up vs down)",
+        "Touch swipe gestures triggering independent animations",
+        "Pinch-zoom on images with smooth scale animation",
+        "Hover states that interrupt scroll-based animations",
+        "Observer plugin for efficient intersection detection",
+        "Typecheck passes",
+        "Verify in browser using agent-browser skill"
+      ],
+      "priority": 10,
+      "passes": true,
+      "notes": "Created 7 sections: CursorTrail (gsap.quickTo() with 8 trailing elements), VelocityScroll (useScrollState with dynamic speed), DirectionScroll (up/down awareness), SwipeGesture (useSwipeCallback with 4-direction animations), PinchZoom (useGestureRecognizer with pinch), HoverInterrupt (hover pauses/resumes animations), ObserverSection (Observer plugin for scroll direction + 3D tilt). Browser verified with screenshots."
+    },
+    {
+      "id": "US-011",
+      "title": "Create Timeline Orchestration demo route",
+      "description": "As a developer, I want to see complex timeline composition with labels and callbacks.",
+      "acceptanceCriteria": [
+        "Create src/app/advanced-patterns/timeline-orchestration/page.tsx",
+        "Master timeline with 5+ child timelines",
+        "Timeline labels for precise sequencing: tl.addLabel(\"section1\")",
+        "tl.to() animations positioned relative to labels: \\\"<\\\" and \\\">\\\"",
+        "Timeline callbacks: onUpdate, onStart, onComplete",
+        "Progress control: play, pause, reverse, restart buttons",
+        "Scrubber for manual timeline control",
+        "Nested timelines with independent control",
+        "Timeline restart capability from specific labels",
+        "Typecheck passes",
+        "Verify in browser using agent-browser skill"
+      ],
+      "priority": 11,
+      "passes": true,
+      "notes": "Created 6 child timelines (intro, spin, bounce, scale, color, finale) with master timeline. Position parameter '>' for sequential placement. getLabelsArray() for current label detection. Scrubber with drag-to-control. Browser verified with screenshot."
+    },
+    {
+      "id": "US-012",
+      "title": "Create Advanced Patterns gallery page",
+      "description": "As a developer, I want a gallery page listing all advanced pattern demos.",
+      "acceptanceCriteria": [
+        "Create src/app/advanced-patterns/page.tsx with gallery grid layout",
+        "Each demo card shows: title, description, used GSAP features, preview thumbnail",
+        "Cards use hover animation (scale + shadow) consistent with design system",
+        "Filter chips to sort by: Scroll-based, Interactive, Timeline-heavy, Mixed",
+        "Links to all 6 demo pages",
+        "Typecheck passes",
+        "Verify in browser using agent-browser skill"
+      ],
+      "priority": 12,
+      "passes": true,
+      "notes": "Created gallery page with 6 demo cards (cinematic-scroll, physics-playground, svg-morph-journey, text-symphony, gesture-scroll, timeline-orchestration). Category filters with color-coded badges. GSAP features listed as tags on each card. Browser verified with screenshots."
+    },
+    {
+      "id": "US-013",
+      "title": "Update navigation with Advanced Patterns routes",
+      "description": "As a user, I want the Advanced Patterns gallery in the navigation menu.",
+      "acceptanceCriteria": [
+        "Update src/lib/navigation-data.ts with advanced-patterns gallery route",
+        "Add entry point to navigation menu",
+        "Typecheck passes",
+        "Verify in browser using agent-browser skill"
+      ],
+      "priority": 13,
+      "passes": true,
+      "notes": "Added Advanced Patterns gallery route to navigation data. Entry point appears in mobile menu and home page navigation. Verified in browser - link works correctly."
+    }
+  ]
+}

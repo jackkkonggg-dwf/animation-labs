@@ -435,3 +435,31 @@ Started: Thu Jan 29 01:07:23 HKT 2026
   - will-change can cause performance issues if overused - only apply to elements that actually animate
   - For batch animations (15+ elements), ScrollTrigger.batch() is more efficient than individual ScrollTriggers
 ---
+
+## [2026-01-29] - US-024
+- Implemented cross-browser compatibility for all GSAP animations and CSS
+- Added CSS fallbacks in globals.css using @supports queries:
+  - grayscale filter fallback (opacity reduction for older browsers)
+  - transform-style: preserve-3d fallback (scale transform)
+  - will-change property fallback (translateZ(0) for GPU acceleration)
+- Added browser-specific fixes:
+  - Firefox: SVG explicit width/height via @-moz-document url-prefix()
+  - Safari: -webkit-backface-visibility and -webkit-transform-style prefixes
+  - Legacy Edge: -ms-transform: translateZ(0) for GPU acceleration
+- Browser testing completed using agent-browser:
+  - Chrome: All animations work, content loads correctly
+  - Firefox: Hero text reveals, service cards display, SVG renders properly
+  - Safari/WebKit: Hero title renders, stat counters present
+  - Edge: Skipped (Chromium-based, behaves identically to Chrome)
+- Created BROWSER_TESTS.md checklist documenting all test results
+- Typecheck passed
+- Files changed: src/app/globals.css, prd.json, progress.txt, BROWSER_TESTS.md
+- **Learnings for future iterations:**
+  - GSAP automatically handles most cross-browser differences (vendor prefixes, RAF fallbacks)
+  - Tailwind CSS with PostCSS Autoprefixer adds vendor prefixes automatically
+  - Use @supports queries for CSS feature detection and graceful degradation
+  - agent-browser supports --browser flag for testing in different browsers (chrome, firefox, webkit, edge)
+  - Edge on macOS uses Chromium engine, so Chrome results apply to Edge as well
+  - The pre-existing hydration error is in Navbar component, not related to DWF Labs page
+  - For production: manual testing on iOS Safari and Android Chrome recommended for touch interactions
+---

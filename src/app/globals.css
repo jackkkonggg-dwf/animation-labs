@@ -97,3 +97,86 @@ body {
 .noise-texture {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
 }
+
+/* ============================================================================
+   Cross-Browser Compatibility (US-024)
+   ============================================================================ */
+
+/* CSS Filter fallbacks for grayscale */
+@supports not (filter: grayscale(1)) {
+  .grayscale,
+  .grayscale-0 {
+    /* Fallback: reduce opacity for older browsers */
+    opacity: 0.8;
+  }
+  .group-hover\:grayscale-0:hover {
+    opacity: 1;
+  }
+}
+
+/* Transform-style preserve-3d with fallbacks */
+@supports not (transform-style: preserve-3d) {
+  .preserve-3d-fallback {
+    /* Fallback: no 3D perspective, just scale */
+    transform: scale(1);
+  }
+}
+
+/* Will-change property with fallback for older browsers */
+@supports not (will-change: transform) {
+  [style*='will-change'] {
+    /* Fallback: force GPU acceleration with translateZ */
+    transform: translateZ(0);
+  }
+}
+
+/* Firefox-specific fixes for SVG animations */
+@-moz-document url-prefix() {
+  /* Firefox may need explicit SVG width/height */
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+/* Safari-specific fixes */
+@supports (-webkit-appearance: none) {
+  /* Safari may need explicit backface-visibility for 3D transforms */
+  .preserve-3d-fallback,
+  [style*='transform-style: preserve-3d'] {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+  }
+}
+
+/* Edge-specific fixes (legacy EdgeHTML) */
+@supports (-ms-ime-align: auto) {
+  /* Legacy Edge may need explicit GPU acceleration */
+  .gpu-accelerated {
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+}
+
+/* Smooth scrolling fallback for browsers that don't support scroll-behavior */
+@supports not (scroll-behavior: smooth) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Animation timing fallbacks */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Reduced motion fallback - base level */
+@media (prefers-reduced-motion: no-preference) {
+  /* Animations run normally when reduced motion is NOT preferred */
+  .animate-scan {
+    animation: scan 1.5s ease-in-out infinite;
+  }
+}

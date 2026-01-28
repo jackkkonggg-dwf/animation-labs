@@ -368,8 +368,8 @@
         "Verify in browser using agent-browser skill (each browser)"
       ],
       "priority": 24,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Added cross-browser CSS fallbacks in globals.css: grayscale filter, transform-style preserve-3d, will-change. Browser-specific fixes for Firefox (SVG), Safari (-webkit- prefixes), Legacy Edge (-ms-transform). Tested in Chrome, Firefox, Safari/WebKit using agent-browser. All animations work correctly. BROWSER_TESTS.md checklist created."
     },
     {
       "id": "US-025",

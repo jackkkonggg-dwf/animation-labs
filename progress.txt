@@ -463,3 +463,24 @@ Started: Thu Jan 29 01:07:23 HKT 2026
   - The pre-existing hydration error is in Navbar component, not related to DWF Labs page
   - For production: manual testing on iOS Safari and Android Chrome recommended for touch interactions
 ---
+## [2026-01-29] - US-025
+- Implemented mobile responsive design for DWF Labs page
+- Added viewport export for Next.js 16 (separate export from metadata)
+- Fixed portfolio grid: grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 (was grid-cols-2 on mobile)
+- Added overflow-x-hidden to main container to prevent horizontal scroll issues
+- Made corner accents responsive: w-10 h-10 on mobile, sm:w-16 sm:h-16 on tablet+
+- Verified in browser with mobile viewport (390x844): hero title 60px, portfolio 1 column
+- Verified in browser with desktop viewport (1280x800): hero title 128px, portfolio 5 columns
+- GSAP Draggable has built-in touch support for mobile drag interactions
+- Typecheck passed
+- Files changed: src/app/layout.tsx, src/app/dwf-labs/page.tsx, prd.json, progress.txt
+- **Learnings for future iterations:**
+  - Next.js 16 requires viewport to be a separate export (not nested in metadata object)
+  - Use `export const viewport: Viewport = { ... }` alongside `export const metadata: Metadata = { ... }`
+  - Tailwind's `sm:` breakpoint starts at 640px, `md:` at 768px, `lg:` at 1024px
+  - agent-browser `set viewport` command can test different screen sizes
+  - For mobile testing: set viewport to 390x844 (iPhone 14) or similar mobile dimensions
+  - GSAP Draggable automatically handles touch events - no additional configuration needed
+  - Add `overflow-x-hidden` to prevent horizontal scroll on mobile from transforms going off-screen
+---
+---

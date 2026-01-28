@@ -384,8 +384,8 @@
         "Verify in browser using agent-browser skill (mobile viewport)"
       ],
       "priority": 25,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Added viewport meta export for Next.js 16, fixed portfolio grid to 1 col mobile (grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5), added overflow-x-hidden, made corner accents responsive (w-10 h-10 mobile, sm:w-16 sm:h-16 desktop). Verified in browser: mobile (390x844) shows 60px hero title, 1 col portfolio; desktop (1280x800) shows 128px hero title, 5 col portfolio."
     },
     {
       "id": "US-026",

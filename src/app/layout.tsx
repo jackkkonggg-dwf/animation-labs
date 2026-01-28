@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist_Mono, Inter, Playfair_Display, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { GSAPProvider } from "@/app/providers/gsap-provider";
@@ -33,6 +33,12 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   title: "GSAP Animations Showcase",
   description: "Collection of GSAP-powered animation demos",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
 };
 
 export default function RootLayout({

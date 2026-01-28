@@ -714,7 +714,7 @@ export default function DWFLabsPage() {
   }, { scope: patternGalleryRef });
 
   return (
-    <main className="min-h-screen bg-zinc-950">
+    <main className="min-h-screen bg-zinc-950 overflow-x-hidden">
       {/* Section 1: Hero - Kinetic Text Reveal + Multi-Layer Parallax */}
       <section
         ref={heroRef}
@@ -786,17 +786,17 @@ export default function DWFLabsPage() {
             One of the world&apos;s largest high-frequency cryptocurrency trading entities
           </p>
 
-          {/* SVG Corner Accents */}
-          <svg className="absolute top-8 left-8 w-16 h-16 text-orange-500 opacity-50" viewBox="0 0 60 60">
+          {/* SVG Corner Accents - smaller on mobile */}
+          <svg className="absolute top-4 left-4 w-10 h-10 sm:top-8 sm:left-8 sm:w-16 sm:h-16 text-orange-500 opacity-50" viewBox="0 0 60 60">
             <path className="corner-draw-path" style={{ willChange: 'stroke-dashoffset' }} d="M5,5 L55,5 L55,55" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          <svg className="absolute top-8 right-8 w-16 h-16 text-orange-500 opacity-50" viewBox="0 0 60 60">
+          <svg className="absolute top-4 right-4 w-10 h-10 sm:top-8 sm:right-8 sm:w-16 sm:h-16 text-orange-500 opacity-50" viewBox="0 0 60 60">
             <path className="corner-draw-path" style={{ willChange: 'stroke-dashoffset' }} d="M55,5 L5,5 L5,55" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          <svg className="absolute bottom-8 left-8 w-16 h-16 text-orange-500 opacity-50" viewBox="0 0 60 60">
+          <svg className="absolute bottom-4 left-4 w-10 h-10 sm:bottom-8 sm:left-8 sm:w-16 sm:h-16 text-orange-500 opacity-50" viewBox="0 0 60 60">
             <path className="corner-draw-path" style={{ willChange: 'stroke-dashoffset' }} d="M5,55 L55,55 L55,5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          <svg className="absolute bottom-8 right-8 w-16 h-16 text-orange-500 opacity-50" viewBox="0 0 60 60">
+          <svg className="absolute bottom-4 right-4 w-10 h-10 sm:bottom-8 sm:right-8 sm:w-16 sm:h-16 text-orange-500 opacity-50" viewBox="0 0 60 60">
             <path className="corner-draw-path" style={{ willChange: 'stroke-dashoffset' }} d="M55,55 L5,55 L5,5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
@@ -1052,8 +1052,8 @@ export default function DWFLabsPage() {
             </p>
           </div>
 
-          {/* Portfolio Grid */}
-          <div className="portfolio-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-16">
+          {/* Portfolio Grid - 1 col mobile, 2 col tablet, 3 col desktop, 5 col wide */}
+          <div className="portfolio-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-16">
             {[
               { name: 'TRON', num: '01' },
               { name: 'Algorand', num: '02' },

@@ -534,3 +534,20 @@ Started: Wed Jan 28 04:56:36 HKT 2026
   - The badge only renders when route.difficulty exists using conditional rendering
   - agent-browser skill continues to have "Resource temporarily unavailable" errors - manual browser verification is still needed
 ---
+
+## [2025-01-28] - US-026
+- Created RelatedPatterns component at src/components/patterns/related-patterns.tsx
+- Component displays 3-4 related patterns based on same category (primary) and same difficulty (fallback)
+- Uses useMemo for performance optimization to avoid recalculation on re-renders
+- Added RelatedPatterns component to all 20 pattern pages before the Footer CTA section
+- Features clickable links with difficulty badges, hover effects, arrow indicators
+- Follows industrial orange design system with consistent styling
+- Build and typecheck passed
+- **Learnings for future iterations:**
+  - The RelatedPatterns component uses pattern ID as a prop to find related patterns in NAVIGATION_DATA
+  - Same category patterns are prioritized, then same difficulty patterns fill remaining slots (max 4)
+  - useMemo hook is essential for performance when deriving data from props
+  - Pattern component files have slightly different structures (some use CodeViewer, some use CodeViewerWithCopy, some have additional components)
+  - When editing multiple similar files, always verify each file's unique structure (e.g., reduced-motion has KeyConcepts + SystemPreferencesInfo, performance-optimization has PerformanceTips)
+  - The pattern IDs in navigation-data.ts use kebab-case (e.g., "char-text-reveal", "multi-layer-parallax")
+---

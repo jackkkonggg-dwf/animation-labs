@@ -301,13 +301,13 @@ export function PinnedSequencePattern() {
         title="Sequence"
         titleHighlight="Pinned"
         description="Pin elements and animate through a sequence as user scrolls. Perfect for step-by-step reveals and storytelling."
-        features=[{"{ label: 'pin: true' },
+        features={[
+          { label: 'pin: true' },
           { label: 'scrub: true' },
-          { label: 'Timeline' }"}]
+          { label: 'Timeline' }]}
       />
       <LiveDemo />
       <CodeViewer code={CODE_EXAMPLE} language="tsx" filename="tsx" />
-      <PatternNotes />
 
       {/* Related Patterns */}
       <RelatedPatterns currentPatternId="pinned-sequence" />

@@ -343,7 +343,6 @@ export function StaggeredRevealPattern() {
       />
       <LiveDemo />
       <CodeViewer code={CODE_EXAMPLE} language="tsx" filename="tsx" />
-      <PatternNotes />
 
       {/* Related Patterns */}
       <RelatedPatterns currentPatternId="staggered-reveal" />

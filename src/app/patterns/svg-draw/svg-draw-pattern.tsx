@@ -257,13 +257,13 @@ export function SvgDrawPattern() {
         title="Draw"
         titleHighlight="SVG"
         description="Animate SVG paths drawing themselves on scroll. Perfect for illustrations, icons, and decorative elements."
-        features=[{"{ label: 'stroke-dashoffset' },
+        features={[
+          { label: 'stroke-dashoffset' },
           { label: 'path length' },
-          { label: 'scrub animation' }"}]
+          { label: 'scrub animation' }]}
       />
       <LiveDemo />
       <CodeViewer code={CODE_EXAMPLE} language="tsx" filename="tsx" />
-      <PatternNotes />
 
       {/* Related Patterns */}
       <RelatedPatterns currentPatternId="svg-draw" />

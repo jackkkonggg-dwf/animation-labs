@@ -3,6 +3,7 @@
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap } from '@/lib/gsap-config';
+import { PatternHeader, CodeViewer, ReplayButton } from '@/components/patterns';
 import { RelatedPatterns } from '@/components/patterns/related-patterns';
 import { PatternNavigation } from '@/components/patterns/pattern-navigation';
 
@@ -439,13 +440,13 @@ export function ButtonHoverPattern() {
         title="Hover"
         titleHighlight="Button"
         description="Add engaging micro-interactions to buttons with smooth hover effects. Scale, color, and icon animations create delightful feedback."
-        features=[{"{ label: 'scale: 1.05' },
+        features={[
+          { label: 'scale: 1.05' },
           { label: 'Icon animation' },
-          { label: 'Fast duration' }"}]
+          { label: 'Fast duration' }]}
       />
       <LiveDemo />
       <CodeViewer code={CODE_EXAMPLE} language="tsx" filename="tsx" />
-      <PatternNotes />
 
       {/* Related Patterns */}
       <RelatedPatterns currentPatternId="button-hover" />

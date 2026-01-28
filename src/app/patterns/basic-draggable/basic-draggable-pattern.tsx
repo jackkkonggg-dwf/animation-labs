@@ -3,6 +3,7 @@
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import { Draggable } from '@/lib/gsap-config';
+import { PatternHeader, CodeViewer, ReplayButton } from '@/components/patterns';
 import { RelatedPatterns } from '@/components/patterns/related-patterns';
 import { PatternNavigation } from '@/components/patterns/pattern-navigation';
 
@@ -218,13 +219,14 @@ export function BasicDraggablePattern() {
         title="Draggable"
         titleHighlight="Basic"
         description="Make any element draggable with user input. Perfect for sliders, sortable lists, and interactive components."
-        features=[{'{ label: \'Draggable.create\' },
-          { label: \'type: "x"\' },
-          { label: \'edgeResistance\' }'}]
+        features={[
+          { label: 'Draggable.create' },
+          { label: 'type: "x"' },
+          { label: 'edgeResistance' },
+        ]}
       />
       <LiveDemo />
       <CodeViewer code={CODE_EXAMPLE} language="tsx" filename="tsx" />
-      <PatternNotes />
 
       {/* Related Patterns */}
       <RelatedPatterns currentPatternId="basic-draggable" />

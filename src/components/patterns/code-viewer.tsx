@@ -4,7 +4,8 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { codeToHtml } from 'shiki';
 
 interface CodeViewerProps {
   code: string;
@@ -14,6 +15,28 @@ interface CodeViewerProps {
 
 export function CodeViewer({ code, language = 'tsx', filename = 'tsx' }: CodeViewerProps) {
   const [copied, setCopied] = useState(false);
+  const [highlightedCode, setHighlightedCode] = useState<string>('');
+
+  useEffect(() => {
+    async function highlight() {
+      try {
+        const html = await codeToHtml(code, {
+          lang: language,
+          theme: 'github-dark',
+        });
+        setHighlightedCode(html);
+      } catch {
+        // Fallback to escaped HTML if highlighting fails
+        setHighlightedCode(
+          code
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+        );
+      }
+    }
+    highlight();
+  }, [code, language]);
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(code);
@@ -76,12 +99,10 @@ export function CodeViewer({ code, language = 'tsx', filename = 'tsx' }: CodeVie
           </div>
 
           {/* Code content with syntax highlighting */}
-          <pre className="p-6 pt-8 overflow-x-auto text-sm">
-            <code
-              className="font-mono leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: highlightCode(code, language) }}
-            />
-          </pre>
+          <pre
+            className="p-6 pt-8 overflow-x-auto text-sm shiki github-dark"
+            dangerouslySetInnerHTML={{ __html: highlightedCode }}
+          />
 
           {/* Bottom scan line */}
           <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-50" />
@@ -89,62 +110,4 @@ export function CodeViewer({ code, language = 'tsx', filename = 'tsx' }: CodeVie
       </div>
     </section>
   );
-}
-
-// Simple syntax highlighter for TSX/TypeScript
-// This is a lightweight client-side solution
-function highlightCode(code: string, language: string): string {
-  // Escape HTML first
-  let html = code
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
-
-  // Keywords (purple)
-  const keywords = [
-    'import', 'export', 'from', 'default', 'const', 'let', 'var', 'function',
-    'return', 'if', 'else', 'for', 'while', 'class', 'extends', 'new',
-    'this', 'super', 'typeof', 'instanceof', 'try', 'catch', 'finally',
-    'throw', 'async', 'await', 'yield', 'interface', 'type', 'enum',
-    'implements', 'private', 'public', 'protected', 'readonly', 'static',
-    'abstract', 'declare', 'namespace', 'module', 'as', 'is', 'in', 'of'
-  ];
-
-  // React/TSX keywords (blue)
-  const reactKeywords = ['useRef', 'useEffect', 'useState', 'useCallback', 'useMemo', 'useGSAP'];
-
-  // GSAP keywords (blue)
-  const gsapKeywords = ['gsap', 'ScrollTrigger', 'Draggable'];
-
-  // Build patterns
-  const keywordPattern = new RegExp(`\\b(${keywords.join('|')})\\b`, 'g');
-  const reactPattern = new RegExp(`\\b(${reactKeywords.join('|')})\\b`, 'g');
-  const gsapPattern = new RegExp(`\\b(${gsapKeywords.join('|')})\\b`, 'g');
-
-  // Strings (cyan)
-  html = html.replace(/(['"`])((?:\\.|[^\\])*?)\1/g, '<span class="text-cyan-400">$1$2$1</span>');
-
-  // Comments (zinc/gray)
-  html = html.replace(/(\/\/.*$)/gm, '<span class="text-zinc-500">$1</span>');
-  html = html.replace(/(\/\*[\s\S]*?\*\/)/g, '<span class="text-zinc-500">$1</span>');
-
-  // Keywords (purple)
-  html = html.replace(keywordPattern, '<span class="text-purple-400">$1</span>');
-
-  // React hooks (blue)
-  html = html.replace(reactPattern, '<span class="text-blue-400">$1</span>');
-
-  // GSAP (blue)
-  html = html.replace(gsapPattern, '<span class="text-blue-400">$1</span>');
-
-  // Numbers (orange)
-  html = html.replace(/\b(\d+\.?\d*)\b/g, '<span class="text-orange-400">$1</span>');
-
-  // Function calls (yellow)
-  html = html.replace(/\b([a-zA-Z_][a-zA-Z0-9_]*)\s*\(/g, '<span class="text-yellow-300">$1</span>(');
-
-  // JSX tags (white)
-  html = html.replace(/(&lt;\/?)([\w]+)/g, '$1<span class="text-white">$2</span>');
-
-  return html;
 }

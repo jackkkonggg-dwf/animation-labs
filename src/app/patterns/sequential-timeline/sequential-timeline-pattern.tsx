@@ -3,6 +3,7 @@
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap } from '@/lib/gsap-config';
+import { PatternHeader, CodeViewer, ReplayButton } from '@/components/patterns';
 import { RelatedPatterns } from '@/components/patterns/related-patterns';
 import { PatternNavigation } from '@/components/patterns/pattern-navigation';
 
@@ -252,13 +253,13 @@ export function SequentialTimelinePattern() {
         title="Timeline"
         titleHighlight="Sequential"
         description="Chain multiple animations in sequence using GSAP timelines. Control timing and dependencies with precision."
-        features=[{"{ label: 'gsap.timeline' },
+        features={[
+          { label: 'gsap.timeline' },
           { label: '.to() chaining' },
-          { label: 'Position params' }"}]
+          { label: 'Position params' }]}
       />
       <LiveDemo />
       <CodeViewer code={CODE_EXAMPLE} language="tsx" filename="tsx" />
-      <PatternNotes />
 
       {/* Related Patterns */}
       <RelatedPatterns currentPatternId="sequential-timeline" />

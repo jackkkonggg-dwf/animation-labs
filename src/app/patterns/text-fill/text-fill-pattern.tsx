@@ -228,13 +228,13 @@ export function TextFillPattern() {
         title="Fill"
         titleHighlight="Text"
         description="Animate text filling with color or gradient on scroll. Creates a striking reveal effect perfect for headlines and important messages."
-        features=[{"{ label: 'background-clip' },
+        features={[
+          { label: 'background-clip' },
           { label: 'SVG mask' },
-          { label: 'scrub: true' }"}]
+          { label: 'scrub: true' }]}
       />
       <LiveDemo />
       <CodeViewer code={CODE_EXAMPLE} language="tsx" filename="tsx" />
-      <PatternNotes />
 
       {/* Related Patterns */}
       <RelatedPatterns currentPatternId="text-fill" />

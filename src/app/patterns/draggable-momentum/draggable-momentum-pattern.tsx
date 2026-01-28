@@ -3,6 +3,7 @@
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import { Draggable, gsap } from '@/lib/gsap-config';
+import { PatternHeader, CodeViewer, ReplayButton } from '@/components/patterns';
 import { RelatedPatterns } from '@/components/patterns/related-patterns';
 import { PatternNavigation } from '@/components/patterns/pattern-navigation';
 
@@ -410,13 +411,13 @@ export function DraggableMomentumPattern() {
         title="Momentum"
         titleHighlight="Draggable"
         description="Add natural momentum and inertia to draggable elements. Creates smooth, physics-based interactions."
-        features=[{"{ label: 'momentum: true' },
+        features={[
+          { label: 'momentum: true' },
           { label: 'resistance' },
-          { label: 'LiveSnap' }"}]
+          { label: 'LiveSnap' }]}
       />
       <LiveDemo />
       <CodeViewer code={CODE_EXAMPLE} language="tsx" filename="tsx" />
-      <PatternNotes />
 
       {/* Related Patterns */}
       <RelatedPatterns currentPatternId="draggable-momentum" />

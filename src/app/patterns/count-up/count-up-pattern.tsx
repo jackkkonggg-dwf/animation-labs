@@ -266,13 +266,13 @@ export function CountUpPattern() {
         title="Up"
         titleHighlight="Count"
         description="Animate numbers counting up when they come into view. Perfect for statistics, metrics, and data visualization."
-        features=[{"{ label: 'onUpdate' },
+        features={[
+          { label: 'onUpdate' },
           { label: 'Math.round' },
-          { label: 'ScrollTrigger' }"}]
+          { label: 'ScrollTrigger' }]}
       />
       <LiveDemo />
       <CodeViewer code={CODE_EXAMPLE} language="tsx" filename="tsx" />
-      <PatternNotes />
 
       {/* Related Patterns */}
       <RelatedPatterns currentPatternId="count-up" />

@@ -265,13 +265,13 @@ export function ScrubTimelinePattern() {
         title="Timeline"
         titleHighlight="Scrub"
         description="Link timeline progress directly to scroll position. Creates frame-by-frame control perfect for interactive storytelling."
-        features=[{"{ label: 'scrub: true' },
+        features={[
+          { label: 'scrub: true' },
           { label: 'Link to scroll' },
-          { label: 'Precise control' }"}]
+          { label: 'Precise control' }]}
       />
       <LiveDemo />
       <CodeViewer code={CODE_EXAMPLE} language="tsx" filename="tsx" />
-      <PatternNotes />
 
       {/* Related Patterns */}
       <RelatedPatterns currentPatternId="scrub-timeline" />

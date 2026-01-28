@@ -317,13 +317,13 @@ export function MultiLayerParallaxPattern() {
         title="Parallax"
         titleHighlight="Multi-Layer"
         description="Create immersive depth with multiple parallax layers moving at different speeds. Perfect for hero sections and storytelling experiences."
-        features=[{"{ label: 'Multiple layers' },
+        features={[
+          { label: 'Multiple layers' },
           { label: 'Depth effect' },
-          { label: 'scrub: 0.5' }"}]
+          { label: 'scrub: 0.5' }]}
       />
       <LiveDemo />
       <CodeViewer code={CODE_EXAMPLE} language="tsx" filename="tsx" />
-      <PatternNotes />
 
       {/* Related Patterns */}
       <RelatedPatterns currentPatternId="multi-layer-parallax" />

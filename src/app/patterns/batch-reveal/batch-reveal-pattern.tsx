@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 import { PatternHeader, CodeViewer, ReplayButton } from '@/components/patterns';
@@ -17,7 +17,7 @@ const CODE_EXAMPLE = `// =======================================================
 
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 
@@ -191,10 +191,10 @@ function LiveDemo() {
         {/* Replay button */}
         <div className="mt-12 flex justify-center">
           <ReplayButton onReplay={handleReplay} />
+        </div>
       </div>
-    </section>;
-}
-
+    </section>
+  );
 }
 
 // ============================================================================
@@ -275,13 +275,14 @@ export function BatchRevealPattern() {
         title="Reveal"
         titleHighlight="Batch"
         description="Efficiently animate large collections of elements (20+) using batch techniques that optimize performance. Perfect for grids, galleries, and data-heavy interfaces where smooth animation is critical."
-        features=[{"{ label: '24 Items' },
+        features={[
+          { label: '24 Items' },
           { label: 'fast stagger' },
-          { label: 'GPU Accelerated' }"}]
+          { label: 'GPU Accelerated' },
+        ]}
       />
       <LiveDemo />
       <CodeViewer code={CODE_EXAMPLE} language="tsx" filename="tsx" />
-      <PatternNotes />
 
       {/* Related Patterns */}
       <RelatedPatterns currentPatternId="batch-reveal" />

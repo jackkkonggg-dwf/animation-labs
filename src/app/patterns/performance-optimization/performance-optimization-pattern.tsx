@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 import { PatternHeader, CodeViewer, ReplayButton } from '@/components/patterns';
@@ -76,7 +76,7 @@ const CODE_EXAMPLE = `// =======================================================
 
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 
@@ -305,14 +305,13 @@ export function PerformanceOptimizationPattern() {
         title="Optimization"
         titleHighlight="Performance"
         description="Best practices for smooth GSAP animations. Learn how to optimize for 60fps and avoid common performance pitfalls."
-        features=[{"{ label: 'will-change' },
+        features={[
+          { label: 'will-change' },
           { label: 'GPU acceleration' },
-          { label: 'Cleanup' }"}]
+          { label: 'Cleanup' }]}
       />
       <LiveDemo />
       <CodeViewer code={CODE_EXAMPLE} language="tsx" filename="tsx" />
-      <PatternNotes />
-      <PerformanceTips />
 
       {/* Related Patterns */}
       <RelatedPatterns currentPatternId="performance-optimization" />

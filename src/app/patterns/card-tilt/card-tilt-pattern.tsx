@@ -3,6 +3,7 @@
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap } from '@/lib/gsap-config';
+import { PatternHeader, CodeViewer, ReplayButton } from '@/components/patterns';
 import { RelatedPatterns } from '@/components/patterns/related-patterns';
 import { PatternNavigation } from '@/components/patterns/pattern-navigation';
 
@@ -279,13 +280,13 @@ export function CardTiltPattern() {
         title="Tilt"
         titleHighlight="Card"
         description="Create 3D tilt effects on cards that respond to mouse movement. Adds depth and interactivity to any card-based layout."
-        features=[{"{ label: '3D transform' },
+        features={[
+          { label: '3D transform' },
           { label: 'Mouse follow' },
-          { label: 'Smooth easing' }"}]
+          { label: 'Smooth easing' }]}
       />
       <LiveDemo />
       <CodeViewer code={CODE_EXAMPLE} language="tsx" filename="tsx" />
-      <PatternNotes />
 
       {/* Related Patterns */}
       <RelatedPatterns currentPatternId="card-tilt" />

@@ -246,13 +246,13 @@ export function SimpleParallaxPattern() {
         title="Parallax"
         titleHighlight="Simple"
         description="Create depth and movement by animating elements at different speeds as the user scrolls. A classic effect that adds sophistication to any page."
-        features=[{"{ label: 'scrub: true' },
+        features={[
+          { label: 'scrub: true' },
           { label: 'y-offset' },
-          { label: 'Smooth' }"}]
+          { label: 'Smooth' }]}
       />
       <LiveDemo />
       <CodeViewer code={CODE_EXAMPLE} language="tsx" filename="tsx" />
-      <PatternNotes />
 
       {/* Related Patterns */}
       <RelatedPatterns currentPatternId="simple-parallax" />

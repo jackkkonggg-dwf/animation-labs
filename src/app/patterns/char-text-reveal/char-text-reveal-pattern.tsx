@@ -201,13 +201,13 @@ export function CharTextRevealPattern() {
         title="Reveal"
         titleHighlight="Char Text"
         description="Animate text character by character for dramatic reveals. Split text into individual elements and stagger their entrance."
-        features=[{"{ label: 'Split text' },
+        features={[
+          { label: 'Split text' },
           { label: 'Char stagger' },
-          { label: 'Custom ease' }"}]
+          { label: 'Custom ease' }]}
       />
       <LiveDemo />
       <CodeViewer code={CODE_EXAMPLE} language="tsx" filename="tsx" />
-      <PatternNotes />
 
       {/* Related Patterns */}
       <RelatedPatterns currentPatternId="char-text-reveal" />

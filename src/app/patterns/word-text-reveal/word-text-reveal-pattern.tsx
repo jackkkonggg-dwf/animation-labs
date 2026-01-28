@@ -216,13 +216,13 @@ export function WordTextRevealPattern() {
         title="Reveal"
         titleHighlight="Word Text"
         description="Animate text word by word for readable and elegant reveals. Balance visual impact with legibility."
-        features=[{"{ label: 'Word split' },
+        features={[
+          { label: 'Word split' },
           { label: 'stagger: 0.1' },
-          { label: 'Readable' }"}]
+          { label: 'Readable' }]}
       />
       <LiveDemo />
       <CodeViewer code={CODE_EXAMPLE} language="tsx" filename="tsx" />
-      <PatternNotes />
 
       {/* Related Patterns */}
       <RelatedPatterns currentPatternId="word-text-reveal" />

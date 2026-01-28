@@ -7,11 +7,42 @@
  * Preserves all original DWF content (Web3 investor, market maker, portfolio, news).
  */
 
+'use client';
+
+import { useRef } from 'react';
+import { useGSAP } from '@gsap/react';
+import { gsap, ScrollTrigger } from '@/lib/gsap-config';
+
 export default function DWFLabsPage() {
+  const heroRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    const hero = heroRef.current;
+    if (!hero) return;
+
+    // US-004: Hero character text reveal animation
+    const titleChars = hero.querySelectorAll('.hero-title span');
+    gsap.set(titleChars, { y: 100, opacity: 0, rotation: -5 });
+
+    gsap.to(titleChars, {
+      y: 0,
+      opacity: 1,
+      rotation: 0,
+      duration: 0.8,
+      stagger: 0.03,
+      ease: 'back.out(1.7)',
+      delay: 0.2,
+    });
+
+    return () => {
+      gsap.killTweensOf(titleChars);
+    };
+  }, { scope: heroRef });
   return (
     <main className="min-h-screen bg-zinc-950">
       {/* Section 1: Hero - Kinetic Text Reveal + Multi-Layer Parallax */}
       <section
+        ref={heroRef}
         id="hero"
         className="relative min-h-screen flex items-center justify-center overflow-hidden"
       >

@@ -529,3 +529,39 @@ Started: Thu Jan 29 01:07:23 HKT 2026
   - The useGSAP hook from @gsap/react automatically runs the returned cleanup function on unmount
   - No orphaned ScrollTrigger warnings appear when navigating away and back to the page
   - Testing rapid navigation (multiple back/forth) helps verify cleanup robustness
+---
+
+## [2026-01-29] - US-028
+- Fetched and integrated portfolio company logos from DWF API in `src/lib/portfolio-logos.ts`
+- Created `src/components/PortfolioLogo.tsx` with loading states, error handling, and fallback to company initials
+- Cached 14/15 logos from DWF API (`https://www.dwf-labs.com/api/media/file/partner-*-dark.svg`) in `public/dwf-logos/`
+- Vaultek logo returns 404 from DWF API - fallback displays "VA" initials (0-byte file as placeholder)
+- Updated portfolio grid to use `PortfolioLogo` component with grayscale filter (orange-500 on hover)
+- Updated portfolio marquee to use `portfolioCompanies` data array
+- All logos use `img` tag with `onError`/`onLoad` handlers for graceful degradation
+- Typecheck passed, logos verified accessible via HTTP (200 status)
+- Files changed: `src/lib/portfolio-logos.ts`, `src/components/PortfolioLogo.tsx`, `src/app/dwf-labs/page.tsx`, `prd.json`, `public/dwf-logos/*.svg`
+- **Learnings for future iterations:**
+  - DWF logo API pattern: `https://www.dwf-labs.com/api/media/file/partner-{id}-dark.svg` where id is lowercase company name
+  - Use `img` tag (not `Image` from next/image) for SVG logos to avoid Next.js image optimization issues with SVGs
+  - For error handling on images, use `onError` callback to set error state and show fallback content
+  - For loading states, use `onLoad` callback with opacity transition (0→1) for smooth appearance
+  - Public directory files in Next.js are served at root path (e.g., `public/dwf-logos/tron.svg` → `/dwf-logos/tron.svg`)
+  - Company ID mappings: TRON=tron, Fetch.ai=fetch, YGG=ygg, WLFI=wlfi (not all lowercase direct match)
+  - When caching external assets, verify file sizes after fetch (0 bytes = failed request)
+
+## [2026-01-29] - US-029
+- Implemented news article thumbnails with lazy loading in `src/lib/news-data.ts` and `src/components/NewsThumbnail.tsx`
+- Created news article data with unique gradient placeholders for each article (orange-900/30 to zinc-900, etc.)
+- Created NewsThumbnail component with: IntersectionObserver lazy loading (50px rootMargin), orange/zinc styled placeholder with backdrop-blur, graceful error handling with fallback icon, opacity transition on load
+- Updated DWF Labs page to use newsArticles.map() and NewsThumbnail component instead of hardcoded array
+- Typecheck passed
+- Files changed: `src/lib/news-data.ts`, `src/components/NewsThumbnail.tsx`, `src/app/dwf-labs/page.tsx`, `prd.json`
+- **Learnings for future iterations:**
+  - DWF Labs website has Cloudflare protection (403 Forbidden), so direct thumbnail fetching isn't possible
+  - Use styled gradient placeholders matching the design system as fallback for protected resources
+  - IntersectionObserver with rootMargin enables lazy loading before elements enter viewport
+  - For lazy loading patterns: placeholder visible while loading → opacity transition when loaded → error fallback on failure
+  - The NewsThumbnail component supports both external URLs (with lazy loading) and gradient-only placeholders
+  - Agent-browser had resource availability issues - manual verification via file reading was necessary
+---

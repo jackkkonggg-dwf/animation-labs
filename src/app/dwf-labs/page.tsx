@@ -13,7 +13,9 @@ import { useRef, useEffect, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger, Draggable, InertiaPlugin } from '@/lib/gsap-config';
 import { PortfolioLogo } from '@/components/PortfolioLogo';
+import { NewsThumbnail } from '@/components/NewsThumbnail';
 import { portfolioCompanies } from '@/lib/portfolio-logos';
+import { newsArticles } from '@/lib/news-data';
 
 export default function DWFLabsPage() {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -1218,54 +1220,17 @@ export default function DWFLabsPage() {
 
           {/* News Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              {
-                title: 'October 2025 Recap: New Partnerships, Conferences, and Community Events',
-                date: 'Oct 31, 2025',
-                badge: 'Recap',
-              },
-              {
-                title: 'DWF Labs Participates in Block Street\'s Funding Round',
-                date: 'Oct 12, 2025',
-                badge: 'Investment',
-              },
-              {
-                title: 'September 2025 Highlights: Partnerships, Events, and Research',
-                date: 'Oct 01, 2025',
-                badge: 'Monthly',
-              },
-              {
-                title: 'DWF Labs Backs MemeCore: Building the First Blockchain for Meme 2.0',
-                date: 'Sep 18, 2025',
-                badge: 'Ventures',
-              },
-              {
-                title: 'DWF Labs Joins as Strategic Crypto Liquidity Provider in Coincall\'s Enhanced Market Ecosystem',
-                date: 'Sep 07, 2025',
-                badge: 'Partnership',
-              },
-              {
-                title: 'RICE AI Secures Series A Funding with Support from DWF Labs',
-                date: 'Aug 18, 2025',
-                badge: 'Ventures',
-              },
-            ].map((article, index) => (
+            {newsArticles.map((article) => (
               <article
-                key={index}
+                key={article.id}
                 className="news-card group relative bg-zinc-900 border border-zinc-800 overflow-hidden hover:border-orange-500/50 transition-all duration-200"
                 style={{ transformStyle: 'preserve-3d', willChange: 'transform' }}
               >
                 {/* Shine effect overlay */}
                 <div className="news-shine absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200" style={{ willChange: 'opacity, background' }} />
 
-                {/* Thumbnail placeholder */}
-                <div className="news-thumbnail aspect-video bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center overflow-hidden">
-                  <div className="w-12 h-12 bg-zinc-800 rounded-lg flex items-center justify-center text-zinc-600 group-hover:scale-110 transition-transform duration-300" style={{ willChange: 'transform' }}>
-                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-                    </svg>
-                  </div>
-                </div>
+                {/* Thumbnail with lazy loading */}
+                <NewsThumbnail article={article} />
 
                 {/* Content */}
                 <div className="p-6">

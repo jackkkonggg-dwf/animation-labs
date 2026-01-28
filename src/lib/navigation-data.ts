@@ -196,5 +196,14 @@ export const NAVIGATION_DATA: NavigationData = {
       category: 'Advanced',
       difficulty: 'advanced',
     },
+    // DWF Labs
+    {
+      id: 'dwf-labs',
+      title: 'DWF Labs',
+      description: 'Production-ready DWF Labs website featuring 12+ advanced GSAP animation patterns with Animation Labs visual theme',
+      path: '/dwf-labs',
+      category: 'Showcase',
+      difficulty: 'advanced',
+    },
   ],
 };

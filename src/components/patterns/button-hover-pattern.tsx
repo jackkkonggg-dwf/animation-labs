@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap } from '@/lib/gsap-config';
 import { RelatedPatterns } from '@/components/patterns/related-patterns';
+import { PatternNavigation } from '@/components/patterns/pattern-navigation';
 
 // ============================================================================
 // PATTERN HEADER COMPONENT
@@ -796,6 +797,9 @@ export function ButtonHoverPattern() {
 
       {/* Related Patterns */}
       <RelatedPatterns currentPatternId="button-hover" />
+
+      {/* Pattern Navigation */}
+      <PatternNavigation currentPatternId="button-hover" />
 
       {/* Footer CTA */}
       <section className="relative border-t border-orange-500/20 bg-zinc-900/30">

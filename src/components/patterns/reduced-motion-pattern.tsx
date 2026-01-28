@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 import { RelatedPatterns } from '@/components/patterns/related-patterns';
+import { PatternNavigation } from '@/components/patterns/pattern-navigation';
 
 // ============================================================================
 // PATTERN HEADER COMPONENT
@@ -649,6 +650,9 @@ export function ReducedMotionPattern() {
 
       {/* Related Patterns */}
       <RelatedPatterns currentPatternId="reduced-motion" />
+
+      {/* Pattern Navigation */}
+      <PatternNavigation currentPatternId="reduced-motion" />
 
       {/* Footer CTA */}
       <section className="relative border-t border-orange-500/20 bg-zinc-900/30">

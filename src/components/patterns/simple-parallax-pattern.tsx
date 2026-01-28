@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 import { RelatedPatterns } from '@/components/patterns/related-patterns';
+import { PatternNavigation } from '@/components/patterns/pattern-navigation';
 
 // ============================================================================
 // PATTERN HEADER COMPONENT
@@ -586,6 +587,9 @@ export function SimpleParallaxPattern() {
 
       {/* Related Patterns */}
       <RelatedPatterns currentPatternId="simple-parallax" />
+
+      {/* Pattern Navigation */}
+      <PatternNavigation currentPatternId="simple-parallax" />
 
       {/* Footer CTA */}
       <section className="relative border-t border-orange-500/20 bg-zinc-900/30">

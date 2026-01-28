@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap, ScrollTrigger } from '@/app/lib/gsap-config';
+import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 import { STATS_DATA, WAVE_ANIMATION_CONFIG } from '../_data';
 import { calculateOscillatingValue, formatCounterValue } from '@/app/lib/wave-utils';
 

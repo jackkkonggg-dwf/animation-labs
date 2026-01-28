@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap, ScrollTrigger } from '@/app/lib/gsap-config';
+import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 import { PROFESSIONAL_STATS_DATA, PROFESSIONAL_ANIMATION_CONFIG } from '../_data';
 
 /**
@@ -98,7 +98,7 @@ export function ProfessionalStatsSection() {
     };
   }, []);
 
-  const animateCounter = (element: HTMLElement, data: typeof PROFESSIONAL_STATS_DATA[0], index: number) => {
+  const animateCounter = (element: HTMLElement, data: typeof PROFESSIONAL_STATS_DATA[0], _index: number) => {
     const { value, suffix, prefix } = data;
     const duration = PROFESSIONAL_ANIMATION_CONFIG.stats.counter.duration * 1000;
     const startTime = Date.now();
@@ -156,7 +156,7 @@ export function ProfessionalStatsSection() {
 
         {/* Stats Grid */}
         <div ref={statsRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-          {PROFESSIONAL_STATS_DATA.map((stat, index) => (
+          {PROFESSIONAL_STATS_DATA.map((stat, _index) => (
             <div
               key={stat.id}
               className="stat-card relative bg-slate-900/20 border border-slate-700/30 p-8 text-center hover:border-amber-500/30 transition-all duration-300"

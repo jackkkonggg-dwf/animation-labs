@@ -2,9 +2,8 @@
 
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
-import { ScrollTrigger } from '@/app/lib/gsap-config';
+import { ScrollTrigger } from '@/lib/gsap-config';
 import { BrutalistHeroSection } from './hero-section';
-import { MarqueeText } from './marquee-text';
 import dynamic from 'next/dynamic';
 
 // Lazy load sections below the fold for better performance

@@ -2,7 +2,7 @@
 
 import { useRef, useEffect } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap, ScrollTrigger } from '@/app/lib/gsap-config';
+import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 import { STATS_DATA, NEON_COLORS } from '../_data';
 import type { StatItem } from '../_data';
 

@@ -1,12 +1,12 @@
 'use client';
 
-import { useRef, useState, useMemo, useEffect } from 'react';
+import { useRef, useMemo } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useGSAP } from '@gsap/react';
-import { gsap, ScrollTrigger } from '@/app/lib/gsap-config';
-import { NAVIGATION_DATA } from '@/app/lib/navigation-data';
-import type { Difficulty } from '@/app/types/pattern';
+import { gsap, ScrollTrigger } from '@/lib/gsap-config';
+import { NAVIGATION_DATA } from '@/lib/navigation-data';
+import type { Difficulty } from '@/types/pattern';
 
 // Difficulty badge styles
 const getDifficultyStyles = (difficulty: Difficulty) => {

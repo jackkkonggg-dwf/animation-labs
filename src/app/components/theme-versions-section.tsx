@@ -3,7 +3,7 @@
 import { useRef } from 'react';
 import Link from 'next/link';
 import { useGSAP } from '@gsap/react';
-import { gsap, ScrollTrigger } from '@/app/lib/gsap-config';
+import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 
 interface ThemeVersion {
   id: string;
@@ -48,24 +48,24 @@ const THEMES: ThemeVersion[] = [
     gradientTo: 'to-purple-900',
   },
   {
-    id: 'sunset',
-    title: 'Sunset',
+    id: 'brutalist',
+    title: 'Brutalist',
     subtitle: '04',
-    description: 'Warm color transitions with golden hour aesthetics',
-    path: '#',
-    accentColor: '#f97316',
-    gradientFrom: 'from-orange-500',
-    gradientTo: 'to-rose-900',
+    description: 'Industrial design with raw aesthetics, bold typography, and acid green accents',
+    path: '/dwf-brutalist-theme',
+    accentColor: '#ccff00',
+    gradientFrom: 'from-lime-400',
+    gradientTo: 'to-zinc-900',
   },
   {
-    id: 'aurora',
-    title: 'Aurora',
+    id: 'zen',
+    title: 'Zen',
     subtitle: '05',
-    description: 'Northern lights inspired with ethereal color shifts',
-    path: '#',
-    accentColor: '#a855f7',
-    gradientFrom: 'from-violet-500',
-    gradientTo: 'to-emerald-900',
+    description: 'Minimalist harmony with serene washi paper tones and balanced spatial design',
+    path: '/dwf-zen-theme',
+    accentColor: '#f5f5f0',
+    gradientFrom: 'from-stone-200',
+    gradientTo: 'to-stone-400',
   },
 ];
 
@@ -205,11 +205,21 @@ export function ThemeVersionsSection() {
         {/* Theme cards grid */}
         <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {THEMES.map((theme) => (
-            <Link key={theme.id} href={theme.path}>
+            <Link key={theme.id} href={theme.path} scroll={true}>
               <div
                 className="theme-card group relative h-[420px] bg-zinc-900/40 backdrop-blur-sm
-                  border border-white/5 overflow-hidden cursor-pointer
-                  hover:border-cyan-500/30 transition-all duration-500"
+                  border border-white/5 overflow-hidden cursor-pointer transition-all duration-500"
+                style={
+                  {
+                    '--theme-accent': theme.accentColor,
+                  } as React.CSSProperties
+                }
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = `${theme.accentColor}30`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.05)';
+                }}
               >
                 {/* Animated gradient background */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${theme.gradientFrom} ${theme.gradientTo} opacity-0 group-hover:opacity-20 transition-opacity duration-700`} />
@@ -248,7 +258,7 @@ export function ThemeVersionsSection() {
                   </div>
 
                   {/* Floating number */}
-                  <div className="absolute top-4 left-4 text-[72px] font-black text-white/5 leading-none">
+                  <div className="absolute top-4 left-4 text-[72px] font-black text-white/5 group-hover:text-white/80 transition-colors duration-500 leading-none">
                     {theme.subtitle}
                   </div>
 
@@ -264,11 +274,37 @@ export function ThemeVersionsSection() {
                 <div className="relative p-6 flex flex-col flex-1">
                   {/* Title */}
                   <h3
-                    className="text-3xl font-black text-zinc-100 mb-2 uppercase tracking-tight
-                      group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r
-                      group-hover:from-cyan-400 group-hover:to-blue-500 transition-all duration-300"
+                    className="text-3xl font-black mb-2 uppercase tracking-tight"
                   >
-                    {theme.title}
+                    <span
+                      style={
+                        {
+                          color: 'rgb(244 244 245)',
+                          backgroundImage: 'transparent',
+                          backgroundClip: 'initial',
+                          WebkitBackgroundClip: 'initial',
+                          transition: 'all 0.3s ease',
+                        } as React.CSSProperties
+                      }
+                      onMouseEnter={(e) => {
+                        Object.assign(e.currentTarget.style, {
+                          color: 'transparent',
+                          backgroundImage: `linear-gradient(to right, ${theme.accentColor}66, ${theme.accentColor}33)`,
+                          backgroundClip: 'text',
+                          WebkitBackgroundClip: 'text',
+                        });
+                      }}
+                      onMouseLeave={(e) => {
+                        Object.assign(e.currentTarget.style, {
+                          color: 'rgb(244 244 245)',
+                          backgroundImage: 'transparent',
+                          backgroundClip: 'initial',
+                          WebkitBackgroundClip: 'initial',
+                        });
+                      }}
+                    >
+                      {theme.title}
+                    </span>
                   </h3>
 
                   {/* Description */}
@@ -282,12 +318,14 @@ export function ThemeVersionsSection() {
                       Explore Theme
                     </span>
                     <div
-                      className="w-10 h-10 bg-zinc-800 group-hover:bg-cyan-500 transition-colors duration-300
-                        flex items-center justify-center"
-                    >
+                      className="w-10 h-10 flex items-center justify-center bg-zinc-900"
+                      style={
+                        {
+                          '--theme-accent': `${theme.accentColor}a0`,
+                        } as React.CSSProperties
+                      }>
                       <svg
-                        className="w-4 h-4 text-zinc-400 group-hover:text-black transition-colors duration-300
-                          transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300"
+                        className="w-4 h-4 text-zinc-500 group-hover:text-(--theme-accent) transition-colors duration-500"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -301,13 +339,38 @@ export function ThemeVersionsSection() {
 
                 {/* Corner accent */}
                 <div className="absolute top-0 right-0 w-16 h-16">
-                  <div className="absolute top-0 right-0 w-8 h-0.5 bg-gradient-to-l from-cyan-500/50 to-transparent group-hover:w-16 transition-all duration-500" />
-                  <div className="absolute top-0 right-0 w-0.5 h-8 bg-gradient-to-b from-cyan-500/50 to-transparent group-hover:h-16 transition-all duration-500" />
+                  <div
+                    className="absolute top-0 right-0 h-0.5 transition-all duration-500 group-hover:w-16"
+                    style={
+                      {
+                        width: '2rem',
+                        background: `linear-gradient(to left, ${theme.accentColor}80, transparent)`,
+                      } as React.CSSProperties
+                    }
+                  />
+                  <div
+                    className="absolute top-0 right-0 w-0.5 transition-all duration-500 group-hover:h-16"
+                    style={
+                      {
+                        height: '2rem',
+                        background: `linear-gradient(to bottom, ${theme.accentColor}80, transparent)`,
+                      } as React.CSSProperties
+                    }
+                  />
                 </div>
 
                 {/* Ripple effect on hover */}
                 <div className="absolute inset-0 overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <div className="absolute top-1/2 left-1/2 w-0 h-0 bg-cyan-500/10 rounded-full group-hover:w-[600px] group-hover:h-[600px] group-hover:-translate-x-1/2 group-hover:-translate-y-1/2 transition-all duration-700 ease-out" />
+                  <div
+                    className="absolute top-1/2 left-1/2 rounded-full transition-all duration-700 ease-out group-hover:w-[600px] group-hover:h-[600px] group-hover:-translate-x-1/2 group-hover:-translate-y-1/2"
+                    style={
+                      {
+                        width: 0,
+                        height: 0,
+                        backgroundColor: `${theme.accentColor}1a`,
+                      } as React.CSSProperties
+                    }
+                  />
                 </div>
               </div>
             </Link>

@@ -3,8 +3,8 @@
 import { useRef } from 'react';
 import Link from 'next/link';
 import { useGSAP } from '@gsap/react';
-import { gsap } from '@/app/lib/gsap-config';
-import type { NavigationRoute } from '@/app/types/navigation';
+import { gsap } from '@/lib/gsap-config';
+import type { NavigationRoute } from '@/types/navigation';
 
 interface MenuItemProps {
   route: NavigationRoute;

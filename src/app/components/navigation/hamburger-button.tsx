@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap } from '@/app/lib/gsap-config';
+import { gsap } from '@/lib/gsap-config';
 
 interface HamburgerButtonProps {
   isOpen: boolean;

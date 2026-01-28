@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap, ScrollTrigger } from '@/app/lib/gsap-config';
+import { gsap } from '@/lib/gsap-config';
 import { BRUTALIST_COLORS, BRUTALIST_FONTS, BRUTALIST_ANIMATION_CONFIG } from '../_data';
 
 interface GaugeSegment {

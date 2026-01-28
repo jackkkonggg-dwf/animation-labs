@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap, ScrollTrigger } from '@/app/lib/gsap-config';
+import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 import { PROFESSIONAL_SERVICES_DATA, PROFESSIONAL_ANIMATION_CONFIG } from '../_data';
 
 /**
@@ -111,7 +111,7 @@ export function ProfessionalServicesSection() {
 
         {/* Services Grid */}
         <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-          {PROFESSIONAL_SERVICES_DATA.map((service, index) => (
+          {PROFESSIONAL_SERVICES_DATA.map((service, _index) => (
             <div
               key={service.id}
               className="service-card group relative bg-slate-900/30 backdrop-blur-sm border border-slate-700/30 p-8 hover:border-amber-500/30 transition-all duration-500"

@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useState } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap, ScrollTrigger } from '@/app/lib/gsap-config';
+import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 import { generateSineWavePath, WAVE_PRESETS } from '@/app/lib/wave-utils';
 
 interface WaveBackgroundProps {

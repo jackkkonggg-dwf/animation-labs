@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
-import { ScrollTrigger } from '@/app/lib/gsap-config';
+import { ScrollTrigger } from '@/lib/gsap-config';
 import { HeroSection } from './hero-section';
 import dynamic from 'next/dynamic';
 

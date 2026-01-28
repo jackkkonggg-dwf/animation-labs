@@ -6,6 +6,7 @@ import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 import { PatternHeader, CodeViewer, ReplayButton } from '@/components/patterns';
 import { RelatedPatterns } from '@/components/patterns/related-patterns';
 import { PatternNavigation } from '@/components/patterns/pattern-navigation';
+import Link from 'next/link';
 
 // ============================================================================
 // CODE EXAMPLE
@@ -297,12 +298,12 @@ export function BatchRevealPattern() {
           <p className="text-zinc-400 text-lg mb-8 max-w-2xl mx-auto">
             Master performance techniques for smooth, professional animations that scale.
           </p>
-          <a
+          <Link
             href="/"
             className="inline-block px-8 py-4 bg-orange-500 text-black font-black text-sm uppercase tracking-wider rounded hover:bg-orange-400 transition-colors duration-300"
           >
             View All Patterns
-          </a>
+          </Link>
         </div>
       </section>
     </div>

@@ -208,9 +208,9 @@ export const FOOTER_DATA = {
     {
       title: 'Services',
       links: [
-        { label: 'Market Making', href: '#services' },
-        { label: 'OTC Trading', href: '#services' },
-        { label: 'Ventures', href: '#services' },
+        { label: 'Market Making', href: '#market-making' },
+        { label: 'OTC Trading', href: '#otc-trading' },
+        { label: 'Ventures', href: '#ventures' },
       ],
     },
     {

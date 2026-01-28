@@ -1,11 +1,12 @@
 'use client';
 
 import { useRef } from 'react';
+import Link from 'next/link';
 import { useGSAP } from '@gsap/react';
-import { gsap, ScrollTrigger } from '@/app/lib/gsap-config';
+import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 import { TEXT_SECTIONS, type LayoutType } from '../_data';
 import type { TextSection } from '../_data';
-import { splitElementToChars, splitElementToWords } from '@/app/lib/text-split-utils';
+import { splitElementToChars, splitElementToWords } from '@/lib/text-split-utils';
 
 // ============================================================================
 // ANIMATION CREATORS
@@ -568,13 +569,13 @@ function EndSection() {
         >
           Explore more animation demos
         </p>
-        <a
+        <Link
           href="/"
           className="inline-block px-8 py-4 bg-[#ff6b35] text-white font-semibold rounded-full hover:bg-[#e55a2b] transition-colors"
           style={{ fontFamily: "'Space Grotesk', sans-serif" }}
         >
           Back to Home
-        </a>
+        </Link>
       </div>
     </section>
   );

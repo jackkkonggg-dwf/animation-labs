@@ -1,8 +1,8 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap } from '@/app/lib/gsap-config';
+import { gsap } from '@/lib/gsap-config';
 import { BRUTALIST_MARQUEE_TEXT, BRUTALIST_COLORS, BRUTALIST_FONTS, BRUTALIST_ANIMATION_CONFIG } from '../_data';
 
 interface MarqueeTextProps {

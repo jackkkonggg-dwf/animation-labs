@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
-import { ScrollTrigger } from '@/app/lib/gsap-config';
+import { ScrollTrigger } from '@/lib/gsap-config';
 import { HeroSection } from './hero-section';
 import dynamic from 'next/dynamic';
 
@@ -67,7 +67,6 @@ export function DWFFuturisticTheme() {
       `;
       document.body.appendChild(trail);
 
-      const { gsap } = require('@/app/lib/gsap-config');
       gsap.to(trail, {
         scale: 0,
         opacity: 0,

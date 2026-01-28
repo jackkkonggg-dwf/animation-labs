@@ -11,6 +11,17 @@
 | @gsap/react | 2.1.2 | React integration with useGSAP hook |
 | TypeScript | 5.x | Type safety |
 
+## Package Management Rule
+
+> **ALWAYS use `pnpm` for package management. Never use `npm` or `yarn`.**
+>
+> - Use `pnpm install` instead of `npm install`
+> - Use `pnpm add` instead of `npm install <package>`
+> - Use `pnpm dlx` instead of `npx` for executing packages
+> - Use `pnpm run <script>` instead of `npm run <script>`
+>
+> This ensures consistent dependency resolution and prevents package manager conflicts.
+
 ## Critical Design Rule
 
 > **ALWAYS use the `frontend-design` skill when making ANY type of design decision.**

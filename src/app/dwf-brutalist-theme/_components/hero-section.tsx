@@ -2,8 +2,8 @@
 
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap, ScrollTrigger } from '@/app/lib/gsap-config';
-import { BRUTALIST_HERO_DATA, BRUTALIST_COLORS, BRUTALIST_FONTS, BRUTALIST_ANIMATION_CONFIG } from '../_data';
+import { gsap, ScrollTrigger } from '@/lib/gsap-config';
+import { BRUTALIST_HERO_DATA, BRUTALIST_COLORS, BRUTALIST_FONTS } from '../_data';
 import { MarqueeText } from './marquee-text';
 
 /**

@@ -3,9 +3,10 @@
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap } from '@/lib/gsap-config';
-import { PatternHeader, CodeViewer, ReplayButton } from '@/components/patterns';
+import { PatternHeader, CodeViewer } from '@/components/patterns';
 import { RelatedPatterns } from '@/components/patterns/related-patterns';
 import { PatternNavigation } from '@/components/patterns/pattern-navigation';
+import Link from 'next/link';
 
 // ============================================================================
 // CODE EXAMPLE
@@ -245,8 +246,8 @@ function MagneticButton() {
     const area = areaRef.current;
     if (!button || !area) return;
 
-    let xTo = gsap.quickTo(button, 'x', { duration: 0.4, ease: 'power3.out' });
-    let yTo = gsap.quickTo(button, 'y', { duration: 0.4, ease: 'power3.out' });
+    const xTo = gsap.quickTo(button, 'x', { duration: 0.4, ease: 'power3.out' });
+    const yTo = gsap.quickTo(button, 'y', { duration: 0.4, ease: 'power3.out' });
 
     const handleMouseMove = (e: MouseEvent) => {
       const rect = area.getBoundingClientRect();
@@ -460,12 +461,12 @@ export function ButtonHoverPattern() {
           <p className="text-zinc-400 text-lg mb-8 max-w-2xl mx-auto">
             This is just the beginning. Explore 50+ GSAP animation patterns in our complete collection.
           </p>
-          <a
+          <Link
             href="/"
             className="inline-block px-8 py-4 bg-orange-500 text-black font-black text-sm uppercase tracking-wider rounded hover:bg-orange-400 transition-colors duration-300"
           >
             View All Patterns
-          </a>
+          </Link>
         </div>
       </section>
     </div>

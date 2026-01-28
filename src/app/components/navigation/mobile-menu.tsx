@@ -2,11 +2,11 @@
 
 import { useRef, useEffect } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap } from '@/app/lib/gsap-config';
+import { gsap } from '@/lib/gsap-config';
 import { HamburgerButton } from './hamburger-button';
 import { MenuItem } from './menu-item';
-import { NAVIGATION_DATA } from '@/app/lib/navigation-data';
-import type { NavigationRoute } from '@/app/types/navigation';
+import { NAVIGATION_DATA } from '@/lib/navigation-data';
+import type { NavigationRoute } from '@/types/navigation';
 
 interface MobileMenuProps {
   isOpen: boolean;

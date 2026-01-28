@@ -5,7 +5,7 @@ import { useGSAP } from '@gsap/react';
 import { Hero } from './hero';
 import { ArtistCard } from '@/app/components/artist-card';
 import { ARTIST_CARDS } from '@/app/components/artist-cards-data';
-import { gsap, ScrollTrigger } from '@/app/lib/gsap-config';
+import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 
 interface HorizontalScrollProps {
   routeId?: string;

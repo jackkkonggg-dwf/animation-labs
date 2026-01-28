@@ -1,8 +1,8 @@
 'use client';
 
-import { useRef, useEffect, useState } from 'react';
+import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap } from '@/app/lib/gsap-config';
+import { gsap } from '@/lib/gsap-config';
 
 interface WaveParticle {
   element: HTMLDivElement;
@@ -22,54 +22,6 @@ export function WaveCursor() {
   const lastMousePosRef = useRef({ x: 0, y: 0 });
   const mouseVelocityRef = useRef({ x: 0, y: 0 });
   const animationFrameRef = useRef<number | undefined>(undefined);
-
-  useGSAP(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    // Track mouse position and velocity
-    const handleMouseMove = (e: MouseEvent) => {
-      const currentX = e.clientX;
-      const currentY = e.clientY;
-
-      // Calculate velocity
-      mouseVelocityRef.current = {
-        x: currentX - lastMousePosRef.current.x,
-        y: currentY - lastMousePosRef.current.y,
-      };
-
-      lastMousePosRef.current = { x: currentX, y: currentY };
-
-      // Create particle based on velocity magnitude
-      const velocity = Math.sqrt(
-        mouseVelocityRef.current.x ** 2 + mouseVelocityRef.current.y ** 2
-      );
-
-      // Only create particles if moving fast enough
-      if (velocity > 2) {
-        createParticle(currentX, currentY, velocity);
-      }
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-
-    // Animation loop for updating particles
-    const animateParticles = () => {
-      updateParticles();
-      animationFrameRef.current = requestAnimationFrame(animateParticles);
-    };
-    animateParticles();
-
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-      }
-      // Clean up particles
-      particlesRef.current.forEach((p) => p.element.remove());
-      particlesRef.current = [];
-    };
-  }, []);
 
   const createParticle = (x: number, y: number, velocity: number) => {
     const container = containerRef.current;
@@ -140,6 +92,54 @@ export function WaveCursor() {
       particle.element.style.opacity = (0.8 * (1 - progress)).toString();
     }
   };
+
+  useGSAP(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    // Track mouse position and velocity
+    const handleMouseMove = (e: MouseEvent) => {
+      const currentX = e.clientX;
+      const currentY = e.clientY;
+
+      // Calculate velocity
+      mouseVelocityRef.current = {
+        x: currentX - lastMousePosRef.current.x,
+        y: currentY - lastMousePosRef.current.y,
+      };
+
+      lastMousePosRef.current = { x: currentX, y: currentY };
+
+      // Create particle based on velocity magnitude
+      const velocity = Math.sqrt(
+        mouseVelocityRef.current.x ** 2 + mouseVelocityRef.current.y ** 2
+      );
+
+      // Only create particles if moving fast enough
+      if (velocity > 2) {
+        createParticle(currentX, currentY, velocity);
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    // Animation loop for updating particles
+    const animateParticles = () => {
+      updateParticles();
+      animationFrameRef.current = requestAnimationFrame(animateParticles);
+    };
+    animateParticles();
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+      // Clean up particles
+      particlesRef.current.forEach((p) => p.element.remove());
+      particlesRef.current = [];
+    };
+  }, []);
 
   return <div ref={containerRef} className="wave-cursor-container pointer-events-none fixed inset-0 z-50" />;
 }

@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap, ScrollTrigger } from '@/app/lib/gsap-config';
+import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 import { BRUTALIST_SERVICES, BRUTALIST_COLORS, BRUTALIST_FONTS, BRUTALIST_ANIMATION_CONFIG } from '../_data';
 
 /**
@@ -138,7 +138,7 @@ export function ServicesSection() {
 
         {/* Services Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {BRUTALIST_SERVICES.map((service, index) => (
+          {BRUTALIST_SERVICES.map((service, _index) => (
             <div
               key={service.id}
               className="service-card relative overflow-hidden border-2 group"

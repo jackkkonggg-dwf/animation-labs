@@ -1,70 +1,12 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from '@/lib/gsap-config';
-import { PatternHeader, CodeViewer, ReplayButton } from '@/components/patterns';
+import { PatternHeader, CodeViewer } from '@/components/patterns';
 import { RelatedPatterns } from '@/components/patterns/related-patterns';
 import { PatternNavigation } from '@/components/patterns/pattern-navigation';
-
-// ============================================================================
-// PERFORMANCE CARD COMPONENT (Animated)
-// ============================================================================
-
-interface PerfCardProps {
-  title: string;
-  icon: string;
-  optimized: boolean;
-  color: string;
-}
-
-function PerfCard({ title, icon, optimized, color }: PerfCardProps) {
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  useGSAP(() => {
-    const card = cardRef.current;
-    if (!card) return;
-
-    // Animate continuously to show performance difference
-    gsap.to(card, {
-      rotation: 360,
-      scale: 1.1,
-      duration: 2,
-      repeat: -1,
-      ease: 'none',
-    });
-
-    return () => {
-      gsap.killTweensOf(card);
-    };
-  }, { scope: cardRef });
-
-  return (
-    <div
-      ref={cardRef}
-      className={`
-        relative p-6 rounded-lg border flex items-center justify-center
-        ${optimized
-          ? 'will-change-transform will-change-opacity border-orange-500/50 bg-zinc-900'
-          : 'border-zinc-700 bg-zinc-900/50'
-        }
-      `}
-    >
-      <div className="text-center">
-        <div className="text-4xl mb-3">{icon}</div>
-        <div className={`text-xs font-black uppercase tracking-wider ${optimized ? 'text-orange-500' : 'text-zinc-500'}`}>
-          {title}
-        </div>
-        {optimized && (
-          <div className="mt-2 text-[10px] text-green-500 font-mono">GPU ACCELERATED</div>
-        )}
-      </div>
-
-      {/* Performance indicator */}
-      <div className={`absolute top-2 right-2 w-2 h-2 rounded-full ${optimized ? 'bg-green-500 animate-pulse' : 'bg-zinc-600'}`} />
-    </div>
-  );
-}
+import Link from 'next/link';
 
 // ============================================================================
 // CODE EXAMPLE
@@ -146,9 +88,6 @@ export function OptimizedAnimation() {
 
 function LiveDemo() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [fps, setFps] = useState({ optimized: 60, unoptimized: 60 });
-  const frameCountRef = useRef({ optimized: 0, unoptimized: 0 });
-  const lastTimeRef = useRef({ optimized: 0, unoptimized: 0 });
 
   useGSAP(() => {
     const container = containerRef.current;
@@ -326,12 +265,12 @@ export function PerformanceOptimizationPattern() {
             Performance optimization is critical for delivering buttery smooth 60fps experiences.
             Your users will notice the difference.
           </p>
-          <a
+          <Link
             href="/"
             className="inline-block px-8 py-4 bg-orange-500 text-black font-black text-sm uppercase tracking-wider rounded hover:bg-orange-400 transition-colors duration-300"
           >
             View All Patterns
-          </a>
+          </Link>
         </div>
       </section>
     </div>

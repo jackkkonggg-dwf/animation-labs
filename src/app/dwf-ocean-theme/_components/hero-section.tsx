@@ -2,10 +2,10 @@
 
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap, ScrollTrigger } from '@/app/lib/gsap-config';
+import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 import { HERO_DATA, WAVE_ANIMATION_CONFIG } from '../_data';
 import { calculateWaveYOffset } from '@/app/lib/wave-utils';
-import { splitElementToChars } from '@/app/lib/text-split-utils';
+import { splitElementToChars } from '@/lib/text-split-utils';
 
 /**
  * Hero Section - Ocean Wave Theme

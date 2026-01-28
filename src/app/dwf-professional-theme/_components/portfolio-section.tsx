@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap, ScrollTrigger } from '@/app/lib/gsap-config';
+import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 import { PROFESSIONAL_PORTFOLIO_DATA, PROFESSIONAL_ANIMATION_CONFIG } from '../_data';
 
 /**
@@ -109,7 +109,7 @@ export function ProfessionalPortfolioSection() {
 
         {/* Portfolio Grid */}
         <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {PROFESSIONAL_PORTFOLIO_DATA.map((item, index) => (
+          {PROFESSIONAL_PORTFOLIO_DATA.map((item, _index) => (
             <div
               key={item.id}
               className="portfolio-card group relative bg-slate-900/30 border border-slate-700/30 p-6 hover:border-amber-500/30 transition-all duration-300 cursor-pointer"

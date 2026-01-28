@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap, ScrollTrigger } from '@/app/lib/gsap-config';
+import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 import { LIVE_STATS_DATA, TRADING_PAIRS_DATA, ZEN_COLORS, ANIMATION_CONFIG } from '../_data';
 
 /**

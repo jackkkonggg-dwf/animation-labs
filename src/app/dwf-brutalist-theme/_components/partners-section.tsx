@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap, ScrollTrigger } from '@/app/lib/gsap-config';
+import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 import {
   BRUTALIST_EXCHANGE_PARTNERS,
   BRUTALIST_PROTOCOL_PARTNERS,
@@ -171,7 +171,7 @@ export function PartnersSection() {
             EXCHANGES
           </h3>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-            {BRUTALIST_EXCHANGE_PARTNERS.map((partner, index) => (
+            {BRUTALIST_EXCHANGE_PARTNERS.map((partner, _index) => (
               <div
                 key={partner.name}
                 className="exchange-logo relative p-4 border-2 group hover:bg-white hover:text-black transition-all duration-150 cursor-pointer"
@@ -219,7 +219,7 @@ export function PartnersSection() {
             DEFI_PROTOCOLS
           </h3>
           <div className="flex flex-wrap gap-4">
-            {BRUTALIST_PROTOCOL_PARTNERS.map((partner, index) => (
+            {BRUTALIST_PROTOCOL_PARTNERS.map((partner, _index) => (
               <div
                 key={partner.name}
                 className="protocol-logo relative px-6 py-3 border-2 group hover:bg-white hover:text-black transition-all duration-150 cursor-pointer"

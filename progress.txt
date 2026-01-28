@@ -12,3 +12,18 @@ Started: Thu Jan 29 01:07:23 HKT 2026
   - Use `pnpm exec tsc --noEmit` for typecheck since there's no typecheck script in package.json
   - ESLint shows warnings but no errors in this project configuration
 ---
+
+## [2026-01-29] - US-002
+- Added DWF Labs route to `src/lib/navigation-data.ts` with Animation Labs styling
+- Created placeholder page at `src/app/dwf-labs/page.tsx` (structure coming in US-003)
+- Route displays in main navigation menu with Showcase category
+- Page accessible via direct URL navigation
+- Files changed: `src/lib/navigation-data.ts`, `src/app/dwf-labs/page.tsx`
+- **Learnings for future iterations:**
+  - The navigation system uses `src/lib/navigation-data.ts` to define all routes
+  - Mobile menu component automatically renders routes from `NAVIGATION_DATA`
+  - Route structure: `{ id, title, description, path, category, difficulty }`
+  - Category 'Showcase' fits DWF Labs as a production demo page
+  - agent-browser CLI is available via `pnpm dlx agent-browser` for browser testing
+  - Screenshots saved to `/tmp/` for verification
+---

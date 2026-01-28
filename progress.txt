@@ -478,3 +478,29 @@ Started: Wed Jan 28 04:56:36 HKT 2026
   - The key performance pattern: Animate only transform and opacity properties for 60fps animations
   - Be specific with will-change - "will-change: all" wastes resources, use "will-change: transform, opacity" instead
   - Performance optimization is critical for smooth user experience - users notice the difference between 30fps and 60fps
+
+## [2025-01-28] - US-022
+- Created src/app/patterns/reduced-motion/page.tsx as the entry point for reduced motion pattern
+- Created src/components/patterns/reduced-motion-pattern.tsx with full implementation
+- Reduced motion pattern: uses gsap.matchMedia() to conditionally create animations based on (prefers-reduced-motion: no-preference) and (prefers-reduced-motion: reduce)
+- Full motion mode: gsap.set() for initial state (opacity: 0, y: 80, scale: 0.9) then gsap.to() with stagger: 0.15 and back.out(1.2) easing
+- Reduced motion mode: gsap.set() immediately sets final state (opacity: 1, y: 0, scale: 1) - no animation
+- Live demo includes toggle button to simulate reduced motion mode for demonstration purposes
+- Visual mode indicator shows "Full Motion Mode" (orange) or "Reduced Motion Mode" (emerald) with pulse animation
+- Code viewer with syntax-highlighted TypeScript/JSX code showing matchMedia pattern
+- System Preferences Info section with instructions for Windows, macOS, iOS, and Android
+- Key concepts cards: matchMedia(), prefers-reduced-motion, immediate state, cleanup (mm.kill())
+- Accessibility note explaining vestibular disorders and importance of motion preferences
+- Follows same industrial orange design system: zinc-950 background, zinc-900 cards, orange-500 accents
+- Build and typecheck passed
+- Note: agent-browser skill had connection issues - manual browser verification recommended
+- **Learnings for future iterations:**
+  - gsap.matchMedia() is the correct way to handle conditional animations based on CSS media queries
+  - MatchMedia contexts must be killed with mm.kill() in cleanup to prevent memory leaks
+  - For reduced motion, use gsap.set() to immediately place elements in final state - no gsap.to() animation
+  - The matchMedia add() method takes a media query string and a callback function that runs when condition matches
+  - "(prefers-reduced-motion: reduce)" is set at OS level - affects all websites for users with motion sensitivity
+  - Simulation toggle is useful for demo purposes, but in production use the actual system preference
+  - matchMedia contexts can be layered with multiple .add() calls for different conditions
+  - The matchMedia callback receives a context parameter for additional control if needed
+  - Always cleanup mm.kill() before ScrollTrigger cleanup to ensure proper disposal order

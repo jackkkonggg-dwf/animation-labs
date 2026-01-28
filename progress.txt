@@ -48,3 +48,24 @@ Started: Thu Jan 29 01:07:23 HKT 2026
   - Dev server must run in background before agent-browser can connect
   - The cleanup pattern from CLAUDE.md is critical: Track ScrollTriggers array, kill in cleanup return
 ---
+
+## [2026-01-29] - US-004
+- Implemented Hero character text reveal animation in `src/app/dwf-labs/page.tsx`
+- Added 'use client' directive to enable GSAP hooks
+- Created heroRef and attached to Hero section with useRef
+- Used useGSAP hook with scope: heroRef for proper cleanup
+- Query .hero-title span elements (8 chars: D, W, F, space, L, A, B, S)
+- Initial state: y: 100, opacity: 0, rotation: -5
+- Animate to: y: 0, opacity: 1, rotation: 0
+- Stagger: 0.03s per character, ease: back.out(1.7), delay: 0.2s
+- Cleanup: killTweensOf on titleChars in return function
+- Files changed: `src/app/dwf-labs/page.tsx`, `prd.json`
+- **Learnings for future iterations:**
+  - Converting page.tsx from server to client component requires adding 'use client' directive
+  - useGSAP hook with scope parameter ensures proper cleanup when component unmounts
+  - useGSAP runs after component mount, perfect for page load animations
+  - gsap.set() sets initial state before animation, prevents FOUC (Flash of Unstyled Content)
+  - back.out(1.7) creates snappy "overshoot" effect for dynamic feel
+  - Browser console shows pre-existing hydration error (not related to GSAP changes)
+  - agent-browser eval can verify animation state by checking computed styles
+---

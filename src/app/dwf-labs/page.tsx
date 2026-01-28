@@ -250,9 +250,13 @@ export default function DWFLabsPage() {
     // Get all stat value elements with their data-target attributes
     const statValues = stats.querySelectorAll('.stat-value');
 
-    statValues.forEach((statValue) => {
+    // US-013: Get all stat progress circles for circular animation
+    const progressCircles = stats.querySelectorAll('.stat-progress-circle');
+
+    statValues.forEach((statValue, index) => {
       const target = parseInt((statValue as HTMLElement).dataset.target || '0', 10);
       const counterObj = { value: 0 };
+      const circle = progressCircles[index] as SVGCircleElement;
 
       // Count up animation from 0 to target
       gsap.to(counterObj, {
@@ -270,6 +274,22 @@ export default function DWFLabsPage() {
           (statValue as HTMLElement).textContent = Math.round(counterObj.value).toString();
         },
       });
+
+      // US-013: Animate circular progress indicator
+      // Circle circumference = 2 * PI * 56 ≈ 351.86
+      const circumference = 351.86;
+      if (circle) {
+        gsap.to(circle, {
+          strokeDashoffset: 0,
+          duration: 2,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: stats,
+            start: 'top center',
+            toggleActions: 'play none none reverse',
+          },
+        });
+      }
     });
 
     // Collect ScrollTriggers for cleanup
@@ -282,6 +302,7 @@ export default function DWFLabsPage() {
     return () => {
       triggers.forEach((t) => t.kill());
       gsap.killTweensOf(statValues);
+      gsap.killTweensOf(progressCircles);
     };
   }, { scope: statsRef });
 

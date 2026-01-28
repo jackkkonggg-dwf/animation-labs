@@ -210,3 +210,23 @@ Started: Thu Jan 29 01:07:23 HKT 2026
   - Separate useGSAP hooks for different animation types (count up vs scrub) keeps concerns clear
   - Browser verification: eval transform matrix to verify scale (√(a² + b²)) and rotation (atan2(b, a))
 ---
+
+## [2026-01-29] - US-013
+- Implemented Stats circular SVG progress indicators in `src/app/dwf-labs/page.tsx`
+- Added animation to existing US-011 count up hook for synchronization
+- SVG circles with class `.stat-progress-circle` animate strokeDashoffset from 351.86 (circumference) to 0 (full circle)
+- Circle radius: 56, circumference: 2 * π * 56 ≈ 351.86
+- Duration: 2s, ease: power2.out, synchronized with count up animation
+- Each stat has its own circle animated alongside its counter (index-based matching)
+- ScrollTrigger: start: 'top center', toggleActions: 'play none none reverse'
+- Browser verified: strokeDashoffset reaches 0px (full) after animation, returns to ~352px (empty) on reverse scroll
+- Files changed: `src/app/dwf-labs/page.tsx`, `prd.json`, `progress.txt`
+- **Learnings for future iterations:**
+  - SVG circle progress animation uses strokeDasharray (circumference) and strokeDashoffset (hidden portion)
+  - strokeDashoffset = circumference = empty (no visible stroke), strokeDashoffset = 0 = full circle
+  - Circumference formula: 2 * π * r (for r=56, circumference ≈ 351.86)
+  - Index-based matching works when elements are in the same order: `progressCircles[index]` pairs with `statValues[index]`
+  - The progress circles were already in HTML from US-003 with correct attributes, just needed GSAP animation
+  - agent-browser eval requires IIFE wrapper `(() => { ... })()` for complex JS (can't use bare return statement)
+  - Browser verification: wait 2-3s after scroll trigger for animation to complete before checking computed styles
+---

@@ -504,3 +504,33 @@ Started: Wed Jan 28 04:56:36 HKT 2026
   - matchMedia contexts can be layered with multiple .add() calls for different conditions
   - The matchMedia callback receives a context parameter for additional control if needed
   - Always cleanup mm.kill() before ScrollTrigger cleanup to ensure proper disposal order
+
+## [2025-01-28] - US-023
+- Updated src/types/navigation.ts to add difficulty field to NavigationRoute type
+- Updated src/lib/navigation-data.ts with all 20 GSAP animation patterns
+- Each pattern includes id, title, description, path, category, and difficulty
+- Patterns organized by 9 categories: ScrollTrigger Basics (4), Text Animations (3), Parallax & Depth (2), Micro-interactions (2), Timelines (2), SVG Animations (1), Draggable (2), Advanced Scroll (2), Performance (2)
+- Difficulty distribution: beginner (9), intermediate (8), advanced (3)
+- Build passed - all 23 routes recognized (3 legacy + 20 patterns)
+- **Learnings for future iterations:**
+  - agent-browser skill continues to have connection issues ("Resource temporarily unavailable" error)
+  - Dev server was already running on port 3001, causing EADDRINUSE when trying to start another
+  - The NavigationRoute type needed a new optional difficulty field to support pattern difficulty metadata
+  - Pattern paths follow the convention /patterns/{slug} matching the directory structure
+  - Categories should match the PATTERN_CATEGORIES defined in src/lib/patterns-data.ts
+  - Difficulty assignments: beginner for foundational patterns, intermediate for patterns requiring multiple concepts, advanced for complex techniques like Draggable with momentum and pinned sections
+---
+
+## [2025-01-28] - US-024
+- Added difficulty badges to demo cards in src/components/navigation/demo-grid.tsx
+- Created getDifficultyStyles() helper function that returns bg, text, border, and label for each difficulty level
+- Badge colors: Beginner (emerald-400), Intermediate (yellow-400), Advanced (orange-400)
+- Badges render above title on each card with consistent styling (px-2 py-1, uppercase, tracking-wider, border)
+- Build and typecheck passed
+- **Learnings for future iterations:**
+  - The NavigationRoute type already had an optional difficulty field from US-023, so only the UI component needed updating
+  - Using a switch statement for badge styles is cleaner than a Record type when you need multiple style properties (bg, text, border, label)
+  - Badge placement above title (mb-3) maintains good visual hierarchy while keeping the badge prominent
+  - The badge only renders when route.difficulty exists using conditional rendering
+  - agent-browser skill continues to have "Resource temporarily unavailable" errors - manual browser verification is still needed
+---

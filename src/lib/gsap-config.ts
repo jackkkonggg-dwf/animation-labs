@@ -30,6 +30,12 @@ if (typeof window !== 'undefined') {
     ScrollToPlugin,
     Observer
   );
+
+  // Set global defaults for animations
+  gsap.defaults({
+    ease: 'power3.out',
+    duration: 0.5,
+  });
 }
 
 export {

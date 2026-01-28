@@ -5,6 +5,34 @@ import Link from 'next/link';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 import { NAVIGATION_DATA } from '@/lib/navigation-data';
+import type { Difficulty } from '@/types/pattern';
+
+// Difficulty badge styles
+const getDifficultyStyles = (difficulty: Difficulty) => {
+  switch (difficulty) {
+    case 'beginner':
+      return {
+        bg: 'bg-emerald-500/20',
+        text: 'text-emerald-400',
+        border: 'border-emerald-500/30',
+        label: 'BEGINNER',
+      };
+    case 'intermediate':
+      return {
+        bg: 'bg-yellow-500/20',
+        text: 'text-yellow-400',
+        border: 'border-yellow-500/30',
+        label: 'INTERMEDIATE',
+      };
+    case 'advanced':
+      return {
+        bg: 'bg-orange-500/20',
+        text: 'text-orange-400',
+        border: 'border-orange-500/30',
+        label: 'ADVANCED',
+      };
+  }
+};
 
 export function DemoGrid() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -111,6 +139,17 @@ export function DemoGrid() {
 
                 {/* Content */}
                 <div className="relative z-10 h-full p-6 flex flex-col">
+                  {/* Difficulty badge */}
+                  {route.difficulty && (
+                    <div className="mb-3">
+                      <span
+                        className={`inline-block px-2 py-1 text-[10px] font-black uppercase tracking-wider border ${getDifficultyStyles(route.difficulty).bg} ${getDifficultyStyles(route.difficulty).text} ${getDifficultyStyles(route.difficulty).border}`}
+                      >
+                        {getDifficultyStyles(route.difficulty).label}
+                      </span>
+                    </div>
+                  )}
+
                   {/* Title */}
                   <h3 className="text-2xl font-black text-white mb-2 uppercase tracking-tight group-hover:text-orange-500 transition-colors duration-300">
                     {route.title}

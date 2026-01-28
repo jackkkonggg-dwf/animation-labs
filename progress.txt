@@ -241,3 +241,28 @@ Started: Wed Jan 28 04:56:36 HKT 2026
   - Always remove event listeners in cleanup - forgotten listeners cause memory leaks and zombie animations
   - Icon animations work best when combined with subtle button scale - the icon gets more dramatic transform (translate + rotate) while button gets subtle scale
 ---
+
+## [2025-01-28] - US-013
+- Created src/app/patterns/card-tilt/page.tsx as the entry point for the card 3D tilt pattern
+- Created src/components/patterns/card-tilt-pattern.tsx with full implementation
+- Card 3D tilt pattern: calculates rotateX/rotateY based on mouse position relative to card center
+- Mouse position calculation: (mouse - center) / (dimension / 2) gives -1 to 1 range
+- rotateY = deltaX * maxTilt (horizontal rotation), rotateX = -deltaY * maxTilt (inverted for natural feel)
+- Uses perspective: 1000px on container and transformStyle: preserve-3d on inner element
+- Dynamic radial gradient shine effect that follows cursor (background-position updates on mousemove)
+- Three demo cards with different maxTilt values: Product (15°), Profile (20°), Settings (10°)
+- Elastic bounce reset on mouseleave using elastic.out(1, 0.5) easing
+- Code viewer with syntax-highlighted TypeScript/JSX code
+- Copy to clipboard button with scan line hover effect
+- Proper cleanup: removeEventListener + gsap.killTweensOf() for both card and inner elements
+- 4 key concept cards explaining: perspective, rotation axes, preserve-3d, elastic reset
+- Follows same industrial orange design system: zinc-950 background, zinc-900 cards, orange-500 accents
+- Build and typecheck passed, browser verified (matrix3d transforms confirmed in console)
+- **Learnings for future iterations:**
+  - For 3D tilt effects, rotateX controls vertical tilt (looking up/down), rotateY controls horizontal tilt (looking left/right)
+  - The rotateX value should be inverted (-deltaY) because moving mouse down should tilt the top away (negative X rotation)
+  - Perspective (1000px is a good default) determines how dramatic the 3D effect appears - lower = more dramatic
+  - transformStyle: preserve-3d is required on the inner element to enable proper 3D transforms
+  - radial-gradient background with dynamic position creates a convincing shine/gloss effect that follows cursor
+  - matrix3d is the computed style value when 3D transforms are applied - use this to verify animations are working
+  - Client-side interactive components need 'use client' directive even when imported by Server Component page

@@ -258,8 +258,8 @@
         "Verify in browser using agent-browser skill"
       ],
       "priority": 16,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Implemented with 4 SVG paths (lightning bolt, star, spiral, arrow) using stroke-dasharray/dashoffset technique. Uses getTotalLength() to get path length, then animates strokeDashoffset from length to 0 with scrub: 1 for smooth scroll-linked animation. Includes code viewer with syntax highlighting and 4 key concept cards."
     },
     {
       "id": "US-017",
@@ -274,8 +274,8 @@
         "Verify in browser using agent-browser skill"
       ],
       "priority": 17,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Implemented with 3 draggable boxes: Free Drag (unconstrained), Horizontal (x-axis only), and Bounded (within container). Uses Draggable.create() with type, bounds, edgeResistance, cursor, and activeCursor options. Code viewer with copy button and 4 key concept cards explaining Draggable.create, type option, bounds, and cursor styles."
     },
     {
       "id": "US-018",

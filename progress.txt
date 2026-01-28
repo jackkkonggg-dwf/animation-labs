@@ -315,3 +315,56 @@ Started: Wed Jan 28 04:56:36 HKT 2026
   - ScrollTrigger.getAll().forEach(t => t.kill()) is the safest way to clean up all scroll triggers in a component
   - The progress bar animation uses ease: "none" to directly map to timeline progress without easing interference
 ---
+
+## [2025-01-28] - US-016
+- Created src/app/patterns/svg-draw/page.tsx as the entry point for the SVG path drawing pattern
+- Created src/components/patterns/svg-draw-pattern.tsx with full implementation
+- SVG path drawing pattern: uses stroke-dasharray/dashoffset technique for self-drawing paths
+- Live demo uses getTotalLength() to get exact path length, then sets strokeDasharray/strokeDashoffset
+- Animates strokeDashoffset from length (invisible) to 0 (fully drawn) with scrub: 1
+- 4 SVG shapes: lightning bolt (orange-red gradient), star (cyan-blue gradient), spiral (purple-pink gradient), arrow (green-teal gradient)
+- Code viewer with syntax-highlighted TypeScript/JSX code showing SVG drawing pattern
+- Copy to clipboard button with scan line hover effect and "Copied!" state feedback
+- Proper cleanup: gsap.killTweensOf(paths) and ScrollTrigger.getAll().forEach(t => t.kill()) in useGSAP return function
+- 3 info cards showing: 4 Paths, Scrub: 1, Gradients
+- 4 key concept cards explaining: getTotalLength, strokeDasharray, strokeDashoffset, scrub animation
+- Follows same industrial orange design system: zinc-950 background, zinc-900 cards, orange-500 accents
+- Build and typecheck passed
+- **Learnings for future iterations:**
+  - The stroke-dasharray/dashoffset technique works by setting stroke-dasharray to the path's total length and animating strokeDashoffset from length to 0
+  - getTotalLength() is a method on SVGPathElement that returns the exact pixel length of any SVG path
+  - Always querySelector for paths inside useGSAP to ensure the SVG is mounted before accessing DOM elements
+  - scrub: 1 creates smooth scroll-linked animation with 1-second "catch up" lag for polished feel
+  - Linear gradients in SVG require defining <defs> with <linearGradient> elements and referencing them via url(#id)
+  - When copying pattern files as templates, rename all function/component exports to avoid naming conflicts
+  - JSX template literals with `})` sequences can cause parsing issues in Turbopack - use existing working patterns as templates
+---
+
+## [2025-01-28] - US-017
+- Created src/app/patterns/basic-draggable/page.tsx as the entry point for the basic draggable pattern
+- Created src/components/patterns/basic-draggable-pattern.tsx with full implementation
+- Updated src/lib/gsap-config.ts to register Draggable plugin
+- Basic draggable pattern: 3 draggable boxes with different constraints
+- Free Drag box: type: 'x,y' with no constraints - can be dragged anywhere
+- Horizontal box: type: 'x' - can only be dragged left and right
+- Bounded box: type: 'x,y' with bounds: containerRef - stays within parent container
+- Uses Draggable.create() with options: type, edgeResistance: 0.65, bounds, cursor: 'grab', activeCursor: 'grabbing'
+- Code viewer with syntax-highlighted TypeScript/JSX code showing Draggable pattern
+- Copy to clipboard button with scan line hover effect and "Copied!" state feedback
+- Proper cleanup: Draggable.get(element)?.kill() for each draggable element
+- 3 info cards showing each drag type: Free Drag (TYPE: X,Y), Horizontal (TYPE: X), Bounded (BOUNDS: CONTAINER)
+- 4 key concept cards explaining: Draggable.create, type option, bounds, cursor styles
+- Follows same industrial orange design system: zinc-950 background, zinc-900 cards, orange-500 accents
+- Build and typecheck passed
+- Note: agent-browser skill showed static HTML but GSAP wasn't loading in browser automation environment - manual browser verification recommended for interactive patterns
+- **Learnings for future iterations:**
+  - GSAP's Draggable plugin has a known case-sensitivity issue with TypeScript definitions on case-sensitive file systems (draggable.d.ts vs Draggable.js)
+  - Import Draggable from 'gsap/src/Draggable' as a default export to avoid the casing conflict: `import Draggable from 'gsap/src/Draggable'`
+  - Use Draggable.create(element, config) to make elements draggable - returns a Draggable instance
+  - Type option controls drag direction: 'x' (horizontal), 'y' (vertical), 'x,y' (both), or 'rotation' (spinning)
+  - Bounds option constrains dragging within a container: `bounds: containerRef.current` or numeric values like { minX: 0, maxX: 500 }
+  - edgeResistance: 0.65 creates resistance when hitting bounds - 0 = no resistance, 1 = cannot pass bounds at all
+  - Cursor styles: cursor: 'grab' for not dragging, activeCursor: 'grabbing' for dragging state
+  - Use Draggable.get(element)?.kill() for cleanup - the optional chaining is necessary in case element doesn't have a Draggable instance
+  - Interactive patterns like Draggable require client-side JavaScript to work - browser automation may show static HTML in some testing setups
+---

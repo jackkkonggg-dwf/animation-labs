@@ -322,8 +322,8 @@
         "Verify in browser using agent-browser skill"
       ],
       "priority": 21,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Active card scaling: centered card scales to 1.1, others to 1.0. Progress bar width updates based on scroll X / total scroll width. Text shows 'Pattern X/14' (14 cards total). Updates in real-time on drag, drag end, and throw update (inertia)."
     },
     {
       "id": "US-022",

@@ -372,3 +372,29 @@ Started: Thu Jan 29 01:07:23 HKT 2026
   - agent-browser eval has issues with certain JS syntax - use simple expressions or test visually
   - The pre-existing hydration error in Navbar is unrelated to Draggable implementation
 ---
+
+## [2026-01-29] - US-021
+- Implemented CTA active card scale and progress indicator in `src/app/dwf-labs/page.tsx`
+- Added useState import for managing state (though using local state in callbacks)
+- Added progress indicator HTML: progress bar with fill element, text display for "Pattern X/14"
+- Active card scaling: centered card scales to 1.1, others reset to 1.0
+- Created `updateActiveCard()` helper function to handle both card scaling and progress updates
+- Progress bar width: 0% to 100% based on scroll X position / total scroll width
+- Progress text: "Pattern X/14" (14 cards, not 15 as originally noted in AC)
+- Real-time updates: onDrag, onDragEnd, onThrowUpdate callbacks for smooth feedback
+- Duration: 0.3s, easing: power2.out per acceptance criteria
+- Initialization: first card (index 0) active on mount
+- Cleanup: added gsap.killTweensOf for cards and progressFill
+- Typecheck passed
+- Files changed: `src/app/dwf-labs/page.tsx`, `prd.json`, `progress.txt`
+- **Learnings for future iterations:**
+  - When calculating centered card index, use `Math.round(-xPosition / cardWidth)` and clamp to valid range
+  - Draggable provides `this.x` in callbacks to get current X position
+  - `onThrowUpdate` callback handles updates during inertia animation after drag release
+  - Center card calculation: galleryWidth/2 is viewport center, xPosition is track offset
+  - Added `data-index` attribute to cards (not currently used but useful for debugging)
+  - Progress bar width uses percentage (0-100) based on normalized scroll position
+  - Must use `gallery.offsetWidth` for live width calculation (not hardcoded)
+  - The progress text shows 14 cards total (actual count) vs 15 in original AC
+  - updateActiveCard helper keeps logic DRY - called from multiple callbacks
+---

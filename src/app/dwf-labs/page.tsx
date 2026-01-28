@@ -9,7 +9,7 @@
 
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger, Draggable, InertiaPlugin } from '@/lib/gsap-config';
 
@@ -583,6 +583,7 @@ export default function DWFLabsPage() {
   }, [newsRef]);
 
   // US-020: CTA draggable pattern gallery
+  // US-021: Active card scale and progress indicator
   useGSAP(() => {
     const gallery = patternGalleryRef.current;
     if (!gallery) return;
@@ -602,6 +603,47 @@ export default function DWFLabsPage() {
     // Generate snap points for each card position
     const snapPoints = Array.from(cards).map((_, index) => -index * cardWidth);
 
+    // Get progress indicator elements
+    const progressFill = gallery.querySelector('.pattern-progress-fill') as HTMLElement;
+    const progressText = gallery.querySelector('.pattern-progress-text') as HTMLElement;
+
+    // US-021: Helper function to update active card and progress
+    const updateActiveCard = (xPosition: number) => {
+      const galleryWidth = gallery.offsetWidth;
+      const galleryCenter = galleryWidth / 2;
+
+      // Calculate which card is centered
+      // xPosition is negative when scrolled right, so we add offset to find centered card
+      const centeredIndex = Math.round(-xPosition / cardWidth);
+      const clampedIndex = Math.max(0, Math.min(centeredIndex, cards.length - 1));
+
+      // Scale the active card to 1.1, reset others to 1.0
+      cards.forEach((card, index) => {
+        const isActive = index === clampedIndex;
+        gsap.to(card, {
+          scale: isActive ? 1.1 : 1.0,
+          duration: 0.3,
+          ease: 'power2.out',
+        });
+      });
+
+      // Update progress bar width (0% to 100% based on position)
+      const totalScrollWidth = (cards.length - 1) * cardWidth;
+      const progress = Math.min(Math.max(-xPosition / totalScrollWidth, 0), 1);
+      if (progressFill) {
+        gsap.to(progressFill, {
+          width: `${progress * 100}%`,
+          duration: 0.3,
+          ease: 'power2.out',
+        });
+      }
+
+      // Update progress text "Pattern X/14"
+      if (progressText) {
+        progressText.textContent = `Pattern ${clampedIndex + 1}/${cards.length}`;
+      }
+    };
+
     // Create draggable instance with InertiaPlugin
     const draggableInstance = Draggable.create(track, {
       type: 'x', // Horizontal dragging only
@@ -617,13 +659,30 @@ export default function DWFLabsPage() {
         x: snapPoints, // Snap to nearest card position
       },
       zIndexBoost: false, // Don't change z-index during drag
+      // US-021: Update active card and progress during drag
+      onDrag: function() {
+        updateActiveCard(this.x);
+      },
+      // US-021: Update active card and progress when drag ends
+      onDragEnd: function() {
+        updateActiveCard(this.x);
+      },
+      // US-021: Also update on throw update (inertia animation)
+      onThrowUpdate: function() {
+        updateActiveCard(this.x);
+      },
     });
+
+    // US-021: Initialize with first card active
+    updateActiveCard(0);
 
     // Cleanup Draggable on unmount
     return () => {
       if (draggableInstance[0]) {
         draggableInstance[0].kill();
       }
+      gsap.killTweensOf(cards);
+      if (progressFill) gsap.killTweensOf(progressFill);
     };
   }, { scope: patternGalleryRef });
 
@@ -1158,9 +1217,17 @@ export default function DWFLabsPage() {
           {/* Pattern Gallery Preview */}
           <div ref={patternGalleryRef} className="pattern-gallery overflow-hidden mb-16">
             <div className="text-center mb-8">
-              <p className="text-xs text-zinc-500 uppercase tracking-widest">
+              <p className="text-xs text-zinc-500 uppercase tracking-widest mb-4">
                 Animation Patterns Showcase
               </p>
+              {/* US-021: Progress indicator text */}
+              <p className="pattern-progress-text text-sm text-orange-500 font-semibold">
+                Pattern 1/14
+              </p>
+            </div>
+            {/* US-021: Progress bar */}
+            <div className="pattern-progress-bar h-1 bg-zinc-800 rounded-full mb-6 overflow-hidden">
+              <div className="pattern-progress-fill h-full bg-orange-500 rounded-full w-0 transition-all duration-300" />
             </div>
             <div className="pattern-gallery-track flex gap-4 pb-4" style={{ width: 'max-content' }}>
               {[
@@ -1171,6 +1238,7 @@ export default function DWFLabsPage() {
                 <div
                   key={pattern}
                   className="pattern-card flex-shrink-0 w-40 h-32 bg-zinc-900 border border-zinc-800 rounded-lg flex items-center justify-center text-center p-4 hover:border-orange-500/50 transition-colors duration-200"
+                  data-index={i}
                 >
                   <div>
                     <div className="text-2xl font-black text-orange-500/40 mb-2">{String(i + 1).padStart(2, '0')}</div>

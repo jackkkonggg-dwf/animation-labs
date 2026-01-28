@@ -81,10 +81,9 @@ function CountUpCard({ label, value, suffix = '', icon, gradient, decimals = 0 }
   const displayRef = useRef<HTMLSpanElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(() => {
-    const card = cardRef.current;
+  const animateCount = () => {
     const display = displayRef.current;
-    if (!card || !display) return;
+    if (!display) return;
 
     // Create a proxy object to animate
     const proxy = { value: 0 };
@@ -93,23 +92,29 @@ function CountUpCard({ label, value, suffix = '', icon, gradient, decimals = 0 }
       value: value,
       duration: 2,
       ease: 'power2.out',
-      scrollTrigger: {
-        trigger: card,
-        start: 'top 85%',
-        toggleActions: 'play none none reverse',
-      },
       onUpdate: () => {
         display.textContent = proxy.value.toFixed(decimals) + suffix;
       },
     });
+  };
+
+  useGSAP(() => {
+    const card = cardRef.current;
+    if (!card) return;
+
+    ScrollTrigger.create({
+      trigger: card,
+      start: 'top 85%',
+      onEnter: () => animateCount(),
+    });
 
     return () => {
-      gsap.killTweensOf(proxy);
+      ScrollTrigger.getAll().forEach(t => t.kill());
     };
   }, { scope: cardRef });
 
   return (
-    <div ref={cardRef} className="relative bg-zinc-900/80 backdrop-blur-sm border border-zinc-800 rounded-lg overflow-hidden hover:border-orange-500/50 transition-colors duration-300">
+    <div ref={cardRef} data-value={value} data-suffix={suffix} data-decimals={decimals} className="count-card relative bg-zinc-900/80 backdrop-blur-sm border border-zinc-800 rounded-lg overflow-hidden hover:border-orange-500/50 transition-colors duration-300">
       {/* Gradient overlay on hover */}
       <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 hover:opacity-10 transition-opacity duration-300`} />
 
@@ -125,7 +130,7 @@ function CountUpCard({ label, value, suffix = '', icon, gradient, decimals = 0 }
 
         {/* Count value */}
         <div className="text-4xl md:text-5xl font-black text-white tracking-tight mb-2">
-          <span ref={displayRef} className="tabular-nums">
+          <span ref={displayRef} className="count-display tabular-nums">
             0{suffix}
           </span>
         </div>
@@ -147,6 +152,32 @@ function CountUpCard({ label, value, suffix = '', icon, gradient, decimals = 0 }
 // ============================================================================
 
 function LiveDemo() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const handleReplay = () => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    // Reset all displays to 0
+    const displays = container.querySelectorAll('.count-display');
+    displays.forEach((display) => {
+      const card = display.closest('.count-card') as HTMLElement;
+      const targetValue = parseFloat(card?.dataset.value || '0');
+      const suffix = card?.dataset.suffix || '';
+      const decimals = parseInt(card?.dataset.decimals || '0');
+
+      const proxy = { value: 0 };
+      gsap.to(proxy, {
+        value: targetValue,
+        duration: 2,
+        ease: 'power2.out',
+        onUpdate: () => {
+          (display as HTMLElement).textContent = proxy.value.toFixed(decimals) + suffix;
+        },
+      });
+    });
+  };
+
   const stats = [
     {
       label: 'Active Users',
@@ -213,20 +244,35 @@ function LiveDemo() {
       </div>
 
       {/* Demo cards grid */}
-      <div className="relative z-10 max-w-6xl mx-auto px-6 pb-20">
+      <div ref={containerRef} className="relative z-10 max-w-6xl mx-auto px-6 pb-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {stats.map((stat, index) => (
             <CountUpCard key={index} {...stat} />
           ))}
         </div>
 
-        {/* Scroll indicator */}
+        {/* Replay button */}
         <div className="flex justify-center mt-12">
-          <div className="flex items-center gap-3 text-zinc-600 text-sm">
-            <span className="w-16 h-px bg-zinc-700" />
-            <span className="uppercase tracking-[0.2em]">Scroll to replay</span>
-            <span className="w-16 h-px bg-zinc-700" />
-          </div>
+          <button
+            onClick={handleReplay}
+            className="group relative px-6 py-3 bg-zinc-800 border border-zinc-700 hover:border-orange-500 rounded transition-all duration-300 flex items-center gap-3"
+          >
+            <svg
+              className="w-5 h-5 text-zinc-500 group-hover:text-orange-500 transition-colors group-hover:rotate-180 transition-transform duration-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            <span className="text-zinc-400 group-hover:text-orange-500 transition-colors text-sm font-bold uppercase tracking-wider">
+              Replay Animation
+            </span>
+            {/* Scan line effect */}
+            <div className="absolute inset-0 overflow-hidden rounded">
+              <div className="w-1 h-full bg-white/10 skew-x-[-12deg] translate-x-[-100%] group-hover:translate-x-[400%] transition-transform duration-700 ease-in-out" />
+            </div>
+          </button>
         </div>
       </div>
     </section>

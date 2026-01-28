@@ -71,6 +71,25 @@ function PatternHeader() {
 function LiveDemo() {
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const handleReplay = () => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const words = container.querySelectorAll('.word-reveal');
+
+    // Reset to initial state
+    gsap.set(words, { opacity: 0, y: 50 });
+
+    // Replay the animation
+    gsap.to(words, {
+      opacity: 1,
+      y: 0,
+      duration: 0.6,
+      stagger: 0.15,
+      ease: 'power2.out',
+    });
+  };
+
   useGSAP(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -91,7 +110,6 @@ function LiveDemo() {
       scrollTrigger: {
         trigger: container,
         start: 'top 80%',
-        toggleActions: 'play none none reverse',
       },
     });
 
@@ -180,13 +198,27 @@ function LiveDemo() {
           </div>
         </div>
 
-        {/* Scroll indicator */}
+        {/* Replay button */}
         <div className="flex justify-center mt-12">
-          <div className="flex items-center gap-3 text-zinc-600 text-sm">
-            <span className="w-16 h-px bg-zinc-700" />
-            <span className="uppercase tracking-[0.2em]">Scroll to replay</span>
-            <span className="w-16 h-px bg-zinc-700" />
-          </div>
+          <button
+            onClick={handleReplay}
+            className="group relative px-8 py-3 bg-zinc-800 border border-zinc-700 hover:border-orange-500 rounded transition-all duration-300 flex items-center gap-3"
+          >
+            <svg
+              className="w-5 h-5 text-zinc-500 group-hover:text-orange-500 transition-colors"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            <span className="text-zinc-400 group-hover:text-orange-500 transition-colors text-sm font-bold uppercase tracking-wider">
+              Replay Animation
+            </span>
+            <div className="absolute inset-0 overflow-hidden rounded">
+              <div className="w-1 h-full bg-white/10 skew-x-[-12deg] translate-x-[-100%] group-hover:translate-x-[400%] transition-transform duration-700 ease-in-out" />
+            </div>
+          </button>
         </div>
       </div>
     </section>
@@ -233,6 +265,7 @@ export function WordTextReveal() {
       scrollTrigger: {
         trigger: container,
         start: 'top 80%',
+        end: 'bottom 70%',
         toggleActions: 'play none none reverse',
       },
     });

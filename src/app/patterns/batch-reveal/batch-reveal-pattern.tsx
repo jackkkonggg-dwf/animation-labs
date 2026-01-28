@@ -78,6 +78,29 @@ function LiveDemo() {
     number: i + 1,
   }));
 
+  const handleReplay = () => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const items = container.querySelectorAll('.batch-item');
+
+    // Reset to initial state
+    gsap.set(items, { opacity: 0, scale: 0.9 });
+
+    // Replay the animation
+    gsap.to(items, {
+      opacity: 1,
+      scale: 1,
+      duration: 0.4,
+      stagger: {
+        amount: 0.8,
+        from: 'center',
+        grid: [4, 6],
+      },
+      ease: 'power2.out',
+    });
+  };
+
   useGSAP(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -88,21 +111,19 @@ function LiveDemo() {
     gsap.set(items, { opacity: 0, scale: 0.9 });
 
     // Create fast batch animation with small stagger
-    // For 24 items with 0.05s stagger, total animation time is ~1.2s
     gsap.to(items, {
       opacity: 1,
       scale: 1,
       duration: 0.4,
       stagger: {
-        amount: 0.8, // Total time for all staggered animations to complete
-        from: 'center', // Start from center
-        grid: [4, 6], // 4 rows, 6 columns
+        amount: 0.8,
+        from: 'center',
+        grid: [4, 6],
       },
       ease: 'power2.out',
       scrollTrigger: {
         trigger: container,
         start: 'top 80%',
-        toggleActions: 'play none none reverse',
       },
     });
 
@@ -159,14 +180,28 @@ function LiveDemo() {
           ))}
         </div>
 
-        {/* Performance indicator */}
+        {/* Replay button */}
         <div className="mt-12 flex justify-center">
-          <div className="flex items-center gap-4 px-6 py-3 bg-zinc-900/50 border border-zinc-800 rounded">
-            <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-            <span className="text-zinc-400 text-sm font-mono">
-              Optimized for <span className="text-orange-500 font-bold">GPU Acceleration</span>
+          <button
+            onClick={handleReplay}
+            className="group relative px-6 py-3 bg-zinc-800 border border-zinc-700 hover:border-orange-500 rounded transition-all duration-300 flex items-center gap-3"
+          >
+            <svg
+              className="w-5 h-5 text-zinc-500 group-hover:text-orange-500 transition-colors group-hover:rotate-180 transition-transform duration-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            <span className="text-zinc-400 group-hover:text-orange-500 transition-colors text-sm font-bold uppercase tracking-wider">
+              Replay Animation
             </span>
-          </div>
+            {/* Scan line effect */}
+            <div className="absolute inset-0 overflow-hidden rounded">
+              <div className="w-1 h-full bg-white/10 skew-x-[-12deg] translate-x-[-100%] group-hover:translate-x-[400%] transition-transform duration-700 ease-in-out" />
+            </div>
+          </button>
         </div>
       </div>
     </section>
@@ -218,6 +253,7 @@ export function BatchRevealComponent() {
       scrollTrigger: {
         trigger: container,
         start: 'top 80%',
+        end: 'bottom 70%',
         toggleActions: 'play none none reverse',
       },
     });

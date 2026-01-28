@@ -12,3 +12,22 @@ Started: Wed Jan 28 20:57:54 HKT 2026
   - Draggable uses a different import pattern: `import Draggable from 'gsap/src/Draggable'`
   - TypeScript type definitions are available in `node_modules/gsap/types/` with kebab-case names (e.g., `split-text.d.ts`)
 ---
+
+## [2026-01-28] - US-002
+- Created PerformanceMetrics component at src/components/PerformanceMetrics.tsx
+- Real-time FPS counter using requestAnimationFrame with rolling average of last 10 measurements
+- GSAP metrics tracking: active timelines (via gsap.globalTimeline.getChildren()), ScrollTrigger count, total animation duration
+- Toggle show/hide functionality with persistent button when collapsed
+- Color-coded performance: green (>50 FPS), yellow (30-50), red (<30) with status text (EXCELLENT/GOOD/POOR)
+- Matches design system with zinc-900/95 backgrounds, orange-500 accents, corner accents
+- Test page created at src/app/test-performance-metrics/ for browser verification
+- Browser verification completed via agent-browser - screenshots captured showing component working correctly
+- Build and typecheck passed successfully
+- **Learnings for future iterations:**
+  - gsap.globalTimeline.getChildren() returns array of active animations/timelines - filter with isActive() for currently running
+  - ScrollTrigger.getAll() returns array of all ScrollTrigger instances
+  - For FPS calculation, update every 500ms with frame counting for stable readings
+  - agent-browser skill is invoked via `Skill` tool, not bash command - but pnpm dlx agent-browser works for direct CLI access
+  - Playwright chromium must be installed separately via `pnpm dlx playwright install chromium`
+  - The component should be exportable from a barrel file (e.g., src/components/index.ts) for easier imports in future demos
+---

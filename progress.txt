@@ -289,3 +289,25 @@ Started: Thu Jan 29 01:07:23 HKT 2026
   - To verify CSS hover states, use `find first ".selector" hover` then check `window.getComputedStyle()` for the hovered values
   - Wait 300ms after hover action to allow CSS transitions to complete before checking styles
 ---
+
+## [2026-01-29] - US-017
+- Implemented News staggered list reveal animation in `src/app/dwf-labs/page.tsx`
+- Added `newsRef` with useRef to track News section DOM element
+- Created separate useGSAP hook with scope: newsRef for proper cleanup
+- 6 news cards cascade in from bottom to top with staggered reveal
+- Initial state: y: 60, opacity: 0
+- Animate to: y: 0, opacity: 1
+- Stagger: 0.15s per card, ease: power3.out
+- ScrollTrigger: start: 'top center', toggleActions: 'play none none reverse'
+- Browser verified: all 6 cards reach opacity 1 and y 0 after scroll trigger
+- Typecheck passed
+- Files changed: `src/app/dwf-labs/page.tsx`, `prd.json`, `progress.txt`
+- **Learnings for future iterations:**
+  - News cards already existed in HTML from US-003 with `.news-card` class
+  - Staggered reveal uses standard gsap.to() with stagger option for sequential animation
+  - power3.out is smooth for list reveals (less aggressive than back.out for text)
+  - ScrollTrigger with toggleActions: 'play none none reverse' provides proper enter/exit behavior
+  - Each card animates 150ms after the previous one (6 cards × 0.15s = 0.75s total duration)
+  - Agent-browser eval with Array.from() and map() provides structured data from multiple elements
+  - Use `document.querySelector('#section-id').scrollIntoView()` to trigger scroll-based animations during testing
+---

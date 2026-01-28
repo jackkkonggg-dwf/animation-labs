@@ -1,0 +1,665 @@
+'use client';
+
+import { useRef, useState } from 'react';
+import { useGSAP } from '@gsap/react';
+import { gsap, ScrollTrigger } from '@/lib/gsap-config';
+
+// ============================================================================
+// PATTERN HEADER COMPONENT
+// ============================================================================
+
+function PatternHeader() {
+  return (
+    <header className="relative border-b border-orange-500/20 bg-zinc-900/50 backdrop-blur-sm">
+      {/* Corner accent - top left */}
+      <div className="absolute top-0 left-0 w-16 h-16 border-l-2 border-t-2 border-orange-500" />
+      {/* Corner accent - bottom right */}
+      <div className="absolute bottom-0 right-0 w-16 h-16 border-r-2 border-b-2 border-orange-500" />
+
+      {/* Diagonal stripe decoration */}
+      <div className="absolute top-0 right-0 w-64 h-1 bg-gradient-to-l from-orange-500 to-transparent opacity-50" />
+
+      <div className="max-w-6xl mx-auto px-6 py-16 md:py-24">
+        {/* Category badge */}
+        <div className="inline-flex items-center gap-2 mb-6">
+          <span className="text-orange-500 text-xs font-black tracking-[0.3em] uppercase">
+            SVG Animations
+          </span>
+          <span className="w-8 h-px bg-orange-500/50" />
+          <span className="text-zinc-500 text-xs font-bold tracking-[0.2em] uppercase">
+            Intermediate
+          </span>
+        </div>
+
+        {/* Title */}
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tight uppercase mb-6">
+          <span className="text-orange-500">SVG</span> Draw
+        </h1>
+
+        {/* Description */}
+        <p className="text-zinc-400 text-lg md:text-xl max-w-3xl font-light leading-relaxed">
+          Animate SVG paths to draw themselves on scroll. The stroke-dasharray and stroke-dashoffset technique
+          creates a mesmerizing self-drawing effect that works on any SVG path, from simple lines to complex illustrations.
+        </p>
+
+        {/* Key features */}
+        <div className="flex flex-wrap gap-4 mt-8">
+          <div className="flex items-center gap-2 px-4 py-2 bg-zinc-800/50 border border-zinc-700/50 rounded">
+            <span className="w-2 h-2 bg-orange-500 rounded-full animate-pulse" />
+            <span className="text-zinc-300 text-sm font-mono">strokeDasharray</span>
+          </div>
+          <div className="flex items-center gap-2 px-4 py-2 bg-zinc-800/50 border border-zinc-700/50 rounded">
+            <span className="w-2 h-2 bg-orange-500 rounded-full animate-pulse" />
+            <span className="text-zinc-300 text-sm font-mono">strokeDashoffset</span>
+          </div>
+          <div className="flex items-center gap-2 px-4 py-2 bg-zinc-800/50 border border-zinc-700/50 rounded">
+            <span className="w-2 h-2 bg-orange-500 rounded-full animate-pulse" />
+            <span className="text-zinc-300 text-sm font-mono">getTotalLength()</span>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+// ============================================================================
+// LIVE DEMO SECTION
+// ============================================================================
+
+function LiveDemo() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  useGSAP(() => {
+    const container = containerRef.current;
+    const svg = svgRef.current;
+    if (!container || !svg) return;
+
+    const paths = svg.querySelectorAll('.draw-path');
+
+    // Get the length of each path and set initial state
+    paths.forEach((path) => {
+      const svgPath = path as SVGPathElement;
+      const length = svgPath.getTotalLength();
+
+      // Set stroke-dasharray to the path length
+      gsap.set(svgPath, {
+        strokeDasharray: length,
+        strokeDashoffset: length,
+      });
+    });
+
+    // Animate strokeDashoffset from length to 0 to "draw" the path
+    gsap.to(paths, {
+      strokeDashoffset: 0,
+      duration: 2,
+      ease: 'power2.inOut',
+      scrollTrigger: {
+        trigger: container,
+        start: 'top center',
+        end: 'bottom center',
+        scrub: 1,
+      },
+    });
+
+    ScrollTrigger.refresh();
+
+    return () => {
+      gsap.killTweensOf(paths);
+      ScrollTrigger.getAll().forEach(t => t.kill());
+    };
+  }, { scope: containerRef });
+
+  return (
+    <section className="relative border-b border-zinc-800">
+      {/* Grid pattern overlay */}
+      <div className="absolute inset-0 opacity-5 grid-pattern-overlay" />
+
+      {/* Section header */}
+      <div className="relative z-10 max-w-6xl mx-auto px-6 pt-16 pb-8">
+        <h2 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight flex items-center gap-4">
+          <span className="w-3 h-8 bg-orange-500" />
+          Live Demo
+        </h2>
+        <p className="text-zinc-500 mt-3 ml-7">Scroll to see the SVG paths draw themselves</p>
+      </div>
+
+      {/* Demo SVG */}
+      <div ref={containerRef} className="relative z-10 max-w-6xl mx-auto px-6 pb-20">
+        <div className="bg-zinc-900/80 backdrop-blur-sm border border-zinc-800 rounded-lg overflow-hidden">
+          {/* Corner accents */}
+          <div className="absolute top-0 left-0 w-8 h-8 border-l-2 border-t-2 border-orange-50 pointer-events-none" />
+          <div className="absolute bottom-0 right-0 w-8 h-8 border-r-2 border-b-2 border-orange-50 pointer-events-none" />
+
+          <div className="relative p-12 h-[600px] flex items-center justify-center">
+            <svg
+              ref={svgRef}
+              viewBox="0 0 400 300"
+              className="w-full max-w-2xl h-auto"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              {/* Lightning bolt */}
+              <path
+                className="draw-path"
+                d="M 200 20 L 140 140 L 190 140 L 180 200 L 260 80 L 200 80 L 220 20 Z"
+                stroke="url(#gradient1)"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+
+              {/* Star shape */}
+              <path
+                className="draw-path"
+                d="M 330 150 L 345 180 L 378 180 L 352 200 L 362 230 L 330 210 L 298 230 L 308 200 L 282 180 L 315 180 Z"
+                stroke="url(#gradient2)"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+
+              {/* Spiral */}
+              <path
+                className="draw-path"
+                d="M 70 150 Q 70 100, 100 100 Q 140 100, 140 150 Q 140 210, 80 210 Q 30 210, 30 150 Q 30 70, 100 70 Q 180 70, 180 150 Q 180 240, 80 240 Q 10 240, 10 150"
+                stroke="url(#gradient3)"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+
+              {/* Arrow */}
+              <path
+                className="draw-path"
+                d="M 280 270 L 320 270 L 320 260 L 345 280 L 320 300 L 320 290 L 280 290 Z"
+                stroke="url(#gradient4)"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+
+              {/* Gradients */}
+              <defs>
+                <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#f97316" />
+                  <stop offset="100%" stopColor="#ef4444" />
+                </linearGradient>
+                <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#22d3ee" />
+                  <stop offset="100%" stopColor="#3b82f6" />
+                </linearGradient>
+                <linearGradient id="gradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#a855f7" />
+                  <stop offset="100%" stopColor="#ec4899" />
+                </linearGradient>
+                <linearGradient id="gradient4" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#22c55e" />
+                  <stop offset="100%" stopColor="#14b8a6" />
+                </linearGradient>
+              </defs>
+            </svg>
+
+            {/* Scroll indicator */}
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-3 text-zinc-600 text-sm">
+              <span className="w-12 h-px bg-zinc-700" />
+              <span className="uppercase tracking-[0.2em]">Scroll</span>
+              <span className="w-12 h-px bg-zinc-700" />
+            </div>
+          </div>
+        </div>
+
+        {/* Info cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+          <div className="bg-zinc-900/50 border border-zinc-800 p-4 rounded">
+            <div className="text-orange-500 text-xs font-black tracking-[0.2em] uppercase mb-2">5 PATHS</div>
+            <div className="text-zinc-400 text-sm">Multiple shapes animate simultaneously</div>
+          </div>
+          <div className="bg-zinc-900/50 border border-zinc-800 p-4 rounded">
+            <div className="text-orange-500 text-xs font-black tracking-[0.2em] uppercase mb-2">SCRUB: 1</div>
+            <div className="text-zinc-400 text-sm">1-second catch-up for smooth feel</div>
+          </div>
+          <div className="bg-zinc-900/50 border border-zinc-800 p-4 rounded">
+            <div className="text-orange-500 text-xs font-black tracking-[0.2em] uppercase mb-2">GRADIENTS</div>
+            <div className="text-zinc-400 text-sm">Linear gradients add depth</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ============================================================================
+// CODE VIEWER SECTION
+// ============================================================================
+
+function CodeViewer() {
+  const [copied, setCopied] = useState(false);
+
+  const code = `// ============================================================================
+// SVG PATH DRAWING PATTERN
+// ============================================================================
+
+'use client';
+
+import { useRef } from 'react';
+import { useGSAP } from '@gsap/react';
+import { gsap, ScrollTrigger } from '@/lib/gsap-config';
+
+export function SvgDrawComponent() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
+
+  useGSAP(() => {
+    const container = containerRef.current;
+    const svg = svgRef.current;
+    if (!container || !svg) return;
+
+    const paths = svg.querySelectorAll('.draw-path');
+
+    // Get the length of each path and set initial state
+    paths.forEach((path) => {
+      const svgPath = path as SVGPathElement;
+      const length = svgPath.getTotalLength();
+
+      // Set stroke-dasharray to the path length
+      gsap.set(svgPath, {
+        strokeDasharray: length,
+        strokeDashoffset: length,
+      });
+    });
+
+    // Animate strokeDashoffset from length to 0 to "draw" the path
+    gsap.to(paths, {
+      strokeDashoffset: 0,
+      duration: 2,
+      ease: 'power2.inOut',
+      scrollTrigger: {
+        trigger: container,
+        start: 'top center',
+        end: 'bottom center',
+        scrub: 1,
+      },
+    });
+
+    ScrollTrigger.refresh();
+
+    return () => {
+      gsap.killTweensOf(paths);
+      ScrollTrigger.getAll().forEach(t => t.kill());
+    };
+  }, { scope: containerRef });
+
+  return (
+    <div ref={containerRef}>
+      <svg ref={svgRef} viewBox="0 0 400 300" fill="none">
+        <path
+          className="draw-path"
+          d="M 200 20 L 140 140 L 190 140 L 180 200 L 260 80 L 200 80 L 220 20 Z"
+          stroke="#f97316"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </div>
+  );
+}`;
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <section className="relative border-b border-zinc-800 bg-zinc-900/30">
+      {/* Diagonal stripe decoration */}
+      <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-orange-500 to-transparent" />
+
+      <div className="max-w-6xl mx-auto px-6 py-16">
+        {/* Section header */}
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h2 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight flex items-center gap-4">
+              <span className="w-3 h-8 bg-orange-500" />
+              Code
+            </h2>
+            <p className="text-zinc-500 mt-3 ml-7">Copy and paste into your project</p>
+          </div>
+
+          {/* Copy button */}
+          <button
+            onClick={handleCopy}
+            className="group relative px-6 py-3 bg-zinc-800 border border-zinc-700 hover:border-orange-500 rounded transition-all duration-300 flex items-center gap-3"
+          >
+            <span className="text-zinc-400 group-hover:text-orange-500 transition-colors text-sm font-bold uppercase tracking-wider">
+              {copied ? 'Copied!' : 'Copy Code'}
+            </span>
+            <svg
+              className={`w-5 h-5 text-zinc-500 group-hover:text-orange-500 transition-all duration-300 ${copied ? 'scale-110' : ''}`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              {copied ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              )}
+            </svg>
+            {/* Scan line effect */}
+            <div className="absolute inset-0 overflow-hidden rounded">
+              <div className="w-1 h-full bg-white/10 skew-x-[-12deg] translate-x-[-100%] group-hover:translate-x-[400%] transition-transform duration-700 ease-in-out" />
+            </div>
+          </button>
+        </div>
+
+        {/* Code block */}
+        <div className="relative bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden">
+          {/* Corner accents */}
+          <div className="absolute top-0 left-0 w-4 h-4 border-l-2 border-t-2 border-orange-500" />
+          <div className="absolute top-0 right-0 w-4 h-4 border-r-2 border-t-2 border-orange-500" />
+
+          {/* Language badge */}
+          <div className="absolute top-4 right-4 px-3 py-1 bg-zinc-800 border border-zinc-700 rounded text-xs font-mono text-zinc-400 uppercase">
+            TSX
+          </div>
+
+          {/* Code content */}
+          <pre className="p-6 pt-8 overflow-x-auto">
+            <code className="text-sm font-mono leading-relaxed">
+              <span className="text-zinc-500">{`// ============================================================================`}</span>
+              <span className="text-zinc-500">{`// SVG PATH DRAWING PATTERN`}</span>
+              <span className="text-zinc-500">{`// ============================================================================`}</span>
+              <br />
+              <br />
+              <span className="text-purple-400">{`'use client'`}</span>
+              <span className="text-white">;</span>
+              <br />
+              <br />
+              <span className="text-purple-400">{`import`}</span>
+              <span className="text-white">{` { useRef } `}</span>
+              <span className="text-purple-400">{`from`}</span>
+              <span className="text-cyan-400">{` 'react'`}</span>
+              <span className="text-white">;</span>
+              <br />
+              <span className="text-purple-400">{`import`}</span>
+              <span className="text-white">{` { useGSAP } `}</span>
+              <span className="text-purple-400">{`from`}</span>
+              <span className="text-cyan-400">{` '@gsap/react'`}</span>
+              <span className="text-white">;</span>
+              <br />
+              <span className="text-purple-400">{`import`}</span>
+              <span className="text-white">{` { gsap, ScrollTrigger } `}</span>
+              <span className="text-purple-400">{`from`}</span>
+              <span className="text-cyan-400">{` '@/lib/gsap-config'`}</span>
+              <span className="text-white">;</span>
+              <br />
+              <br />
+              <span className="text-purple-400">{`export`}</span>
+              <span className="text-purple-400">{` function`}</span>
+              <span className="text-yellow-300">{` SvgDrawComponent`}</span>
+              <span className="text-white">() {`{`}</span>
+              <br />
+              &nbsp;&nbsp;<span className="text-purple-400">{`const`}</span>
+              <span className="text-white">{` containerRef `}</span>
+              <span className="text-purple-400">{`= useRef`}</span>
+              <span className="text-orange-400">{`&lt;HTMLDivElement&gt;`}</span>
+              <span className="text-white">(null);</span>
+              <br />
+              &nbsp;&nbsp;<span className="text-purple-400">{`const`}</span>
+              <span className="text-white">{` svgRef `}</span>
+              <span className="text-purple-400">{`= useRef`}</span>
+              <span className="text-orange-400">{`&lt;SVGSVGElement&gt;`}</span>
+              <span className="text-white">(null);</span>
+              <br />
+              <br />
+              &nbsp;&nbsp;<span className="text-blue-400">{`useGSAP`}</span>
+              <span className="text-white">(() {`=>`} {`{`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400">{`const`}</span>
+              <span className="text-white">{` container `}</span>
+              <span className="text-purple-400">{`= containerRef.current`}</span>
+              <span className="text-white">;</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400">{`const`}</span>
+              <span className="text-white">{` svg `}</span>
+              <span className="text-purple-400">{`= svgRef.current`}</span>
+              <span className="text-white">;</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400">{`if`}</span>
+              <span className="text-white"> (!container </span>
+              <span className="text-purple-400">{`||`}</span>
+              <span className="text-white"> !svg) </span>
+              <span className="text-purple-400">{`return`}</span>
+              <span className="text-white">;</span>
+              <br />
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400">{`const`}</span>
+              <span className="text-white">{` paths `}</span>
+              <span className="text-purple-400">{`= svg.querySelectorAll`}</span>
+              <span className="text-cyan-400">{`('.draw-path')`}</span>
+              <span className="text-white">;</span>
+              <br />
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-zinc-500">{`// Get the length of each path and set initial state`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-blue-400">{`paths.forEach`}</span>
+              <span className="text-white">((</span><span className="text-orange-300">{`path`}</span>
+              <span className="text-white">) {`=>`} {`{`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400">{`const`}</span>
+              <span className="text-white">{` svgPath `}</span>
+              <span className="text-purple-400">{`= path `}</span>
+              <span className="text-purple-400">{`as`}</span>
+              <span className="text-white">{` SVGPathElement`}</span>
+              <span className="text-white">;</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400">{`const`}</span>
+              <span className="text-white">{` length `}</span>
+              <span className="text-purple-400">{`= svgPath.getTotalLength`}</span>
+              <span className="text-white">();</span>
+              <br />
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-zinc-500">{`// Set stroke-dasharray to the path length`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-blue-400">{`gsap.set`}</span>
+              <span className="text-white">(svgPath, {`{`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`strokeDasharray: length,`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`strokeDashoffset: length,`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`}`});</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`}`});</span>
+              <br />
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-zinc-500">{`// Animate strokeDashoffset from length to 0`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-blue-400">{`gsap.to`}</span>
+              <span className="text-white">(paths, {`{`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`strokeDashoffset: 0,`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`duration: 2,`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`ease: 'power2.inOut',`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`scrollTrigger: {`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`trigger: container,`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`start: 'top center',`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`end: 'bottom center',`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`scrub: 1,`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`}`}</span><span className="text-white">{`},`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`}`});</span>
+              <br />
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-zinc-500">{`// Cleanup`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400">{`return`}</span>
+              <span className="text-white"> () {`=>`}</span><span className="text-white">{` {`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-blue-400">{`gsap.killTweensOf`}</span>
+              <span className="text-white">(paths);</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-blue-400">{`ScrollTrigger`}</span>
+              <span className="text-white">.</span><span className="text-blue-400">{`getAll`}</span>
+              <span className="text-white">().</span><span className="text-blue-400">{`forEach`}</span>
+              <span className="text-white">(t {`=>`} t.</span><span className="text-blue-400">{`kill`}</span>
+              <span className="text-white">());</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`}});</span>
+              <br />
+              &nbsp;&nbsp;<span className="text-white">`}`}</span>, <span className="text-white">`{`}</span>, <span className="text-white">`{ scope: containerRef `}</span><span className="text-white">`}`}</span><span className="text-white">`})`}</span><span className="text-white">`}`}</span><span className="text-white">`}`}</span>);</span>
+              <br />
+              <br />
+              &nbsp;&nbsp;<span className="text-purple-400">{`return`}</span>
+              <span className="text-white"> (</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400">{`&lt;div`}</span>
+              <span className="text-white">{` ref={containerRef} `}</span>
+              <span className="text-purple-400">{`&gt;`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400">{`&lt;svg`}</span>
+              <span className="text-white">{` ref={svgRef} viewBox="0 0 400 300" fill="none"`}</span>
+              <span className="text-purple-400">{`&gt;`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400">{`&lt;path`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`className="draw-path"`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`d="M 200 20 L 140 140 ..."`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`stroke="#f97316"`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`strokeWidth="3"`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`strokeLinecap="round"`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`strokeLinejoin="round"`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400">{`/&gt;`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400">{`&lt;/svg&gt;`}</span>
+              <br />
+              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400">{`&lt;/div&gt;`}</span>
+              <br />
+              &nbsp;&nbsp;<span className="text-white">{`);`}</span>
+              <br />
+              <span className="text-white">{`}`}</span>
+            </code>
+          </pre>
+
+          {/* Bottom scan line */}
+          <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-50" />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ============================================================================
+// PATTERN NOTES SECTION
+// ============================================================================
+
+function PatternNotes() {
+  const notes = [
+    {
+      title: 'GET TOTAL LENGTH',
+      description: 'The getTotalLength() method returns the exact pixel length of any SVG path. This is essential for the dasharray/dashoffset technique to work correctly.',
+    },
+    {
+      title: 'STROKE DASHARRAY',
+      description: 'Setting strokeDasharray to the path length creates a dashed stroke where the dash equals the entire path. This is the "canvas" for the drawing animation.',
+    },
+    {
+      title: 'STROKE DASHOFFSET',
+      description: 'Animates from length (invisible) to 0 (fully drawn). The offset shifts the dash, creating the illusion that the path is being drawn.',
+    },
+    {
+      title: 'SCRUB ANIMATION',
+      description: 'Using scrub: 1 links the drawing progress to scroll position. Users can "draw" the SVG by scrolling, with automatic reversal on scroll up.',
+    },
+  ];
+
+  return (
+    <section className="relative border-b border-zinc-800">
+      {/* Grid pattern overlay */}
+      <div className="absolute inset-0 opacity-5 grid-pattern-overlay" />
+
+      <div className="relative z-10 max-w-6xl mx-auto px-6 py-16">
+        {/* Section header */}
+        <h2 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight flex items-center gap-4 mb-12">
+          <span className="w-3 h-8 bg-orange-500" />
+          Key Concepts
+        </h2>
+
+        {/* Notes grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {notes.map((note, index) => (
+            <div
+              key={index}
+              className="relative bg-zinc-900/50 border border-zinc-800 p-6 rounded hover:border-orange-500/30 transition-colors duration-300"
+            >
+              {/* Number badge */}
+              <div className="absolute -top-3 -left-3 w-8 h-8 bg-orange-500 text-black font-black text-sm flex items-center justify-center rounded">
+                {index + 1}
+              </div>
+
+              {/* Title */}
+              <h3 className="text-lg font-black text-white uppercase tracking-tight mb-3">
+                {note.title}
+              </h3>
+
+              {/* Description */}
+              <p className="text-zinc-400 text-sm leading-relaxed">
+                {note.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ============================================================================
+// MAIN COMPONENT
+// ============================================================================
+
+export function SvgDrawPattern() {
+  return (
+    <div className="min-h-screen bg-zinc-950">
+      <PatternHeader />
+      <LiveDemo />
+      <CodeViewer />
+      <PatternNotes />
+
+      {/* Footer CTA */}
+      <section className="relative border-t border-orange-500/20 bg-zinc-900/30">
+        <div className="max-w-6xl mx-auto px-6 py-20 text-center">
+          <h2 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tight mb-6">
+            Ready to <span className="text-orange-500">Animate</span>?
+          </h2>
+          <p className="text-zinc-400 text-lg mb-8 max-w-2xl mx-auto">
+            This is just the beginning. Explore 50+ GSAP animation patterns in our complete collection.
+          </p>
+          <a
+            href="/"
+            className="inline-block px-8 py-4 bg-orange-500 text-black font-black text-sm uppercase tracking-wider rounded hover:bg-orange-400 transition-colors duration-300"
+          >
+            View All Patterns
+          </a>
+        </div>
+      </section>
+    </div>
+  );
+}

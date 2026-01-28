@@ -400,3 +400,29 @@ Started: Wed Jan 28 04:56:36 HKT 2026
   - JSX parsing issue: sequences like `gsap.``}` in template literals can cause parsing errors - split into separate spans or escape properly
   - For hook parameters with RefObjects, use `RefObject<HTMLDivElement | null>` to allow null values, then use optional chaining `containerRef?.current`
 ---
+
+## [2025-01-28] - US-019
+- Created src/app/patterns/pinned-sequence/page.tsx as the entry point for the pinned section sequence pattern
+- Created src/components/patterns/pinned-sequence-pattern.tsx with full implementation
+- Pinned section sequence pattern: demonstrates ScrollTrigger's pin: true option to lock sections in place during animation
+- Live demo uses pin: true with end: '+=2000' to pin the section for 2000px of scroll distance
+- Timeline sequence plays while section is pinned: circle scale/rotate, square scale/rotate/x-translate, triangle scale/rotate/y-translate
+- Info cards (Stay Fixed, Timeline Plays, Scroll Control) reveal with stagger animation mid-sequence
+- Code viewer with syntax-highlighted TypeScript/JSX code showing pinned timeline pattern
+- Copy to clipboard button with scan line hover effect and "Copied!" state feedback
+- Proper cleanup: ScrollTrigger.getAll().forEach(t => t.kill()), tl.kill(), and gsap.killTweensOf() for all elements
+- Comparison cards showing 'With Pin' vs 'Without Pin' behavior to illustrate the value of pinning
+- 4 key concept cards explaining: pin: true, end duration, pin spacer, scrub + pin combination
+- Follows same industrial orange design system: zinc-950 background, zinc-900 cards, orange-500 accents
+- Build and typecheck passed
+- Note: agent-browser skill had connection issues - manual browser verification recommended
+- **Learnings for future iterations:**
+  - pin: true locks the trigger element in place during animation, creating immersive storytelling moments
+  - Use end: '+=2000' to define pin duration as scroll distance - the user scrolls that amount while section stays fixed
+  - GSAP creates a "pin spacer" element to maintain document flow while the element itself becomes position: fixed
+  - Combine pin with scrub for scroll-controlled animations - progress is tied to scroll within the pinned region
+  - The pinned section should have sufficient content/height to justify the pin duration - match end value to content length
+  - Pinning is perfect for product reveals, step-by-step guides, and narrative-driven animations
+  - Cleanup is critical for pinned sections - ScrollTrigger.getAll().forEach(t => t.kill()) ensures pin spacer is removed on unmount
+  - When using pin, ensure the pinned container has relative positioning and proper z-index to stay above other content
+---

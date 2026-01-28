@@ -15,6 +15,7 @@ import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 
 export default function DWFLabsPage() {
   const heroRef = useRef<HTMLDivElement>(null);
+  const servicesRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
     const hero = heroRef.current;
@@ -143,6 +144,62 @@ export default function DWFLabsPage() {
       triggers.forEach((t) => t.kill());
     };
   }, { scope: heroRef });
+
+  // US-008: Services pinned section with progress bar
+  useGSAP(() => {
+    const services = servicesRef.current;
+    if (!services) return;
+
+    // Track all ScrollTriggers for cleanup
+    const triggers: ScrollTrigger[] = [];
+
+    // Pin the services section for 3000px of scroll
+    const pinTrigger = ScrollTrigger.create({
+      trigger: services,
+      start: 'top center',
+      end: '+=3000',
+      pin: true,
+      scrub: 1,
+      // Toggle the PINNED badge state
+      onToggle: (self) => {
+        const badgeText = services.querySelector('.services-pin-badge span');
+        if (badgeText) {
+          badgeText.textContent = self.isActive ? 'PINNED' : 'Pinned Section';
+        }
+      },
+    });
+    triggers.push(pinTrigger);
+
+    // Animate progress bar from 0% to 100% during pin
+    const progressFill = services.querySelector('.services-progress-fill');
+    if (progressFill) {
+      gsap.to(progressFill, {
+        width: '100%',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: services,
+          start: 'top center',
+          end: '+=3000',
+          scrub: 1,
+        },
+      });
+    }
+
+    // Collect ScrollTriggers for cleanup
+    ScrollTrigger.getAll().forEach((trigger) => {
+      if (trigger.trigger === services || services.contains(trigger.trigger as Element)) {
+        if (!triggers.includes(trigger)) {
+          triggers.push(trigger);
+        }
+      }
+    });
+
+    return () => {
+      triggers.forEach((t) => t.kill());
+      gsap.killTweensOf(progressFill);
+    };
+  }, { scope: servicesRef });
+
   return (
     <main className="min-h-screen bg-zinc-950">
       {/* Section 1: Hero - Kinetic Text Reveal + Multi-Layer Parallax */}
@@ -234,8 +291,9 @@ export default function DWFLabsPage() {
 
       {/* Section 2: Services - Pinned Sequence with Animated Cards */}
       <section
+        ref={servicesRef}
         id="services"
-        className="relative min-h-screen flex items-center py-24 px-4"
+        className="services-section relative min-h-screen flex items-center py-24 px-4"
       >
         <div className="max-w-7xl mx-auto w-full">
           {/* Section Header */}

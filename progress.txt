@@ -573,3 +573,41 @@ Started: Wed Jan 28 04:56:36 HKT 2026
   - The component returns null if both previousPattern and nextPattern are null (edge case for single pattern lists)
   - When adding components to multiple similar files, verify each file's structure before editing - some files have unique component arrangements
 ---
+
+## [2025-01-28] - US-028
+- Created CategoryGrid component at src/components/navigation/category-grid.tsx
+- Homepage now shows category overview before the DemoGrid
+- Hero section with "GSAP Showcase" title using gradient text (orange-500 to amber-500 to yellow-500)
+- Featured Patterns section highlighting 3 key patterns:
+  - Fade Reveal (beginner, orange gradient)
+  - Character Text Reveal (intermediate, cyan-blue-purple gradient)
+  - Pinned Section Sequence (advanced, rose-pink-fuchsia gradient)
+- Featured patterns have "Featured" badge with pulsing indicator, gradient overlays, and larger cards
+- Browse by Category section with 9 category cards (only those with patterns)
+- Each category card shows: emoji icon, title, description, pattern count, and "X patterns" label
+- Category cards link to filtered view using window.location.href with category URL param
+- Uses useSearchParams hook, requires Suspense boundary wrapper
+- CategoryGridFallback component shows loading state with same hero styling
+- GSAP animations: featured-pattern-card (back.out(1.2) stagger: 0.12), category-card (power3.out stagger: 0.06)
+- Industrial orange design: zinc-950 bg, zinc-900 cards, orange-500 accents, corner accents, scan line effects
+- Responsive layout: featured patterns (3 columns), categories (1/2/3 columns)
+- Empty categories (Horizontal Scroll, Page Transitions, Real-world Examples) are shown with 40% opacity and disabled state
+- "More patterns coming soon" notice at bottom of category grid
+
+Files changed:
+- src/app/page.tsx (added CategoryGrid with Suspense boundary and CategoryGridFallback)
+- src/components/navigation/category-grid.tsx (new file, ~370 lines)
+
+Build and typecheck passed.
+
+**Learnings for future iterations:**
+- When using useSearchParams in client components, the parent must wrap the component in a Suspense boundary
+- CategoryGrid component uses window.location.href instead of Next.js router.push() for simplicity - this causes a full page reload but ensures filters are properly applied
+- The category filtering matches by category title (string comparison), not category ID - this works because navigation-data.ts uses the same title strings as PATTERN_CATEGORIES
+- Featured patterns use unique gradient backgrounds (from-orange-500, from-cyan-500, from-rose-500) to differentiate them visually
+- GSAP animation targeting uses class selectors (.featured-pattern-card, .category-card) instead of ref selectors for multiple elements
+- Category cards without patterns are still shown with opacity-40 and cursor-not-allowed to indicate they're coming soon
+- agent-browser skill continues to have "Resource temporarily unavailable" errors - manual browser verification is required
+- The homepage now has two Suspense boundaries: one for CategoryGrid and one for DemoGrid - this allows each to load independently
+- Pattern counts are calculated dynamically from NAVIGATION_DATA, so adding new patterns automatically updates the counts
+---

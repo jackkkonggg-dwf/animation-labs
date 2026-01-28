@@ -19,6 +19,7 @@ export default function DWFLabsPage() {
   const statsRef = useRef<HTMLDivElement>(null);
   const portfolioRef = useRef<HTMLDivElement>(null);
   const marqueeRowRef = useRef<HTMLDivElement>(null);
+  const newsRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
     const hero = heroRef.current;
@@ -435,6 +436,47 @@ export default function DWFLabsPage() {
     };
   }, { scope: marqueeRowRef });
 
+  // US-017: News staggered list reveal
+  useGSAP(() => {
+    const news = newsRef.current;
+    if (!news) return;
+
+    // Track all ScrollTriggers for cleanup
+    const triggers: ScrollTrigger[] = [];
+
+    // Get all news cards for staggered reveal
+    const newsCards = news.querySelectorAll('.news-card');
+
+    // Set initial state for staggered reveal
+    gsap.set(newsCards, { y: 60, opacity: 0 });
+
+    // Create staggered reveal animation
+    gsap.to(newsCards, {
+      y: 0,
+      opacity: 1,
+      duration: 0.6,
+      stagger: 0.15,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: news,
+        start: 'top center',
+        toggleActions: 'play none none reverse',
+      },
+    });
+
+    // Collect ScrollTriggers for cleanup
+    ScrollTrigger.getAll().forEach((trigger) => {
+      if (trigger.trigger === news || news.contains(trigger.trigger as Element)) {
+        triggers.push(trigger);
+      }
+    });
+
+    return () => {
+      triggers.forEach((t) => t.kill());
+      gsap.killTweensOf(newsCards);
+    };
+  }, { scope: newsRef });
+
   return (
     <main className="min-h-screen bg-zinc-950">
       {/* Section 1: Hero - Kinetic Text Reveal + Multi-Layer Parallax */}
@@ -840,6 +882,7 @@ export default function DWFLabsPage() {
 
       {/* Section 5: News - Staggered Reveal + Card Tilt */}
       <section
+        ref={newsRef}
         id="news"
         className="relative py-24 px-4 bg-zinc-900/50"
       >

@@ -270,3 +270,22 @@ Started: Thu Jan 29 01:07:23 HKT 2026
   - Use separate ref (marqueeRowRef) for the marquee element since it's different from the portfolio grid
   - Browser verification: check transform value at different times to confirm continuous scrolling and looping
 ---
+## [2026-01-29] - US-016
+- Implemented Portfolio card hover effects in `src/app/dwf-labs/page.tsx`
+- Added `grayscale` filter to logo div with `group-hover:grayscale-0` for color reveal on hover
+- Logo text color transitions from zinc-600 to orange-500 on hover
+- Card scales to 1.05 on hover using `hover:scale-105`
+- Border color transitions from zinc-800 to orange-500 (changed from orange-500/50)
+- Corner accent opacity transitions from 0 to 1 (already implemented, verified working)
+- All transitions use `duration-200` (0.2s) per acceptance criteria
+- Browser verified: grayscale(1) initially, grayscale(0) on hover, orange-500 border/text color, corner opacity 1
+- Typecheck passed
+- Files changed: `src/app/dwf-labs/page.tsx`, `prd.json`, `progress.txt`
+- **Learnings for future iterations:**
+  - Tailwind's `grayscale` filter applies grayscale(1) by default, `grayscale-0` removes it
+  - `hover:scale-105` is the Tailwind utility for scaling to 1.05 on hover
+  - Border color should use full `hover:border-orange-500` not `hover:border-orange-500/50` for complete effect
+  - Agent-browser `find first` command with `hover` action correctly simulates hover and activates CSS group-hover states
+  - To verify CSS hover states, use `find first ".selector" hover` then check `window.getComputedStyle()` for the hovered values
+  - Wait 300ms after hover action to allow CSS transitions to complete before checking styles
+---

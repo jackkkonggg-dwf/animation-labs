@@ -111,3 +111,24 @@ Started: Thu Jan 29 01:07:23 HKT 2026
   - Use `ScrollTrigger.getAll()` with trigger/contains check to find relevant instances
   - agent-browser session flag (--session) prevents browser conflicts between commands
 ---
+
+## [2026-01-29] - US-008
+- Implemented Services pinned section with progress bar in `src/app/dwf-labs/page.tsx`
+- Added `servicesRef` with useRef to track Services section DOM element
+- Created separate useGSAP hook with scope: servicesRef for proper cleanup
+- ScrollTrigger pin configuration: pin for 3000px of scroll (end: '+=3000'), scrub: 1, start: 'top center'
+- Progress bar animation: width from 0% to 100%, ease: none, synchronized with scroll position
+- Pin indicator badge toggles text content: 'Pinned Section' → 'PINNED' when active, back to 'Pinned Section' when inactive
+- Browser verified: badge changes 'Pinned Section'/'PINNED', progress bar 0% → 100% during scroll
+- Cleanup: kill all ScrollTriggers and tweens in return function
+- Files changed: `src/app/dwf-labs/page.tsx`, `prd.json`
+- **Learnings for future iterations:**
+  - ScrollTrigger.create() returns the trigger instance that must be tracked for cleanup
+  - onToggle callback provides self.isActive boolean indicating whether the trigger is currently active
+  - Pin section requires separate ScrollTrigger for progress bar (scrub animation linked to same trigger)
+  - Pin duration (3000px) creates a "virtual scroll distance" - section stays pinned while user scrolls this virtual distance
+  - scrub: 1 creates smooth catch-up animation tied to scroll position
+  - When using multiple ScrollTriggers on same element, collect all for cleanup (some created by gsap.to, some by ScrollTrigger.create)
+  - Browser verification: scroll through the full pin range to verify progress bar reaches 100%
+  - agent-browser eval returns strings - use JSON.stringify() for complex objects
+  - The badge text content toggle in onToggle requires querySelector inside the callback (DOM must be queried each time)

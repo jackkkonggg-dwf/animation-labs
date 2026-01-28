@@ -1,10 +1,12 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 import { NAVIGATION_DATA } from '@/lib/navigation-data';
+import { PATTERN_CATEGORIES } from '@/lib/patterns-data';
 import type { Difficulty } from '@/types/pattern';
 
 // Difficulty badge styles
@@ -38,8 +40,85 @@ export function DemoGrid() {
   const containerRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
-  const routes = NAVIGATION_DATA.routes;
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  // Get filter values from URL params
+  const searchQuery = searchParams.get('search') || '';
+  const categoryFilter = searchParams.get('category') || '';
+  const difficultyFilter = searchParams.get('difficulty') || '';
+
+  // Update URL params when filters change
+  const updateFilters = (updates: { search?: string; category?: string; difficulty?: string }) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (updates.search !== undefined) {
+      if (updates.search) {
+        params.set('search', updates.search);
+      } else {
+        params.delete('search');
+      }
+    }
+    if (updates.category !== undefined) {
+      if (updates.category) {
+        params.set('category', updates.category);
+      } else {
+        params.delete('category');
+      }
+    }
+    if (updates.difficulty !== undefined) {
+      if (updates.difficulty) {
+        params.set('difficulty', updates.difficulty);
+      } else {
+        params.delete('difficulty');
+      }
+    }
+
+    router.push(`/?${params.toString()}`, { scroll: false });
+  };
+
+  // Clear all filters
+  const clearAllFilters = () => {
+    router.push('/', { scroll: false });
+  };
+
+  // Get unique categories from routes
+  const categories = useMemo(() => {
+    const uniqueCategories = new Set(
+      NAVIGATION_DATA.routes
+        .map((route) => route.category)
+        .filter((cat): cat is string => cat !== undefined)
+    );
+    return Array.from(uniqueCategories).sort();
+  }, []);
+
+  // Filter routes based on search, category, and difficulty
+  const filteredRoutes = useMemo(() => {
+    return NAVIGATION_DATA.routes.filter((route) => {
+      // Search filter: check title and description (case-insensitive)
+      const matchesSearch =
+        !searchQuery ||
+        route.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        route.description.toLowerCase().includes(searchQuery.toLowerCase());
+
+      // Category filter
+      const matchesCategory =
+        !categoryFilter || route.category === categoryFilter;
+
+      // Difficulty filter
+      const matchesDifficulty =
+        !difficultyFilter || route.difficulty === difficultyFilter;
+
+      return matchesSearch && matchesCategory && matchesDifficulty;
+    });
+  }, [searchQuery, categoryFilter, difficultyFilter]);
+
+  // Check if any filters are active
+  const hasActiveFilters = searchQuery || categoryFilter || difficultyFilter;
+
+  const allRoutes = NAVIGATION_DATA.routes;
 
   useGSAP(() => {
     const container = containerRef.current;
@@ -79,7 +158,7 @@ export function DemoGrid() {
     return () => {
       gsap.killTweensOf(cards);
     };
-  }, {});
+  }, [filteredRoutes.length]); // Re-run animation when filtered routes change
 
   return (
     <section ref={containerRef} className="min-h-screen bg-zinc-950 pt-32 md:pt-40 pb-16 px-4 md:px-6 relative overflow-hidden">
@@ -114,12 +193,148 @@ export function DemoGrid() {
           </div>
         </div>
 
+        {/* Search and Filter Controls */}
+        <div className="mb-8 space-y-4">
+          {/* Search Input */}
+          <div className="relative">
+            <input
+              ref={searchInputRef}
+              type="text"
+              value={searchQuery}
+              onChange={(e) => updateFilters({ search: e.target.value })}
+              placeholder="Search patterns..."
+              className="w-full bg-zinc-900/50 border border-white/10 text-white placeholder-zinc-500
+                px-4 py-3 pr-10 focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50
+                transition-all duration-200 uppercase tracking-wider text-sm"
+            />
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+          </div>
+
+          {/* Filter Dropdowns */}
+          <div className="flex flex-wrap gap-3">
+            {/* Category Filter */}
+            <div className="relative">
+              <select
+                value={categoryFilter}
+                onChange={(e) => updateFilters({ category: e.target.value })}
+                className="appearance-none bg-zinc-900/50 border border-white/10 text-white px-4 py-2 pr-10
+                  focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50
+                  transition-all duration-200 uppercase tracking-wider text-xs cursor-pointer
+                  hover:border-orange-500/30"
+              >
+                <option value="">All Categories</option>
+                {categories.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Difficulty Filter */}
+            <div className="relative">
+              <select
+                value={difficultyFilter}
+                onChange={(e) => updateFilters({ difficulty: e.target.value })}
+                className="appearance-none bg-zinc-900/50 border border-white/10 text-white px-4 py-2 pr-10
+                  focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50
+                  transition-all duration-200 uppercase tracking-wider text-xs cursor-pointer
+                  hover:border-orange-500/30"
+              >
+                <option value="">All Difficulties</option>
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+              </select>
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Results Count */}
+            <div className="flex items-center text-zinc-500 text-xs uppercase tracking-wider ml-auto">
+              <span>{filteredRoutes.length}</span>
+              <span className="mx-1">/</span>
+              <span>{allRoutes.length}</span>
+              <span className="ml-1">patterns</span>
+            </div>
+          </div>
+
+          {/* Active Filter Chips */}
+          {hasActiveFilters && (
+            <div className="flex flex-wrap items-center gap-2 pt-2">
+              <span className="text-zinc-500 text-xs uppercase tracking-wider">Active:</span>
+
+              {searchQuery && (
+                <button
+                  onClick={() => updateFilters({ search: '' })}
+                  className="inline-flex items-center gap-1 bg-orange-500/20 border border-orange-500/30
+                    text-orange-400 px-2 py-1 text-[10px] font-black uppercase tracking-wider
+                    hover:bg-orange-500/30 transition-colors duration-200"
+                >
+                  <span>Search: "{searchQuery}"</span>
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
+
+              {categoryFilter && (
+                <button
+                  onClick={() => updateFilters({ category: '' })}
+                  className="inline-flex items-center gap-1 bg-cyan-500/20 border border-cyan-500/30
+                    text-cyan-400 px-2 py-1 text-[10px] font-black uppercase tracking-wider
+                    hover:bg-cyan-500/30 transition-colors duration-200"
+                >
+                  <span>{categoryFilter}</span>
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
+
+              {difficultyFilter && (
+                <button
+                  onClick={() => updateFilters({ difficulty: '' })}
+                  className="inline-flex items-center gap-1 bg-yellow-500/20 border border-yellow-500/30
+                    text-yellow-400 px-2 py-1 text-[10px] font-black uppercase tracking-wider
+                    hover:bg-yellow-500/30 transition-colors duration-200"
+                >
+                  <span>{difficultyFilter}</span>
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
+
+              <button
+                onClick={clearAllFilters}
+                className="text-zinc-500 hover:text-white text-[10px] uppercase tracking-wider
+                  underline underline-offset-2 hover:underline-offset-4 transition-all duration-200 ml-2"
+              >
+                Clear all
+              </button>
+            </div>
+          )}
+        </div>
+
         {/* Demo cards grid */}
         <div
           ref={cardsRef}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5"
         >
-          {routes.map((route, index) => (
+          {filteredRoutes.map((route, index) => (
             <Link key={route.id} href={route.path}>
               <div
                 className="demo-card group relative h-72 bg-zinc-900/50 border border-white/5 overflow-hidden
@@ -190,10 +405,13 @@ export function DemoGrid() {
           ))}
         </div>
 
-        {/* Empty state when no demos */}
-        {routes.length === 0 ? (
+        {/* Empty state when no results */}
+        {filteredRoutes.length === 0 ? (
           <div className="text-center py-20 border-2 border-dashed border-zinc-800">
-            <p className="text-zinc-600 text-sm uppercase tracking-wider">No demos available</p>
+            <p className="text-zinc-600 text-sm uppercase tracking-wider mb-2">No patterns found</p>
+            {hasActiveFilters && (
+              <p className="text-zinc-700 text-xs uppercase tracking-wider">Try adjusting your filters</p>
+            )}
           </div>
         ) : null}
       </div>

@@ -31,7 +31,7 @@ export default function DWFLabsPage() {
 
     // US-004: Hero character text reveal animation
     const titleChars = hero.querySelectorAll('.hero-title span');
-    gsap.set(titleChars, { y: 100, opacity: 0, rotation: -5 });
+    gsap.set(titleChars, { y: 100, opacity: 0, rotation: -5, force3D: true });
 
     gsap.to(titleChars, {
       y: 0,
@@ -41,11 +41,12 @@ export default function DWFLabsPage() {
       stagger: 0.03,
       ease: 'back.out(1.7)',
       delay: 0.2,
+      force3D: true, // GPU acceleration
     });
 
     // US-005: Hero tagline word reveal animation
     const taglineWords = hero.querySelectorAll('.hero-tagline span');
-    gsap.set(taglineWords, { y: 50, opacity: 0 });
+    gsap.set(taglineWords, { y: 50, opacity: 0, force3D: true });
 
     gsap.to(taglineWords, {
       y: 0,
@@ -54,6 +55,7 @@ export default function DWFLabsPage() {
       stagger: 0.15,
       ease: 'power2.out',
       delay: 0.3, // Delay after character reveal
+      force3D: true, // GPU acceleration
     });
 
     // US-006: Hero multi-layer parallax background
@@ -67,6 +69,7 @@ export default function DWFLabsPage() {
       gsap.to(layer1, {
         y: 100,
         ease: 'none',
+        force3D: true, // GPU acceleration
         scrollTrigger: {
           trigger: hero,
           start: 'top top',
@@ -81,6 +84,7 @@ export default function DWFLabsPage() {
       gsap.to(layer2, {
         y: 250,
         ease: 'none',
+        force3D: true, // GPU acceleration
         scrollTrigger: {
           trigger: hero,
           start: 'top top',
@@ -95,6 +99,7 @@ export default function DWFLabsPage() {
       gsap.to(layer3, {
         y: 400,
         ease: 'none',
+        force3D: true, // GPU acceleration
         scrollTrigger: {
           trigger: hero,
           start: 'top top',
@@ -109,6 +114,7 @@ export default function DWFLabsPage() {
       gsap.to(layer4, {
         y: 500,
         ease: 'none',
+        force3D: true, // GPU acceleration
         scrollTrigger: {
           trigger: hero,
           start: 'top top',
@@ -133,6 +139,7 @@ export default function DWFLabsPage() {
       duration: 0.8,
       ease: 'power2.out',
       delay: 0.5,
+      force3D: true, // GPU acceleration
     });
 
     // Collect ScrollTriggers for cleanup
@@ -160,7 +167,7 @@ export default function DWFLabsPage() {
 
     // US-009: Services staggered card reveal
     const serviceCards = services.querySelectorAll('.service-card');
-    gsap.set(serviceCards, { y: 100, opacity: 0, scale: 0.9 });
+    gsap.set(serviceCards, { y: 100, opacity: 0, scale: 0.9, force3D: true });
 
     const cardTimeline = gsap.to(serviceCards, {
       y: 0,
@@ -169,6 +176,7 @@ export default function DWFLabsPage() {
       duration: 0.8,
       stagger: 0.3,
       ease: 'back.out(1.2)',
+      force3D: true, // GPU acceleration
       scrollTrigger: {
         trigger: services,
         start: 'top center',
@@ -187,6 +195,7 @@ export default function DWFLabsPage() {
       duration: 0.6,
       stagger: 0.2,
       ease: 'back.out(1)',
+      force3D: true, // GPU acceleration
       scrollTrigger: {
         trigger: services,
         start: 'top center',
@@ -217,6 +226,7 @@ export default function DWFLabsPage() {
       gsap.to(progressFill, {
         width: '100%',
         ease: 'none',
+        force3D: true, // GPU acceleration
         scrollTrigger: {
           trigger: services,
           start: 'top center',
@@ -277,6 +287,7 @@ export default function DWFLabsPage() {
           // Update the element text with current value
           (statValue as HTMLElement).textContent = Math.round(counterObj.value).toString();
         },
+        force3D: true, // GPU acceleration
       });
 
       // US-013: Animate circular progress indicator
@@ -287,6 +298,7 @@ export default function DWFLabsPage() {
           strokeDashoffset: 0,
           duration: 2,
           ease: 'power2.out',
+          force3D: true, // GPU acceleration
           scrollTrigger: {
             trigger: stats,
             start: 'top center',
@@ -339,6 +351,7 @@ export default function DWFLabsPage() {
       duration: 1,
       stagger: 0.2,
       ease: 'power2.out',
+      force3D: true, // GPU acceleration
     });
 
     // Collect ScrollTriggers for cleanup
@@ -368,7 +381,7 @@ export default function DWFLabsPage() {
     const portfolioCards = portfolio.querySelectorAll('.portfolio-card');
 
     // Set initial state for batch animation
-    gsap.set(portfolioCards, { y: 60, opacity: 0, scale: 0.95 });
+    gsap.set(portfolioCards, { y: 60, opacity: 0, scale: 0.95, force3D: true });
 
     // Register ScrollTrigger batch
     const batchTrigger = ScrollTrigger.batch(portfolioCards, {
@@ -380,6 +393,7 @@ export default function DWFLabsPage() {
           duration: 0.6,
           stagger: 0.08,
           ease: 'power3.out',
+          force3D: true, // GPU acceleration
         }),
       onLeave: (batch) =>
         gsap.to(batch, {
@@ -389,6 +403,7 @@ export default function DWFLabsPage() {
           duration: 0.4,
           stagger: 0.05,
           ease: 'power2.in',
+          force3D: true, // GPU acceleration
         }),
       onEnterBack: (batch) =>
         gsap.to(batch, {
@@ -398,6 +413,7 @@ export default function DWFLabsPage() {
           duration: 0.6,
           stagger: 0.08,
           ease: 'power3.out',
+          force3D: true, // GPU acceleration
         }),
       onLeaveBack: (batch) =>
         gsap.to(batch, {
@@ -407,6 +423,7 @@ export default function DWFLabsPage() {
           duration: 0.4,
           stagger: 0.05,
           ease: 'power2.in',
+          force3D: true, // GPU acceleration
         }),
       start: 'top center',
     });
@@ -430,6 +447,7 @@ export default function DWFLabsPage() {
       duration: 20,
       ease: 'none',
       repeat: -1,
+      force3D: true, // GPU acceleration
     });
 
     return () => {
@@ -449,7 +467,7 @@ export default function DWFLabsPage() {
     const newsCards = news.querySelectorAll('.news-card');
 
     // Set initial state for staggered reveal
-    gsap.set(newsCards, { y: 60, opacity: 0 });
+    gsap.set(newsCards, { y: 60, opacity: 0, force3D: true });
 
     // Create staggered reveal animation
     gsap.to(newsCards, {
@@ -458,6 +476,7 @@ export default function DWFLabsPage() {
       duration: 0.6,
       stagger: 0.15,
       ease: 'power3.out',
+      force3D: true, // GPU acceleration
       scrollTrigger: {
         trigger: news,
         start: 'top center',
@@ -508,6 +527,7 @@ export default function DWFLabsPage() {
           duration: 0.3,
           ease: 'power2.out',
           transformPerspective: 1000,
+          force3D: true, // GPU acceleration
         });
 
         // US-019: Shine effect follows mouse
@@ -519,6 +539,7 @@ export default function DWFLabsPage() {
             opacity: 0.3,
             duration: 0.3,
             ease: 'power2.out',
+            force3D: true, // GPU acceleration
             background: `radial-gradient(circle 100px at ${xPos}px ${yPos}px, rgba(255, 255, 255, 0.3), transparent)`,
           });
         }
@@ -529,6 +550,7 @@ export default function DWFLabsPage() {
             scale: 1.1,
             duration: 0.3,
             ease: 'power2.out',
+            force3D: true, // GPU acceleration
             transformOrigin: 'center center',
           });
         }
@@ -541,6 +563,7 @@ export default function DWFLabsPage() {
           duration: 0.3,
           ease: 'power2.out',
           transformPerspective: 1000,
+          force3D: true, // GPU acceleration
         });
 
         // US-019: Reset shine opacity
@@ -549,6 +572,7 @@ export default function DWFLabsPage() {
             opacity: 0,
             duration: 0.3,
             ease: 'power2.out',
+            force3D: true, // GPU acceleration
           });
         }
 
@@ -559,6 +583,7 @@ export default function DWFLabsPage() {
             duration: 0.3,
             ease: 'power2.out',
             transformOrigin: 'center center',
+            force3D: true, // GPU acceleration
           });
         }
       };
@@ -624,6 +649,7 @@ export default function DWFLabsPage() {
           scale: isActive ? 1.1 : 1.0,
           duration: 0.3,
           ease: 'power2.out',
+          force3D: true, // GPU acceleration
         });
       });
 
@@ -635,6 +661,7 @@ export default function DWFLabsPage() {
           width: `${progress * 100}%`,
           duration: 0.3,
           ease: 'power2.out',
+          force3D: true, // GPU acceleration
         });
       }
 
@@ -733,25 +760,25 @@ export default function DWFLabsPage() {
         <div className="parallax-layer-4 relative z-10 text-center px-4 max-w-6xl mx-auto">
           {/* Character reveal: DWF LABS */}
           <h1 className="hero-title text-6xl md:text-8xl lg:text-9xl font-black text-white tracking-tighter uppercase mb-6">
-            <span className="inline-block">D</span>
-            <span className="inline-block">W</span>
-            <span className="inline-block">F</span>
-            <span className="inline-block">&nbsp;</span>
-            <span className="inline-block text-orange-500">L</span>
-            <span className="inline-block text-orange-500">A</span>
-            <span className="inline-block text-orange-500">B</span>
-            <span className="inline-block text-orange-500">S</span>
+            <span className="inline-block" style={{ willChange: 'transform, opacity' }}>D</span>
+            <span className="inline-block" style={{ willChange: 'transform, opacity' }}>W</span>
+            <span className="inline-block" style={{ willChange: 'transform, opacity' }}>F</span>
+            <span className="inline-block" style={{ willChange: 'transform, opacity' }}>&nbsp;</span>
+            <span className="inline-block text-orange-500" style={{ willChange: 'transform, opacity' }}>L</span>
+            <span className="inline-block text-orange-500" style={{ willChange: 'transform, opacity' }}>A</span>
+            <span className="inline-block text-orange-500" style={{ willChange: 'transform, opacity' }}>B</span>
+            <span className="inline-block text-orange-500" style={{ willChange: 'transform, opacity' }}>S</span>
           </h1>
 
           {/* Word reveal: Tagline */}
           <p className="hero-tagline text-lg md:text-xl lg:text-2xl text-zinc-400 uppercase tracking-[0.2em] mb-4">
-            <span className="inline-block">New</span>
-            <span className="inline-block">Generation</span>
-            <span className="inline-block">Web3</span>
-            <span className="inline-block">Investor</span>
-            <span className="inline-block">&</span>
-            <span className="inline-block">Market</span>
-            <span className="inline-block">Maker</span>
+            <span className="inline-block" style={{ willChange: 'transform, opacity' }}>New</span>
+            <span className="inline-block" style={{ willChange: 'transform, opacity' }}>Generation</span>
+            <span className="inline-block" style={{ willChange: 'transform, opacity' }}>Web3</span>
+            <span className="inline-block" style={{ willChange: 'transform, opacity' }}>Investor</span>
+            <span className="inline-block" style={{ willChange: 'transform, opacity' }}>&</span>
+            <span className="inline-block" style={{ willChange: 'transform, opacity' }}>Market</span>
+            <span className="inline-block" style={{ willChange: 'transform, opacity' }}>Maker</span>
           </p>
 
           {/* Description */}
@@ -761,16 +788,16 @@ export default function DWFLabsPage() {
 
           {/* SVG Corner Accents */}
           <svg className="absolute top-8 left-8 w-16 h-16 text-orange-500 opacity-50" viewBox="0 0 60 60">
-            <path className="corner-draw-path" d="M5,5 L55,5 L55,55" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path className="corner-draw-path" style={{ willChange: 'stroke-dashoffset' }} d="M5,5 L55,5 L55,55" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           <svg className="absolute top-8 right-8 w-16 h-16 text-orange-500 opacity-50" viewBox="0 0 60 60">
-            <path className="corner-draw-path" d="M55,5 L5,5 L5,55" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path className="corner-draw-path" style={{ willChange: 'stroke-dashoffset' }} d="M55,5 L5,5 L5,55" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           <svg className="absolute bottom-8 left-8 w-16 h-16 text-orange-500 opacity-50" viewBox="0 0 60 60">
-            <path className="corner-draw-path" d="M5,55 L55,55 L55,5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path className="corner-draw-path" style={{ willChange: 'stroke-dashoffset' }} d="M5,55 L55,55 L55,5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           <svg className="absolute bottom-8 right-8 w-16 h-16 text-orange-500 opacity-50" viewBox="0 0 60 60">
-            <path className="corner-draw-path" d="M55,55 L5,55 L5,5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path className="corner-draw-path" style={{ willChange: 'stroke-dashoffset' }} d="M55,55 L5,55 L5,5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
       </section>
@@ -803,14 +830,14 @@ export default function DWFLabsPage() {
           {/* Progress Bar */}
           <div className="services-progress-bar max-w-md mx-auto mb-12">
             <div className="h-1 bg-zinc-800 rounded-full overflow-hidden">
-              <div className="services-progress-fill h-full bg-orange-500 rounded-full w-0" />
+              <div className="services-progress-fill h-full bg-orange-500 rounded-full w-0" style={{ willChange: 'width, transform' }} />
             </div>
           </div>
 
           {/* Service Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {/* Card 1: Market Making */}
-            <div className="service-card group relative bg-zinc-900 border border-zinc-800 p-8 hover:border-orange-500/50 transition-colors duration-200">
+            <div className="service-card group relative bg-zinc-900 border border-zinc-800 p-8 hover:border-orange-500/50 transition-colors duration-200" style={{ willChange: 'transform, opacity' }}>
               {/* Corner accent */}
               <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
               <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
@@ -833,7 +860,7 @@ export default function DWFLabsPage() {
             </div>
 
             {/* Card 2: OTC Trading */}
-            <div className="service-card group relative bg-zinc-900 border border-zinc-800 p-8 hover:border-orange-500/50 transition-colors duration-200">
+            <div className="service-card group relative bg-zinc-900 border border-zinc-800 p-8 hover:border-orange-500/50 transition-colors duration-200" style={{ willChange: 'transform, opacity' }}>
               {/* Corner accent */}
               <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
               <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
@@ -856,7 +883,7 @@ export default function DWFLabsPage() {
             </div>
 
             {/* Card 3: Ventures */}
-            <div className="service-card group relative bg-zinc-900 border border-zinc-800 p-8 hover:border-orange-500/50 transition-colors duration-200">
+            <div className="service-card group relative bg-zinc-900 border border-zinc-800 p-8 hover:border-orange-500/50 transition-colors duration-200" style={{ willChange: 'transform, opacity' }}>
               {/* Corner accent */}
               <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
               <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
@@ -916,10 +943,11 @@ export default function DWFLabsPage() {
                     strokeDasharray="351.86"
                     strokeDashoffset="351.86"
                     strokeLinecap="round"
+                    style={{ willChange: 'stroke-dashoffset, transform' }}
                   />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="stat-icon w-12 h-12 bg-zinc-800 rounded-lg flex items-center justify-center text-zinc-400">
+                  <div className="stat-icon w-12 h-12 bg-zinc-800 rounded-lg flex items-center justify-center text-zinc-400" style={{ willChange: 'transform, color' }}>
                     <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                     </svg>
@@ -950,10 +978,11 @@ export default function DWFLabsPage() {
                     strokeDasharray="351.86"
                     strokeDashoffset="351.86"
                     strokeLinecap="round"
+                    style={{ willChange: 'stroke-dashoffset, transform' }}
                   />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="stat-icon w-12 h-12 bg-zinc-800 rounded-lg flex items-center justify-center text-zinc-400">
+                  <div className="stat-icon w-12 h-12 bg-zinc-800 rounded-lg flex items-center justify-center text-zinc-400" style={{ willChange: 'transform, color' }}>
                     <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                     </svg>
@@ -984,10 +1013,11 @@ export default function DWFLabsPage() {
                     strokeDasharray="351.86"
                     strokeDashoffset="351.86"
                     strokeLinecap="round"
+                    style={{ willChange: 'stroke-dashoffset, transform' }}
                   />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="stat-icon w-12 h-12 bg-zinc-800 rounded-lg flex items-center justify-center text-zinc-400">
+                  <div className="stat-icon w-12 h-12 bg-zinc-800 rounded-lg flex items-center justify-center text-zinc-400" style={{ willChange: 'transform, color' }}>
                     <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                     </svg>
@@ -1044,6 +1074,7 @@ export default function DWFLabsPage() {
               <div
                 key={item.name}
                 className="portfolio-card group relative aspect-square bg-zinc-900 border border-zinc-800 p-4 flex flex-col items-center justify-center hover:border-orange-500 hover:scale-105 transition-all duration-200 cursor-pointer"
+                style={{ willChange: 'transform, opacity' }}
               >
                 {/* Corner accent */}
                 <div className="absolute top-2 left-2 w-4 h-4 border-t border-l border-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
@@ -1069,7 +1100,7 @@ export default function DWFLabsPage() {
           <div className="portfolio-marquee overflow-hidden relative">
             <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-zinc-950 to-transparent z-10" />
             <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-zinc-950 to-transparent z-10" />
-            <div ref={marqueeRowRef} className="marquee-row flex items-center gap-8 whitespace-nowrap py-8">
+            <div ref={marqueeRowRef} className="marquee-row flex items-center gap-8 whitespace-nowrap py-8" style={{ willChange: 'transform' }}>
               {[
                 'TRON', 'Algorand', 'Notcoin', 'Mantle', 'Jupiter', 'TON', 'Gala', 'Celo',
                 'Fetch.ai', 'YGG', 'Beam', 'Sonic', 'WLFI', 'Vaultek', 'Floki',
@@ -1143,14 +1174,14 @@ export default function DWFLabsPage() {
               <article
                 key={index}
                 className="news-card group relative bg-zinc-900 border border-zinc-800 overflow-hidden hover:border-orange-500/50 transition-all duration-200"
-                style={{ transformStyle: 'preserve-3d' }}
+                style={{ transformStyle: 'preserve-3d', willChange: 'transform' }}
               >
                 {/* Shine effect overlay */}
-                <div className="news-shine absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                <div className="news-shine absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200" style={{ willChange: 'opacity, background' }} />
 
                 {/* Thumbnail placeholder */}
                 <div className="news-thumbnail aspect-video bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center overflow-hidden">
-                  <div className="w-12 h-12 bg-zinc-800 rounded-lg flex items-center justify-center text-zinc-600 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-12 h-12 bg-zinc-800 rounded-lg flex items-center justify-center text-zinc-600 group-hover:scale-110 transition-transform duration-300" style={{ willChange: 'transform' }}>
                     <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
                     </svg>
@@ -1227,7 +1258,7 @@ export default function DWFLabsPage() {
             </div>
             {/* US-021: Progress bar */}
             <div className="pattern-progress-bar h-1 bg-zinc-800 rounded-full mb-6 overflow-hidden">
-              <div className="pattern-progress-fill h-full bg-orange-500 rounded-full w-0 transition-all duration-300" />
+              <div className="pattern-progress-fill h-full bg-orange-500 rounded-full w-0 transition-all duration-300" style={{ willChange: 'width, transform' }} />
             </div>
             <div className="pattern-gallery-track flex gap-4 pb-4" style={{ width: 'max-content' }}>
               {[
@@ -1239,6 +1270,7 @@ export default function DWFLabsPage() {
                   key={pattern}
                   className="pattern-card flex-shrink-0 w-40 h-32 bg-zinc-900 border border-zinc-800 rounded-lg flex items-center justify-center text-center p-4 hover:border-orange-500/50 transition-colors duration-200"
                   data-index={i}
+                  style={{ willChange: 'transform' }}
                 >
                   <div>
                     <div className="text-2xl font-black text-orange-500/40 mb-2">{String(i + 1).padStart(2, '0')}</div>

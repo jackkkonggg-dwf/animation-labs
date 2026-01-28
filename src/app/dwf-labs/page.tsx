@@ -17,6 +17,7 @@ export default function DWFLabsPage() {
   const heroRef = useRef<HTMLDivElement>(null);
   const servicesRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
+  const portfolioRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
     const hero = heroRef.current;
@@ -352,6 +353,68 @@ export default function DWFLabsPage() {
     };
   }, { scope: statsRef });
 
+  // US-014: Portfolio grid batch reveal
+  useGSAP(() => {
+    const portfolio = portfolioRef.current;
+    if (!portfolio) return;
+
+    // Track all ScrollTriggers for cleanup
+    const triggers: ScrollTrigger[] = [];
+
+    // Get all portfolio cards for batch animation
+    const portfolioCards = portfolio.querySelectorAll('.portfolio-card');
+
+    // Set initial state for batch animation
+    gsap.set(portfolioCards, { y: 60, opacity: 0, scale: 0.95 });
+
+    // Register ScrollTrigger batch
+    const batchTrigger = ScrollTrigger.batch(portfolioCards, {
+      onEnter: (batch) =>
+        gsap.to(batch, {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.6,
+          stagger: 0.08,
+          ease: 'power3.out',
+        }),
+      onLeave: (batch) =>
+        gsap.to(batch, {
+          y: -60,
+          opacity: 0,
+          scale: 0.95,
+          duration: 0.4,
+          stagger: 0.05,
+          ease: 'power2.in',
+        }),
+      onEnterBack: (batch) =>
+        gsap.to(batch, {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.6,
+          stagger: 0.08,
+          ease: 'power3.out',
+        }),
+      onLeaveBack: (batch) =>
+        gsap.to(batch, {
+          y: 60,
+          opacity: 0,
+          scale: 0.95,
+          duration: 0.4,
+          stagger: 0.05,
+          ease: 'power2.in',
+        }),
+      start: 'top center',
+    });
+    triggers.push(...batchTrigger);
+
+    return () => {
+      triggers.forEach((t) => t.kill());
+      gsap.killTweensOf(portfolioCards);
+    };
+  }, { scope: portfolioRef });
+
   return (
     <main className="min-h-screen bg-zinc-950">
       {/* Section 1: Hero - Kinetic Text Reveal + Multi-Layer Parallax */}
@@ -673,6 +736,7 @@ export default function DWFLabsPage() {
 
       {/* Section 4: Portfolio - Batch Reveal + Infinite Marquee */}
       <section
+        ref={portfolioRef}
         id="portfolio"
         className="relative py-24 px-4"
       >

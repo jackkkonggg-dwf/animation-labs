@@ -230,3 +230,24 @@ Started: Thu Jan 29 01:07:23 HKT 2026
   - agent-browser eval requires IIFE wrapper `(() => { ... })()` for complex JS (can't use bare return statement)
   - Browser verification: wait 2-3s after scroll trigger for animation to complete before checking computed styles
 ---
+
+## [2026-01-29] - US-014
+- Implemented Portfolio grid batch reveal animation in `src/app/dwf-labs/page.tsx`
+- Added `portfolioRef` with useRef to track Portfolio section DOM element
+- Created separate useGSAP hook with scope: portfolioRef for proper cleanup
+- 15 portfolio cards with class `.portfolio-card`: TRON, Algorand, Notcoin, Mantle, Jupiter, TON, Gala, Celo, Fetch.ai, YGG, Beam, Sonic, WLFI, Vaultek, Floki
+- Used `ScrollTrigger.batch()` for efficient batch animation of multiple elements
+- Initial state: y: 60, opacity: 0, scale: 0.95
+- Animate to: y: 0, opacity: 1, scale: 1
+- Stagger: 0.08s per card, ease: power3.out, duration: 0.6s
+- Implemented all 4 batch callbacks: onEnter, onLeave, onEnterBack, onLeaveBack for proper scroll behavior
+- Start position: 'top center'
+- Browser verified: cards reach opacity 1, scale 1, y 0 after scroll trigger
+- Files changed: `src/app/dwf-labs/page.tsx`, `prd.json`, `progress.txt`
+- **Learnings for future iterations:**
+  - `ScrollTrigger.batch()` is more efficient than individual ScrollTriggers for multiple similar elements
+  - Batch accepts 4 callbacks: onEnter (scrolling down), onLeave (scrolling past), onEnterBack (scrolling up), onLeaveBack (scrolling back above)
+  - `toggleActions` is NOT a valid property for ScrollTrigger.batch() - use individual callbacks instead
+  - `ScrollTrigger.batch()` returns an array of ScrollTrigger instances that must be tracked for cleanup
+  - The portfolio cards already existed in HTML from US-003 with `.portfolio-card` class and number badges
+  - Batch animations create smoother performance for large sets of elements (15+ cards)

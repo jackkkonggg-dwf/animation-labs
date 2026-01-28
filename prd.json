@@ -217,8 +217,8 @@
         "Verify in browser using agent-browser skill"
       ],
       "priority": 14,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Batch reveal: y: 60→0, opacity: 0→1, scale: 0.95→1, stagger: 0.08s, ease: power3.out, duration: 0.6s, start: 'top center'"
     },
     {
       "id": "US-015",

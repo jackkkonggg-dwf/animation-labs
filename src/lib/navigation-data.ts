@@ -203,5 +203,13 @@ export const NAVIGATION_DATA: NavigationData = {
       category: 'Performance',
       difficulty: 'advanced',
     },
+    // Advanced Patterns Gallery
+    {
+      id: 'advanced-patterns',
+      title: 'Advanced Patterns',
+      description: 'Expert-level GSAP demos showcasing complex composition of multiple animation patterns',
+      path: '/advanced-patterns',
+      category: 'Advanced',
+    },
   ],
 };

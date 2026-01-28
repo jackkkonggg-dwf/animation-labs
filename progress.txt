@@ -162,3 +162,29 @@ Started: Wed Jan 28 20:57:54 HKT 2026
   - Event listener type errors: addEventListener expects Event type, cast inside handler to specific type (e.g., MouseEvent)
   - SVG path transformOrigin must be set via style={{ transformOrigin: '100px 100px' }} not as direct prop
   - gsap.timeline().call() callback requires second parameter to be array (not null) for params argument
+---
+
+## [2026-01-28] - US-009
+- Created Text Symphony demo at src/app/advanced-patterns/text-symphony/page.tsx
+- HeroSection: Auto-playing timeline with SplitText character cascade wave (stagger 0.03s from start), word-based subtitle reveal with elastic.out, color wave effect through characters, pulse animation with random stagger
+- CharacterCascadeSection: Scroll-triggered character wave with y/rotation based on Math.sin, color blend on scroll progress using hsl colors
+- WordRevealSection: Three lines with different stagger timings (0.1s, 0.2s, 0.3s) to create visual hierarchy, all using back.out(1.5) easing
+- LineByLineSection: Line-by-line reveals with elastic.out(1, 0.6) easing, scan line visual effect with repeating-linear-gradient
+- ScrollScrubSection: Scrub animation with pin: true, character rotation and scale based on position, 3D rotation (rotationY 360, rotationX based on Math.sin)
+- GradientBlendSection: Text gradient blend with backgroundClip and WebkitBackgroundClip, scale effect with stagger
+- Reduced motion support with CSS @media (prefers-reduced-motion) that disables all transitions/animations
+- Proper cleanup with ScrollTrigger.getAll().forEach(t => t.kill()), tl.kill(), split.revert(), gsap.killTweensOf()
+- Browser verification completed via agent-browser - screenshots captured of all sections
+- Build and typecheck passed successfully
+- **Learnings for future iterations:**
+  - SplitText.create(element, { type: 'chars, words, lines' }) splits text into individual units for animation
+  - split.chars, split.words, split.lines return NodeList-like collections of wrapped elements
+  - For character-based wave effects, use stagger: { each: 0.03, from: 'start' } for left-to-right cascade
+  - For burst/explosion effects, use stagger: { each: 0.05, from: 'center' } or from: 'random'
+  - The ease property in GSAP tweens does NOT accept a function that returns a string - use a single easing string or handle different easings per element via separate tweens
+  - Text gradient effects require backgroundClip: 'text', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' properties
+  - SplitText.revert() cleans up the split wrappers and restores original text - essential for cleanup
+  - When animating split text, reference the split.chars/words/lines in killTweensOf() for proper cleanup
+  - The linesClass option in SplitText creates wrapper divs with overflow hidden for reveal effects
+  - For 3D text effects on scroll, set perspective on the container element via style={{ perspective: '1000px' }}
+---

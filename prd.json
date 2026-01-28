@@ -63,8 +63,8 @@
         "Verify in browser using agent-browser skill"
       ],
       "priority": 4,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Character reveal animation: y: 100→0, opacity: 0→1, rotation: -5→0, stagger: 0.03s, ease: back.out(1.7), delay: 0.2s"
     },
     {
       "id": "US-005",

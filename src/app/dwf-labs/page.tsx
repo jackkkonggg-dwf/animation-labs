@@ -37,6 +37,17 @@ export default function DWFLabsPage() {
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
+  // US-027: Refresh ScrollTrigger after all animations are initialized
+  // This ensures proper positioning and prevents scroll-related issues on navigation
+  useEffect(() => {
+    // Small delay to ensure all useGSAP hooks have completed their setup
+    const refreshTimer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 100);
+
+    return () => clearTimeout(refreshTimer);
+  }, [prefersReducedMotion]); // Re-refresh when reduced motion preference changes
+
   // US-026: Helper to set final state immediately when reduced motion is preferred
   const setFinalStateIfReducedMotion = () => {
     if (!prefersReducedMotion) return false;

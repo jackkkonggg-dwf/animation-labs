@@ -415,8 +415,8 @@
         "Verify in browser using agent-browser skill"
       ],
       "priority": 27,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Added ScrollTrigger.refresh() in useEffect with 100ms delay after all useGSAP hooks complete. All cleanup functions already in place from previous stories. Navigation tested: /dwf-labs → / → /dwf-labs, no orphan warnings."
     },
     {
       "id": "US-028",

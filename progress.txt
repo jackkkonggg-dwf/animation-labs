@@ -503,3 +503,29 @@ Started: Thu Jan 29 01:07:23 HKT 2026
   - All animation hooks need the reduced motion check at the start (early return pattern)
   - The dependencies array ensures useGSAP re-runs when the preference changes, enabling dynamic behavior
 ---
+
+## [2026-01-29] - US-027
+- Implemented ScrollTrigger cleanup on navigation in `src/app/dwf-labs/page.tsx`
+- Added `ScrollTrigger.refresh()` call in useEffect with 100ms delay to ensure proper positioning after all animations initialize
+- All cleanup functions were already in place from previous stories:
+  - Hero section: cleanup kills tweens on titleChars, taglineWords, cornerPaths, and all ScrollTriggers
+  - Services section: cleanup kills tweens on progressFill, serviceCards, serviceIcons, and all ScrollTriggers
+  - Stats count up: cleanup kills tweens on statValues, progressCircles, and all ScrollTriggers
+  - Stats scrub: cleanup kills tweens on statIcons and all ScrollTriggers
+  - Portfolio batch: cleanup kills tweens on portfolioCards and all ScrollTriggers
+  - Marquee: cleanup kills tweens on marqueeRow
+  - News staggered: cleanup kills tweens on newsCards and all ScrollTriggers
+  - News 3D tilt: cleanup removes event listeners and kills tweens on cards, shine, thumbnail
+  - Draggable gallery: cleanup kills draggableInstance and tweens on cards, progressFill
+- Navigation tested: /dwf-labs → / → /dwf-labs, also tested rapid navigation (away/back/away)
+- No console warnings about orphaned ScrollTriggers found
+- Typecheck passed
+- Files changed: `src/app/dwf-labs/page.tsx`, `prd.json`, `progress.txt`
+- **Learnings for future iterations:**
+  - The cleanup functions were already implemented correctly in all useGSAP hooks from previous stories
+  - ScrollTrigger.refresh() was the only missing piece from the acceptance criteria
+  - Use a small delay (100ms) before calling ScrollTrigger.refresh() to ensure all useGSAP hooks have completed setup
+  - Navigation in Next.js App Router unmounts client components, triggering useGSAP cleanup functions automatically
+  - The useGSAP hook from @gsap/react automatically runs the returned cleanup function on unmount
+  - No orphaned ScrollTrigger warnings appear when navigating away and back to the page
+  - Testing rapid navigation (multiple back/forth) helps verify cleanup robustness

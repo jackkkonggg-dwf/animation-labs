@@ -112,6 +112,23 @@ export default function DWFLabsPage() {
       });
     }
 
+    // US-007: Hero SVG corner accents drawing animation
+    const cornerPaths = hero.querySelectorAll('.corner-draw-path');
+    cornerPaths.forEach((path) => {
+      const length = (path as SVGPathElement).getTotalLength();
+      gsap.set(path, {
+        strokeDasharray: length,
+        strokeDashoffset: length,
+      });
+    });
+
+    gsap.to(cornerPaths, {
+      strokeDashoffset: 0,
+      duration: 0.8,
+      ease: 'power2.out',
+      delay: 0.5,
+    });
+
     // Collect ScrollTriggers for cleanup
     ScrollTrigger.getAll().forEach((trigger) => {
       if (trigger.trigger === hero || hero.contains(trigger.trigger as Element)) {
@@ -122,6 +139,7 @@ export default function DWFLabsPage() {
     return () => {
       gsap.killTweensOf(titleChars);
       gsap.killTweensOf(taglineWords);
+      gsap.killTweensOf(cornerPaths);
       triggers.forEach((t) => t.kill());
     };
   }, { scope: heroRef });
@@ -200,16 +218,16 @@ export default function DWFLabsPage() {
 
           {/* SVG Corner Accents */}
           <svg className="absolute top-8 left-8 w-16 h-16 text-orange-500 opacity-50" viewBox="0 0 60 60">
-            <path d="M5,5 L55,5 L55,55" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path className="corner-draw-path" d="M5,5 L55,5 L55,55" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           <svg className="absolute top-8 right-8 w-16 h-16 text-orange-500 opacity-50" viewBox="0 0 60 60">
-            <path d="M55,5 L5,5 L5,55" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path className="corner-draw-path" d="M55,5 L5,5 L5,55" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           <svg className="absolute bottom-8 left-8 w-16 h-16 text-orange-500 opacity-50" viewBox="0 0 60 60">
-            <path d="M5,55 L55,55 L55,5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path className="corner-draw-path" d="M5,55 L55,55 L55,5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           <svg className="absolute bottom-8 right-8 w-16 h-16 text-orange-500 opacity-50" viewBox="0 0 60 60">
-            <path d="M55,55 L5,55 L5,5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path className="corner-draw-path" d="M55,55 L5,55 L5,5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
       </section>

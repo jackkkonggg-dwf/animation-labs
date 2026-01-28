@@ -110,8 +110,8 @@
         "Verify in browser using agent-browser skill"
       ],
       "priority": 7,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Added corner-draw-path class to 4 SVG corners, strokeDasharray: 100, strokeDashoffset: 100→0, duration: 0.8s, delay: 0.5s, ease: power2.out"
     },
     {
       "id": "US-008",

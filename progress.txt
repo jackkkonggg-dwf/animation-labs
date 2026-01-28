@@ -551,3 +551,25 @@ Started: Wed Jan 28 04:56:36 HKT 2026
   - When editing multiple similar files, always verify each file's unique structure (e.g., reduced-motion has KeyConcepts + SystemPreferencesInfo, performance-optimization has PerformanceTips)
   - The pattern IDs in navigation-data.ts use kebab-case (e.g., "char-text-reveal", "multi-layer-parallax")
 ---
+
+## [2025-01-28] - US-027
+- Created PatternNavigation component at src/components/patterns/pattern-navigation.tsx
+- Component displays previous/next pattern navigation cards at the bottom of each pattern page
+- Navigation uses sequential order from NAVIGATION_DATA (filtered to only pattern routes with difficulty field)
+- Previous card: left-aligned with left arrow indicator, shows pattern title and description
+- Next card: right-aligned with right arrow indicator, shows pattern title and description
+- Hover effects include corner accents and arrow translation animations
+- Responsive grid layout (2 columns on desktop, 1 on mobile)
+- Empty spacers when at first/last pattern (no previous/next)
+- Added PatternNavigation component to all 20 pattern pages after RelatedPatterns and before Footer CTA
+- Files changed: 21 (1 new component + 20 pattern files updated)
+- Build and typecheck passed
+- **Learnings for future iterations:**
+  - Filter pattern routes using `route.difficulty !== undefined && route.path.startsWith('/patterns/')` to exclude legacy routes and home
+  - Grid layout with empty spacers maintains consistent 2-column structure even when only one direction is available
+  - Previous navigation is left-aligned with left-pointing arrow, next is right-aligned with right-pointing arrow for visual consistency
+  - Corner accents on hover (border-l-2 border-b-2 for previous, border-r-2 border-b-2 for next) reinforce the design language
+  - useMemo is used for performance to calculate adjacent patterns based on currentPatternId
+  - The component returns null if both previousPattern and nextPattern are null (edge case for single pattern lists)
+  - When adding components to multiple similar files, verify each file's structure before editing - some files have unique component arrangements
+---

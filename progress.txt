@@ -334,4 +334,21 @@ Started: Thu Jan 29 01:07:23 HKT 2026
   - Event type casting: use `e as MouseEvent` because addEventListener expects Event type
   - gsap.to with rotateX/rotateY creates smooth 3D transforms with easing
   - agent-browser skill had issues with resource availability - curl verification is a reliable fallback
+---## [2026-01-29] - US-019
+- Implemented News shine effect and thumbnail zoom in `src/app/dwf-labs/page.tsx`
+- Enhanced existing US-018 useEffect with shine effect and thumbnail zoom
+- Shine gradient: radial-gradient circle 100px at mouse coordinates, opacity 0→0.3
+- Thumbnail zoom: scale 1.0→1.1 on hover, duration 0.3s, transform origin center
+- Both effects update in same mousemove handler as 3D tilt for synchronized performance
+- Cleanup extended to kill tweens on shine and thumbnail elements
+- Typecheck passed
+- Files changed: `src/app/dwf-labs/page.tsx`, `prd.json`, `progress.txt`
+- **Learnings for future iterations:**
+  - GSAP can animate CSS `background` property with dynamic radial gradient strings
+  - For shine effects, use `radial-gradient(circle <size> at <x>px <y>px, rgba(...), transparent)`
+  - Mouse position is in pixels (clientX - rect.left), not normalized for background positioning
+  - Query thumbnail via `.news-thumbnail > div` to get the actual content element inside the wrapper
+  - Adding shine and thumbnail zoom to existing 3D tilt hook keeps all hover effects synchronized
+  - Remember to add tweens to cleanup function: `gsap.killTweensOf(shine)` and `gsap.killTweensOf(thumbnail)`
+  - The shine element already existed in HTML (`.news-shine`), just needed GSAP animation for position/opacity
 ---

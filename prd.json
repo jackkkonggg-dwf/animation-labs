@@ -292,8 +292,8 @@
         "Verify in browser using agent-browser skill"
       ],
       "priority": 19,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Shine effect: radial-gradient circle 100px at mouse pos, opacity 0→0.3. Thumbnail zoom: scale 1.0→1.1, duration 0.3s. Both update in same mousemove handler as 3D tilt."
     },
     {
       "id": "US-020",

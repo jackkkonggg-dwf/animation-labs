@@ -478,6 +478,7 @@ export default function DWFLabsPage() {
   }, { scope: newsRef });
 
   // US-018: News card 3D tilt on mouse move
+  // US-019: News shine effect and thumbnail zoom
   useEffect(() => {
     const news = newsRef.current;
     if (!news) return;
@@ -486,14 +487,17 @@ export default function DWFLabsPage() {
     const cleanupFunctions: Array<() => void> = [];
 
     cards.forEach((card) => {
+      const shine = card.querySelector('.news-shine') as HTMLElement;
+      const thumbnail = card.querySelector('.news-thumbnail > div') as HTMLElement;
+
       const handleMouseMove = (e: Event) => {
         const mouseEvent = e as MouseEvent;
         const rect = (card as HTMLElement).getBoundingClientRect();
         const x = (mouseEvent.clientX - rect.left) / rect.width; // Normalize to 0-1
         const y = (mouseEvent.clientY - rect.top) / rect.height; // Normalize to 0-1
 
-        // RotateX: (y - 0.5) * -30deg (max ±15deg)
-        // RotateY: (x - 0.5) * 30deg (max ±15deg)
+        // US-018: RotateX: (y - 0.5) * -30deg (max ±15deg)
+        // US-018: RotateY: (x - 0.5) * 30deg (max ±15deg)
         const rotateX = (y - 0.5) * -30;
         const rotateY = (x - 0.5) * 30;
 
@@ -504,6 +508,29 @@ export default function DWFLabsPage() {
           ease: 'power2.out',
           transformPerspective: 1000,
         });
+
+        // US-019: Shine effect follows mouse
+        // Position the radial gradient at mouse coordinates
+        const xPos = (mouseEvent.clientX - rect.left) / 1; // Pixel position
+        const yPos = (mouseEvent.clientY - rect.top) / 1;
+        if (shine) {
+          gsap.to(shine, {
+            opacity: 0.3,
+            duration: 0.3,
+            ease: 'power2.out',
+            background: `radial-gradient(circle 100px at ${xPos}px ${yPos}px, rgba(255, 255, 255, 0.3), transparent)`,
+          });
+        }
+
+        // US-019: Thumbnail zoom to 1.1 on hover
+        if (thumbnail) {
+          gsap.to(thumbnail, {
+            scale: 1.1,
+            duration: 0.3,
+            ease: 'power2.out',
+            transformOrigin: 'center center',
+          });
+        }
       };
 
       const handleMouseLeave = () => {
@@ -514,6 +541,25 @@ export default function DWFLabsPage() {
           ease: 'power2.out',
           transformPerspective: 1000,
         });
+
+        // US-019: Reset shine opacity
+        if (shine) {
+          gsap.to(shine, {
+            opacity: 0,
+            duration: 0.3,
+            ease: 'power2.out',
+          });
+        }
+
+        // US-019: Reset thumbnail scale
+        if (thumbnail) {
+          gsap.to(thumbnail, {
+            scale: 1.0,
+            duration: 0.3,
+            ease: 'power2.out',
+            transformOrigin: 'center center',
+          });
+        }
       };
 
       card.addEventListener('mousemove', handleMouseMove);
@@ -524,6 +570,8 @@ export default function DWFLabsPage() {
         card.removeEventListener('mousemove', handleMouseMove);
         card.removeEventListener('mouseleave', handleMouseLeave);
         gsap.killTweensOf(card);
+        if (shine) gsap.killTweensOf(shine);
+        if (thumbnail) gsap.killTweensOf(thumbnail);
       });
     });
 

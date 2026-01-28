@@ -266,3 +266,26 @@ Started: Wed Jan 28 04:56:36 HKT 2026
   - radial-gradient background with dynamic position creates a convincing shine/gloss effect that follows cursor
   - matrix3d is the computed style value when 3D transforms are applied - use this to verify animations are working
   - Client-side interactive components need 'use client' directive even when imported by Server Component page
+
+## [2025-01-28] - US-014
+- Created src/app/patterns/sequential-timeline/page.tsx as the entry point for the sequential timeline pattern
+- Created src/components/patterns/sequential-timeline-pattern.tsx with full implementation
+- Sequential timeline pattern: uses gsap.timeline() to chain animations that play in sequence
+- Live demo shows 3 shapes animating in sequence: circle scales (back.out(1.7)), square rotates (back.out(1.5)), triangle slides (power2.out)
+- Timeline loops infinitely with repeat: -1 and repeatDelay: 1
+- Position parameter examples: default (sequential), "-=0.1" (overlap), "+=0.1" (delay)
+- Timeline flow visualization showing step-by-step animation order
+- Code viewer with syntax-highlighted TypeScript/JSX code
+- Copy to clipboard button with scan line hover effect
+- Proper cleanup: tl.kill() and gsap.killTweensOf() for all elements
+- 4 key concept cards explaining: timeline creation, chaining animations, position parameter, timeline methods
+- Follows same industrial orange design system: zinc-950 background, zinc-900 cards, orange-500 accents
+- Build and typecheck passed
+- Note: agent-browser skill had connection issues - manual browser verification recommended
+- **Learnings for future iterations:**
+  - gsap.timeline() creates a container for tweens that can be controlled as a group
+  - By default, chained .to() calls play sequentially - each starts when the previous ends
+  - Position parameter (3rd argument) controls timing: "-=0.1" overlaps, "+=0.1" delays, "label" syncs to labels
+  - Timeline methods like .play(), .pause(), .reverse(), .restart(), .time(), .progress() allow programmatic control
+  - When writing JSX code examples, always use template literals with {`{...}`} to escape curly braces
+  - Using separate span elements with template literals prevents JSX parsing errors with braces

@@ -426,3 +426,55 @@ Started: Wed Jan 28 04:56:36 HKT 2026
   - Cleanup is critical for pinned sections - ScrollTrigger.getAll().forEach(t => t.kill()) ensures pin spacer is removed on unmount
   - When using pin, ensure the pinned container has relative positioning and proper z-index to stay above other content
 ---
+## [2025-01-28] - US-020
+- Created src/app/patterns/count-up/page.tsx as the entry point for the count-up pattern
+- Created src/components/patterns/count-up-pattern.tsx with full implementation
+- Count-up animation pattern: numbers animate from 0 to target value when entering viewport
+- Manual counting implementation using GSAP's onUpdate callback with proxy object { value: 0 }
+- TextPlugin is a paid GSAP plugin, so this implementation uses free manual counting instead
+- Proxy pattern: gsap.to(proxy, { value: target, onUpdate: () => { display.textContent = proxy.value } })
+- 6 demo cards with various value formats: integers (50000+), decimals (98.5%), large numbers with commas (toLocaleString)
+- CountUpCard component supports label, value, suffix, icon, gradient, and decimals props
+- Uses tabular-nums class for monospaced number display to prevent jitter during counting
+- power2.out easing with 2s duration creates smooth deceleration from fast to slow
+- start: 'top 85%' triggers animation when card is near the bottom of viewport
+- Code viewer with syntax-highlighted TypeScript/JSX code showing count-up pattern
+- Copy to clipboard button with scan line hover effect and "Copied!" state feedback
+- Proper cleanup: gsap.killTweensOf(proxy) in useGSAP return function
+- 4 key concept cards explaining: proxy object pattern, onUpdate callback, duration control, formatting (Math.floor, toFixed, toLocaleString)
+- Follows same industrial orange design system: zinc-950 background, zinc-900 cards, orange-500 accents
+- Build and typecheck passed
+- Note: agent-browser skill had connection issues - manual browser verification recommended
+- **Learnings for future iterations:**
+  - Count-up animations work by animating a proxy object's value property, then updating the DOM in onUpdate callback
+  - The tabular-nums CSS class is critical for number animations - prevents jitter when digits change width
+  - Use .toFixed(decimals) for decimal numbers, Math.floor() for integers, or toLocaleString() for comma formatting
+  - Duration of 2s with power2.out creates smooth, natural feeling count-ups - shorter (0.5-1s) for smaller numbers
+  - Always kill tweens of the proxy object in cleanup - not the DOM element
+  - The proxy object is a plain JavaScript object { value: 0 } - GSAP animates the numeric value directly
+  - Each card needs its own proxy object and useGSAP hook for independent animations
+  - For suffixes (+, %, etc.), append them in the onUpdate callback: display.textContent = proxy.value.toFixed(decimals) + suffix
+---
+
+## [2025-01-28] - US-021
+- Created src/app/patterns/performance-optimization/page.tsx as the entry point for the performance optimization pattern
+- Created src/components/patterns/performance-optimization-pattern.tsx with full implementation
+- Performance optimization pattern demonstrating GPU acceleration techniques for 60fps animations
+- Live demo with side-by-side comparison: will-change vs no will-change animations
+- Shows GPU-accelerated properties: transform (translate, scale, rotate), opacity, filter
+- Will-change hint explanation and when to use it (sparingly, only on animating elements)
+- Code viewer with syntax-highlighted TypeScript/JSX code showing optimized animation pattern
+- Do's and Don'ts section with code examples: transform vs top/left, opacity vs visibility, will-change specifics
+- 4 key concept cards covering GPU acceleration, will-change hints, avoiding layout properties, forcing GPU layers
+- Follows same industrial orange design system: zinc-950 background, zinc-900 cards, orange-500 accents
+- Build and typecheck passed
+- Note: dev server had connection issues for browser verification - manual testing recommended
+- **Learnings for future iterations:**
+  - GPU-accelerated properties (transform, opacity, filter) run on the GPU and avoid layout recalculations
+  - Layout properties (width, height, top, left, margin, padding) trigger CPU-bound layout recalculation - avoid for animations
+  - will-change is a hint to the browser to optimize for upcoming changes - use sparingly only on elements that will actually animate
+  - transform: translateZ(0) or Tailwind's transform-gpu forces a GPU layer - use sparingly as each layer consumes GPU memory
+  - For will-change in Tailwind, use: will-change-transform, will-change-opacity, will-change-transform,opacity
+  - The key performance pattern: Animate only transform and opacity properties for 60fps animations
+  - Be specific with will-change - "will-change: all" wastes resources, use "will-change: transform, opacity" instead
+  - Performance optimization is critical for smooth user experience - users notice the difference between 30fps and 60fps

@@ -290,8 +290,8 @@
         "Verify in browser using agent-browser skill"
       ],
       "priority": 18,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Implemented with custom momentum hook using velocity tracking during drag (position/deltas averaged over 5 frames). Three demo variations: Free Throw (unbounded), Bounded (with edge resistance), Snappy (back.out easing). Uses gsap.to() for smooth deceleration based on calculated throw velocity. Note: GSAP InertiaPlugin is a paid plugin, so this implementation uses custom velocity tracking instead."
     },
     {
       "id": "US-019",

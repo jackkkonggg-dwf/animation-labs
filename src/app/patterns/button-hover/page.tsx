@@ -1,5 +1,5 @@
 import { Navbar } from '@/components/navigation/navbar';
-import { ButtonHoverPattern } from '@/components/patterns/button-hover-pattern';
+import { ButtonHoverPattern } from './button-hover-pattern';
 
 export default function ButtonHoverPage() {
   return (

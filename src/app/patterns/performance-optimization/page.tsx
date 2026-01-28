@@ -1,5 +1,5 @@
 import { Navbar } from '@/components/navigation/navbar';
-import { PerformanceOptimizationPattern } from '@/components/patterns/performance-optimization-pattern';
+import { PerformanceOptimizationPattern } from './performance-optimization-pattern';
 
 export default function PerformanceOptimizationPage() {
   return (

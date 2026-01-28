@@ -1,5 +1,5 @@
 import { Navbar } from '@/components/navigation/navbar';
-import { CountUpPattern } from '@/components/patterns/count-up-pattern';
+import { CountUpPattern } from './count-up-pattern';
 
 export default function CountUpPage() {
   return (

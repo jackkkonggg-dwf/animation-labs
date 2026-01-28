@@ -1,4 +1,4 @@
-import { MultiLayerParallaxPattern } from '@/components/patterns/multi-layer-parallax-pattern';
+import { MultiLayerParallaxPattern } from './multi-layer-parallax-pattern';
 
 export const metadata = {
   title: 'Multi-Layer Parallax Pattern | GSAP Animation Showcase',

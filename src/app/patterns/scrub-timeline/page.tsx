@@ -1,4 +1,4 @@
-import { ScrubTimelinePattern } from '@/components/patterns/scrub-timeline-pattern';
+import { ScrubTimelinePattern } from './scrub-timeline-pattern';
 
 export const metadata = {
   title: 'Scrub Timeline Pattern | GSAP Animation Showcase',

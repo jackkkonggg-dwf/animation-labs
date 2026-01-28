@@ -1,5 +1,5 @@
 import { Navbar } from '@/components/navigation/navbar';
-import { FadeRevealPattern } from '@/components/patterns/fade-reveal-pattern';
+import { FadeRevealPattern } from './fade-reveal-pattern';
 
 export default function FadeRevealPage() {
   return (

@@ -1,4 +1,4 @@
-import { BatchRevealPattern } from '@/components/patterns/batch-reveal-pattern';
+import { BatchRevealPattern } from './batch-reveal-pattern';
 
 export const metadata = {
   title: 'Batch Reveal Pattern | GSAP Animation Showcase',

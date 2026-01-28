@@ -1,5 +1,5 @@
 import { Navbar } from '@/components/navigation/navbar';
-import { CardTiltPattern } from '@/components/patterns/card-tilt-pattern';
+import { CardTiltPattern } from './card-tilt-pattern';
 
 export default function CardTiltPage() {
   return (

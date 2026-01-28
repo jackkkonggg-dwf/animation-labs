@@ -1,4 +1,4 @@
-import { PinnedSequencePattern } from '@/components/patterns/pinned-sequence-pattern';
+import { PinnedSequencePattern } from './pinned-sequence-pattern';
 
 export const metadata = {
   title: 'Pinned Section Sequence Pattern | GSAP Animation Showcase',

@@ -1,5 +1,5 @@
 import { Navbar } from '@/components/navigation/navbar';
-import { ScaleRevealPattern } from '@/components/patterns/scale-reveal-pattern';
+import { ScaleRevealPattern } from './scale-reveal-pattern';
 
 export default function ScaleRevealPage() {
   return (

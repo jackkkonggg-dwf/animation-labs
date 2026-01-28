@@ -1,5 +1,5 @@
 import { Navbar } from '@/components/navigation/navbar';
-import { DraggableMomentumPattern } from '@/components/patterns/draggable-momentum-pattern';
+import { DraggableMomentumPattern } from './draggable-momentum-pattern';
 
 export default function DraggableMomentumPage() {
   return (

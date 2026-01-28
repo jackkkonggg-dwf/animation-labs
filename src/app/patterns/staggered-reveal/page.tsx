@@ -1,5 +1,5 @@
 import { Navbar } from '@/components/navigation/navbar';
-import { StaggeredRevealPattern } from '@/components/patterns/staggered-reveal-pattern';
+import { StaggeredRevealPattern } from './staggered-reveal-pattern';
 
 export default function StaggeredRevealPage() {
   return (

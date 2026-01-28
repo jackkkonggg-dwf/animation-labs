@@ -1,5 +1,5 @@
 import { Navbar } from '@/components/navigation/navbar';
-import { CharTextRevealPattern } from '@/components/patterns/char-text-reveal-pattern';
+import { CharTextRevealPattern } from './char-text-reveal-pattern';
 
 export default function CharTextRevealPage() {
   return (

@@ -1,4 +1,4 @@
-import { SequentialTimelinePattern } from '@/components/patterns/sequential-timeline-pattern';
+import { SequentialTimelinePattern } from './sequential-timeline-pattern';
 
 export const metadata = {
   title: 'Sequential Timeline Pattern | GSAP Animation Showcase',

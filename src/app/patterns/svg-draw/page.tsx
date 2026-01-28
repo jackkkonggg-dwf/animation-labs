@@ -1,5 +1,5 @@
 import { Navbar } from '@/components/navigation/navbar';
-import { SvgDrawPattern } from '@/components/patterns/svg-draw-pattern';
+import { SvgDrawPattern } from './svg-draw-pattern';
 
 export default function SvgDrawPage() {
   return (

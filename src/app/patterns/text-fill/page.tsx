@@ -1,4 +1,4 @@
-import { TextFillPattern } from '@/components/patterns/text-fill-pattern';
+import { TextFillPattern } from './text-fill-pattern';
 
 export const metadata = {
   title: 'Text Fill Animation | GSAP Animation Patterns',

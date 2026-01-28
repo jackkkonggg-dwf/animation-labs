@@ -1,4 +1,4 @@
-import { SimpleParallaxPattern } from '@/components/patterns/simple-parallax-pattern';
+import { SimpleParallaxPattern } from './simple-parallax-pattern';
 
 export const metadata = {
   title: 'Simple Parallax | GSAP Animation Patterns',

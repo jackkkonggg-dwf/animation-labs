@@ -1,4 +1,4 @@
-import { WordTextRevealPattern } from '@/components/patterns/word-text-reveal-pattern';
+import { WordTextRevealPattern } from './word-text-reveal-pattern';
 
 export const metadata = {
   title: 'Word-by-Word Text Reveal | GSAP Animation Patterns',

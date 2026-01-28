@@ -1,5 +1,5 @@
 import { Navbar } from '@/components/navigation/navbar';
-import { ReducedMotionPattern } from '@/components/patterns/reduced-motion-pattern';
+import { ReducedMotionPattern } from './reduced-motion-pattern';
 
 export default function ReducedMotionPage() {
   return (

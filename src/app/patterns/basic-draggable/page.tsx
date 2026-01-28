@@ -1,5 +1,5 @@
 import { Navbar } from '@/components/navigation/navbar';
-import { BasicDraggablePattern } from '@/components/patterns/basic-draggable-pattern';
+import { BasicDraggablePattern } from './basic-draggable-pattern';
 
 export default function BasicDraggablePage() {
   return (

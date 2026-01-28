@@ -251,3 +251,22 @@ Started: Thu Jan 29 01:07:23 HKT 2026
   - `ScrollTrigger.batch()` returns an array of ScrollTrigger instances that must be tracked for cleanup
   - The portfolio cards already existed in HTML from US-003 with `.portfolio-card` class and number badges
   - Batch animations create smoother performance for large sets of elements (15+ cards)
+
+## [2026-01-29] - US-015
+- Implemented Portfolio infinite horizontal marquee animation in `src/app/dwf-labs/page.tsx`
+- Added `marqueeRowRef` with useRef to track the marquee row DOM element
+- Created separate useGSAP hook with scope: marqueeRowRef for proper cleanup
+- Infinite horizontal scroll animation: xPercent from 0 to -50
+- Duration: 20s, ease: none, repeat: -1 for seamless continuous loop
+- Scroll direction: left (xPercent goes from 0 to negative)
+- Browser verified: marquee scrolls left continuously, transform values show loop (e.g., -46% → -13%)
+- Files changed: `src/app/dwf-labs/page.tsx`, `prd.json`, `progress.txt`
+- **Learnings for future iterations:**
+  - Infinite marquee uses xPercent animation instead of scrollTrigger - it's a continuous animation independent of scroll
+  - xPercent: 0 to -50 creates perfect loop when content is duplicated (50% shift = one full content width)
+  - ease: none ensures constant speed without acceleration/deceleration
+  - repeat: -1 creates infinite loop that restarts automatically when animation completes
+  - The marquee HTML already had duplicated content from US-003 (all 15 companies listed twice)
+  - Use separate ref (marqueeRowRef) for the marquee element since it's different from the portfolio grid
+  - Browser verification: check transform value at different times to confirm continuous scrolling and looping
+---

@@ -150,18 +150,27 @@ function LiveDemo() {
 
     const cards = container.querySelectorAll('.demo-card');
 
-    // Reset to initial state
-    gsap.set(cards, { opacity: 0, y: 80, scale: 0.9 });
+    // Check if we should reduce motion (simulation or system preference)
+    const systemPrefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const shouldReduceMotion = simulateReducedMotion || systemPrefersReduced;
 
-    // Replay the animation
-    gsap.to(cards, {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      duration: 0.8,
-      stagger: 0.15,
-      ease: 'back.out(1.2)',
-    });
+    if (shouldReduceMotion) {
+      // Reduced motion - just set final state immediately
+      gsap.set(cards, { opacity: 1, y: 0, scale: 1 });
+    } else {
+      // Reset to initial state
+      gsap.set(cards, { opacity: 0, y: 80, scale: 0.9 });
+
+      // Replay the animation
+      gsap.to(cards, {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: 'back.out(1.2)',
+      });
+    }
   };
 
   useGSAP(() => {
@@ -170,24 +179,19 @@ function LiveDemo() {
 
     const cards = container.querySelectorAll('.demo-card');
 
-    // Clean up any existing context
-    const context = gsap.context();
+    // Check actual system preference for reduced motion
+    const systemPrefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Use simulation state if set, otherwise use system preference
+    const shouldReduceMotion = simulateReducedMotion || systemPrefersReduced;
 
-    // Create matchMedia for reduced motion
-    // When simulateReducedMotion is true, we'll conditionally set up the media query
-    const mm = gsap.matchMedia();
+    // Update state for UI indicator
+    setIsReducedMotion(shouldReduceMotion);
 
-    // Normal animation - full motion
-    mm.add('(prefers-reduced-motion: no-preference)', () => {
-      // Check if we're simulating reduced motion
-      if (simulateReducedMotion) {
-        setIsReducedMotion(true);
-        // Just set final state immediately
-        gsap.set(cards, { opacity: 1, y: 0, scale: 1 });
-        return;
-      }
-
-      setIsReducedMotion(false);
+    if (shouldReduceMotion) {
+      // Reduced motion - set final state immediately without animation
+      gsap.set(cards, { opacity: 1, y: 0, scale: 1 });
+    } else {
+      // Full animation
       gsap.set(cards, { opacity: 0, y: 80, scale: 0.9 });
 
       gsap.to(cards, {
@@ -202,20 +206,11 @@ function LiveDemo() {
           start: 'top 80%',
         },
       });
-    });
-
-    // Reduced motion - no animation
-    mm.add('(prefers-reduced-motion: reduce)', () => {
-      setIsReducedMotion(true);
-      // Set final state immediately without animation
-      gsap.set(cards, { opacity: 1, y: 0, scale: 1 });
-    });
+    }
 
     ScrollTrigger.refresh();
 
     return () => {
-      context.revert();
-      mm.kill(); // Kill matchMedia context
       gsap.killTweensOf(cards);
       ScrollTrigger.getAll().forEach(t => t.kill());
     };

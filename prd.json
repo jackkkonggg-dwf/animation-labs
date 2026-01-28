@@ -126,8 +126,8 @@
         "Verify in browser using agent-browser skill"
       ],
       "priority": 8,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Pinned for 3000px with scrub: 1, progress bar 0-100%, badge toggles 'Pinned Section'/'PINNED'"
     },
     {
       "id": "US-009",

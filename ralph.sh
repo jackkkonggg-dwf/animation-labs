@@ -104,7 +104,7 @@ for i in $(seq 1 $MAX_ITERATIONS); do
     echo "Running in babysit mode (interactive - press Ctrl+D to exit Claude)..."
     claude --dangerously-skip-permissions "$(cat "$RALPH_FILE")" || true
   else
-    claude --print --dangerously-skip-permissions "$(cat "$RALPH_FILE")" 2>&1 || true
+    claude --dangerously-skip-permissions --print < "$SCRIPT_DIR/RALPH.md" 2>&1 | tee /dev/stderr || true
   fi
 
   # Check for completion signal via marker file

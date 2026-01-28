@@ -157,13 +157,31 @@ export default function DWFLabsPage() {
     const serviceCards = services.querySelectorAll('.service-card');
     gsap.set(serviceCards, { y: 100, opacity: 0, scale: 0.9 });
 
-    gsap.to(serviceCards, {
+    const cardTimeline = gsap.to(serviceCards, {
       y: 0,
       opacity: 1,
       scale: 1,
       duration: 0.8,
       stagger: 0.3,
       ease: 'back.out(1.2)',
+      scrollTrigger: {
+        trigger: services,
+        start: 'top center',
+        toggleActions: 'play none none reverse',
+      },
+    });
+
+    // US-010: Services icon animations with color transform
+    const serviceIcons = services.querySelectorAll('.service-icon svg');
+    gsap.set(serviceIcons, { color: '#3f3f46' }); // zinc-700
+
+    gsap.to(serviceIcons, {
+      scale: 1.2,
+      rotation: 360,
+      color: '#f97316', // orange-500
+      duration: 0.6,
+      stagger: 0.2,
+      ease: 'back.out(1)',
       scrollTrigger: {
         trigger: services,
         start: 'top center',
@@ -216,6 +234,7 @@ export default function DWFLabsPage() {
       triggers.forEach((t) => t.kill());
       gsap.killTweensOf(progressFill);
       gsap.killTweensOf(serviceCards);
+      gsap.killTweensOf(serviceIcons);
     };
   }, { scope: servicesRef });
 

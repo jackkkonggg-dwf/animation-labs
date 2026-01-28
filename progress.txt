@@ -415,3 +415,23 @@ Started: Thu Jan 29 01:07:23 HKT 2026
   - agent-browser screenshot failed with "Resource temporarily unavailable" - this can happen when the browser is busy or resources are constrained
   - For simple styling changes, verifying via reading the file is reliable when browser tools are unavailable
 ---
+
+## [2026-01-29] - US-023
+- Implemented GPU acceleration and will-change optimization for all GSAP animations
+- Added force3D: true to all gsap.to() and gsap.set() calls (hero text, parallax layers, service cards, icons, stat circles, portfolio batch, marquee, news cards, 3D tilt, shine effect, draggable gallery)
+- Added will-change inline styles to all animated elements: transform, opacity, stroke-dashoffset
+- Verified no layout properties (width, height, top, left) are being animated
+- gsap.batch() already used for portfolio cards (15+ elements)
+- Browser verified: computed styles show matrix transforms with willChange set
+- Typecheck passed
+- Files changed: src/app/dwf-labs/page.tsx, prd.json, progress.txt
+- **Learnings for future iterations:**
+  - GSAP force3D: true ensures GPU-accelerated transforms (uses translate3d instead of translate)
+  - will-change CSS hints to browser which properties will animate, enabling optimization
+  - will-change should specify exact properties: 'transform, opacity' for animated elements
+  - For SVG stroke animations, use will-change: 'stroke-dashoffset, transform'
+  - force3D on gsap.set() is also needed for initial state, not just gsap.to()
+  - Browser verification: use window.getComputedStyle(el).transform to check for GPU acceleration (matrix() indicates 3D transform)
+  - will-change can cause performance issues if overused - only apply to elements that actually animate
+  - For batch animations (15+ elements), ScrollTrigger.batch() is more efficient than individual ScrollTriggers
+---

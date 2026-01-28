@@ -1,10 +1,8 @@
-import { Navbar } from '@/app/components/navigation/navbar';
 import { HorizontalScroll } from './_components/horizontal-scroll';
 
 export default function HorizontalScrollPage() {
   return (
     <main className="min-h-screen bg-black">
-      <Navbar />
       <HorizontalScroll routeId="horizontal-scroll" />
       <section className="h-screen flex items-center justify-center bg-gradient-to-b from-black to-[#0a0a0f]">
         <div className="text-center">

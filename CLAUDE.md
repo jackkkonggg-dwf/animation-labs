@@ -1,3 +1,51 @@
+# GSAP Animation Showcase - Development Guidelines
+
+## Tech Stack
+
+| Tool | Version | Purpose |
+|------|---------|---------|
+| React | 19.2.3 | UI framework with Server Components |
+| Next.js | 16.1.5 | App Router with React Server Components |
+| Tailwind CSS | 4.x | Utility-first styling |
+| GSAP | 3.14.2 | Animation library with all plugins (100% free) |
+| @gsap/react | 2.1.2 | React integration with useGSAP hook |
+| TypeScript | 5.x | Type safety |
+
+## Critical Design Rule
+
+> **ALWAYS use the `frontend-design` skill when making ANY type of design decision.**
+>
+> Before implementing any UI/UX changes, launch the frontend design skill to ensure:
+> - Production-grade visual quality
+> - Distinctive, non-generic aesthetics
+> - Consistency with the industrial orange design system
+> - Accessibility best practices
+>
+> To invoke: `/frontend-design` or use the Skill tool with `frontend-design`
+
+## Browser Testing Rule
+
+> **Use the `agent-browser` skill for any browser-based checks or testing.**
+>
+> When you need to verify visual output, test interactions, capture screenshots, or validate animations in a browser:
+> - Use the agent-browser skill for automated browser interactions
+> - Captures screenshots, videos, and traces for debugging
+> - Essential for verifying GSAP animations and scroll behaviors
+>
+> To invoke: `/agent-browser` or use the Skill tool with `agent-browser`
+
+## Design System
+
+- **Theme**: Industrial orange with dark zinc backgrounds
+- **Primary accent**: `orange-500` (#f97316)
+- **Backgrounds**: `zinc-950` (main), `zinc-900` (cards), `zinc-800` (elevated)
+- **Typography**: Uppercase headers with tight tracking, Geist Mono font
+- **Visual motifs**: Corner accents, diagonal stripes, scan line effects, grid patterns
+- **Easing**: Aggressive, snappy (back.out, power4.out, power3.out)
+- **Animations**: Fast durations (0.2s - 0.6s) with stagger delays
+
+---
+
 # GSAP Components
 
 ## GSAP Stagger Animation Pattern

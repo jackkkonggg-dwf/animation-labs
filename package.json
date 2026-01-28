@@ -13,7 +13,9 @@
     "gsap": "^3.14.2",
     "next": "16.1.5",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "rehype-pretty-code": "^0.14.1",
+    "shiki": "^3.21.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
@@ -31,8 +33,10 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-turbo": "^2.7.6",
     "globals": "^17.2.0",
+    "playwright": "^1.58.0",
     "tailwindcss": "^4",
     "typescript": "^5",
     "typescript-eslint": "^8.54.0"
-  }
+  },
+  "packageManager": "pnpm@10.28.1+sha512.7d7dbbca9e99447b7c3bf7a73286afaaf6be99251eb9498baefa7d406892f67b879adb3a1d7e687fc4ccc1a388c7175fbaae567a26ab44d1067b54fcb0d6a316"
 }

@@ -307,8 +307,8 @@
         "Verify in browser using agent-browser skill"
       ],
       "priority": 20,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Draggable with inertia: type 'x', throwResistance 2000, edgeResistance 0.8, snap to 14 card positions (176px spacing)"
     },
     {
       "id": "US-021",

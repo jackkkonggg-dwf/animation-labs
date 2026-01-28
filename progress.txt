@@ -213,3 +213,32 @@ Started: Wed Jan 28 20:57:54 HKT 2026
   - ScrollTrigger.create() with onUpdate callback is useful for continuous updates based on scroll state
   - When using container.querySelectorAll() with Observer, loop through elements and create individual Observers for each
 ---
+
+## [2026-01-28] - US-011
+- Created Timeline Orchestration demo at src/app/advanced-patterns/timeline-orchestration/page.tsx
+- Master timeline with 6 child timelines: introTl, spinTl, bounceTl, scaleTl, colorTl, finaleTl
+- Timeline labels for precise sequencing using tl.addLabel('labelName') and position parameter '>'
+- Position parameter '>' places next animation immediately after previous one
+- Timeline callbacks: onStart, onUpdate (tracks progress + current label), onComplete, onReverseComplete
+- Progress control: play, pause, reverse, restart buttons with isPlaying state tracking
+- Scrubber for manual timeline control: drag-to-scrub with mousedown/mousemove/mouseup event handlers
+- Nested timelines with independent control: each section has play/pause/reverse buttons
+- Timeline restart capability from specific labels via play('labelName') method
+- getLabelsArray() returns array of labels with time - used for current label detection
+- Current label detection logic: compare timeline progress with label.time / tl.duration()
+- Info banner shows: master timeline status, current label, progress percentage
+- Each demo card shows individual animation (fade+scale, rotation, bounce, scale pulse, color cycle, staggered burst)
+- Matches design system with zinc-900/95 backgrounds, orange-500 accents
+- Browser verification completed via agent-browser - screenshot captured
+- Build and lint passed successfully
+- **Learnings for future iterations:**
+  - When using position parameter '>' in timeline, it references the end time of the most recently added animation
+  - Timeline label can be used with play('labelName') to jump to and play from a specific label
+  - getLabelsArray() returns objects with { label: string, time: number } - divide time by duration() for progress ratio
+  - Child timelines should be created with { paused: true } and then added to master timeline with .add(childTl.play())
+  - For scrubber functionality, pause timeline on mousedown, update progress on mousemove, release on mouseup
+  - onUpdate callback fires frequently - use it for UI updates but avoid expensive operations
+  - Timeline progress() returns 0-1 value, time() returns seconds, duration() returns total duration in seconds
+  - Scrubber drag logic: calculate x relative to container bounds, then progress = x / width, clamp to 0-1
+  - When adding child timelines to master, use childTl.play() which returns the timeline - master waits for child to complete
+  - For state tracking in callbacks, setIsPlaying state helps keep UI in sync with timeline state

@@ -48,7 +48,7 @@ export default function RootLayout({
       <body className={`${geistMono.variable} antialiased`}>
         <GSAPProvider />
         <Navbar />
-        <div className="pt-[72px]">{children}</div>
+        <div className="relative mt-[72px]">{children}</div>
       </body>
     </html>
   );

@@ -1,4 +1,4 @@
-# Ralph V2 Agent Instructions
+# Ralph Agent Instructions
 
 You are an autonomous coding agent working on a software project.
 
@@ -96,7 +96,7 @@ After completing **exactly ONE** user story (commit + PRD update + progress log)
 
 - If you successfully completed a story: **End your response** - do NOT continue to another story. The next iteration will pick up the next story.
 - If ALL stories are now complete (all have `passes: true`):
-  1. Run: `touch .ralph-v2-complete` (in the same directory as prd.json)
+  1. Run: `touch .ralph-complete` (in the same directory as prd.json)
   2. Then end your response
 - If you could not complete a story (blocked, failed, etc.), end your response normally with an explanation
 

@@ -413,7 +413,7 @@ function FinaleSection() {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: container,
-        start: 'top center',
+        start: 'top top',
         end: '+=1500',
         scrub: 1,
         pin: true,
@@ -518,7 +518,7 @@ export default function CinematicScrollPage() {
   return (
     <main className="min-h-screen">
       {/* Info banner */}
-      <div className="sticky top-0 z-50 bg-zinc-900/95 backdrop-blur border-b border-zinc-800">
+      <div className="sticky top-[72px] z-40 bg-zinc-900/95 backdrop-blur border-b border-zinc-800">
         <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <span className="text-orange-500 text-xs font-black tracking-[0.2em] uppercase">

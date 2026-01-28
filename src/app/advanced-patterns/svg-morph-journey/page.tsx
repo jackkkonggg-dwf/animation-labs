@@ -43,7 +43,7 @@ function MorphingJourneySection() {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: container,
-        start: 'top center',
+        start: 'top top',
         end: '+=2500',
         scrub: 1,
         pin: true,
@@ -55,9 +55,9 @@ function MorphingJourneySection() {
       },
     });
 
-    // Initial state
+    // Initial state - only circle visible, all target shapes hidden
     gsap.set(shapes.circle, { opacity: 1 });
-    gsap.set([shapes.square, shapes.triangle, shapes.star], { opacity: 0 });
+    gsap.set([shapes.square, shapes.triangle, shapes.star], { opacity: 0, visibility: 'hidden' });
 
     // Morph circle to square with rotational type for smoother transition
     tl.to(shapes.circle, {
@@ -70,6 +70,8 @@ function MorphingJourneySection() {
       ease: 'power2.inOut',
       onStart: () => {
         if (labels.state) labels.state.textContent = 'Morphing: Circle → Square';
+        // Ensure target is hidden during morph
+        gsap.set(shapes.square, { visibility: 'hidden' });
       },
     }, 0);
 
@@ -81,8 +83,8 @@ function MorphingJourneySection() {
       repeat: 1,
     }, 0);
 
-    // Morph square to triangle
-    tl.to(shapes.square, {
+    // Morph square to triangle (continuing from circle which is now square-shaped)
+    tl.to(shapes.circle, {
       morphSVG: {
         shape: shapes.triangle,
         type: 'rotational',
@@ -92,6 +94,7 @@ function MorphingJourneySection() {
       ease: 'power2.inOut',
       onStart: () => {
         if (labels.state) labels.state.textContent = 'Morphing: Square → Triangle';
+        gsap.set(shapes.triangle, { visibility: 'hidden' });
       },
     }, 1);
 
@@ -104,7 +107,7 @@ function MorphingJourneySection() {
     }, 1);
 
     // Morph triangle to star
-    tl.to(shapes.triangle, {
+    tl.to(shapes.circle, {
       morphSVG: {
         shape: shapes.star,
         type: 'rotational',
@@ -114,6 +117,7 @@ function MorphingJourneySection() {
       ease: 'power2.inOut',
       onStart: () => {
         if (labels.state) labels.state.textContent = 'Morphing: Triangle → Star';
+        gsap.set(shapes.star, { visibility: 'hidden' });
       },
     }, 2);
 
@@ -122,19 +126,10 @@ function MorphingJourneySection() {
       attr: { stdDeviation: 5 },
       duration: 0.5,
       ease: 'elastic.out(1, 0.5)',
+      onStart: () => {
+        if (labels.state) labels.state.textContent = 'Final State: Star';
+      },
     }, 2.5);
-
-    // Final state label
-    tl.call(() => {
-      if (labels.state) labels.state.textContent = 'Final State: Star';
-    }, [], 3);
-
-    // DrawSVG-style stroke animation combined with morph
-    tl.fromTo(shapes.star,
-      { strokeDasharray: 1000, strokeDashoffset: 1000 },
-      { strokeDashoffset: 0, duration: 0.8, ease: 'power2.out' },
-      2.8
-    );
 
     return () => {
       ScrollTrigger.getAll().forEach((t) => t.kill());
@@ -177,20 +172,42 @@ function MorphingJourneySection() {
         {/* SVG Morphing Shapes */}
         <svg
           className="w-80 h-80"
-          viewBox="0 0 200 200"
+          viewBox="-10 -10 220 220"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          {/* Circle (initial) */}
+          {/* Target shapes (hidden, used for morphing reference only) */}
+          <path
+            id="morph-square-target"
+            d="M 40 40 L 160 40 L 160 160 L 40 160 Z"
+            fill="none"
+            stroke="none"
+          />
+
+          <path
+            id="morph-triangle-target"
+            d="M 100 30 L 170 160 L 30 160 Z"
+            fill="none"
+            stroke="none"
+          />
+
+          <path
+            id="morph-star-target"
+            d="M 100 20 L 115 75 L 175 75 L 125 110 L 145 170 L 100 135 L 55 170 L 75 110 L 25 75 L 85 75 Z"
+            fill="none"
+            stroke="none"
+          />
+
+          {/* Circle (initial and morphing shape - single visible element) */}
           <path
             id="morph-circle"
-            d="M 100 20 A 80 80 0 1 1 99.999 20.001 A 80 80 0 0 1 100 20 Z"
+            d="M 100 30 A 70 70 0 1 1 100 170 A 70 70 0 1 1 100 30 Z"
             fill="rgba(249, 115, 22, 0.2)"
             stroke="#f97316"
             strokeWidth="2"
           />
 
-          {/* Square */}
+          {/* Square (morphing target, initially hidden) */}
           <path
             id="morph-square"
             d="M 40 40 L 160 40 L 160 160 L 40 160 Z"
@@ -200,7 +217,7 @@ function MorphingJourneySection() {
             opacity="0"
           />
 
-          {/* Triangle */}
+          {/* Triangle (morphing target, initially hidden) */}
           <path
             id="morph-triangle"
             d="M 100 30 L 170 160 L 30 160 Z"
@@ -210,7 +227,7 @@ function MorphingJourneySection() {
             opacity="0"
           />
 
-          {/* Star */}
+          {/* Star (morphing target, initially hidden) */}
           <path
             id="morph-star"
             d="M 100 20 L 115 75 L 175 75 L 125 110 L 145 170 L 100 135 L 55 170 L 75 110 L 25 75 L 85 75 Z"
@@ -256,7 +273,7 @@ function MotionPathJourneySection() {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: container,
-        start: 'top center',
+        start: 'top top',
         end: '+=2000',
         scrub: 1,
         pin: true,
@@ -535,7 +552,7 @@ function CombinedShowcaseSection() {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: container,
-        start: 'top center',
+        start: 'top top',
         end: '+=3000',
         scrub: 1,
         pin: true,
@@ -693,7 +710,7 @@ export default function SVGMorphJourneyPage() {
   return (
     <main className="min-h-screen">
       {/* Info banner */}
-      <div className="sticky top-0 z-50 bg-zinc-900/95 backdrop-blur border-b border-zinc-800">
+      <div className="sticky top-[72px] z-40 bg-zinc-900/95 backdrop-blur border-b border-zinc-800">
         <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <span className="text-orange-500 text-xs font-black tracking-[0.2em] uppercase">

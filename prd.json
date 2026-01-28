@@ -123,7 +123,8 @@
       ],
       "priority": 7,
       "passes": true,
-      "notes": "Created PhysicsBox components with InertiaPlugin momentum, liveSnap grid snapping, rotation spinner with 45deg snap, collision detection with Draggable.hitTest(), visual feedback animations. Note: ThrowPropsPlugin is replaced by InertiaPlugin in GSAP 3+. SnapPlugin is built into Draggable, not a separate module."
+      "status": "removed",
+      "notes": "Created PhysicsBox components with InertiaPlugin momentum, liveSnap grid snapping, rotation spinner with 45deg snap, collision detection with Draggable.hitTest(), visual feedback animations. Note: ThrowPropsPlugin is replaced by InertiaPlugin in GSAP 3+. SnapPlugin is built into Draggable, not a separate module. DEMO REMOVED."
     },
     {
       "id": "US-008",

@@ -40,21 +40,10 @@ Create a showcase gallery of 5-6 expert-level GSAP demo pages that demonstrate c
 - [ ] Typecheck passes
 - [ ] Verify in browser using dev-browser skill
 
-### US-003: Implement Demo 2 - "Interactive Physics Playground"
-**Description:** As a developer, I want to see Draggable combined with physics animations for natural-feeling interactions.
+### ~~US-003: Implement Demo 2 - "Interactive Physics Playground"~~
+**Status:** REMOVED - Demo deleted
 
-**Acceptance Criteria:**
-- [ ] Create `/advanced-patterns/physics-playground` route
-- [ ] Draggable elements with InertiaPlugin for momentum
-- [ ] ThrowPropsPlugin for realistic physics
-- [ ] Snap-to-grid functionality with SnapPlugin
-- [ ] Collision detection between draggable elements
-- [ ] Visual feedback on collision (scale bounce, color shift)
-- [ ] Proper cleanup of all Draggable instances
-- [ ] Typecheck passes
-- [ ] Verify in browser using dev-browser skill
-
-### US-004: Implement Demo 3 - "SVG Morph & Path Journey"
+### US-003: Implement Demo 2 - "SVG Morph & Path Journey"
 **Description:** As a developer, I want to see MorphSVG and MotionPath combined for complex SVG animations.
 
 **Acceptance Criteria:**
@@ -69,7 +58,7 @@ Create a showcase gallery of 5-6 expert-level GSAP demo pages that demonstrate c
 - [ ] Typecheck passes
 - [ ] Verify in browser using dev-browser skill
 
-### US-005: Implement Demo 4 - "Text Symphony"
+### US-004: Implement Demo 3 - "Text Symphony"
 **Description:** As a developer, I want to see advanced text animations combining SplitText-style reveals with scroll and timeline control.
 
 **Acceptance Criteria:**
@@ -84,7 +73,7 @@ Create a showcase gallery of 5-6 expert-level GSAP demo pages that demonstrate c
 - [ ] Typecheck passes
 - [ ] Verify in browser using dev-browser skill
 
-### US-006: Implement Demo 5 - "Gesture & Scroll Hybrid"
+### US-005: Implement Demo 4 - "Gesture & Scroll Hybrid"
 **Description:** As a developer, I want to see mouse/touch gestures combined with scroll-based animations for rich interactions.
 
 **Acceptance Criteria:**
@@ -99,7 +88,7 @@ Create a showcase gallery of 5-6 expert-level GSAP demo pages that demonstrate c
 - [ ] Typecheck passes
 - [ ] Verify in browser using dev-browser skill
 
-### US-007: Implement Demo 6 - "Timeline Orchestration Masterclass"
+### US-006: Implement Demo 5 - "Timeline Orchestration Masterclass"
 **Description:** As a developer, I want to see complex timeline composition with labels, callbacks, and advanced control methods.
 
 **Acceptance Criteria:**
@@ -115,7 +104,7 @@ Create a showcase gallery of 5-6 expert-level GSAP demo pages that demonstrate c
 - [ ] Typecheck passes
 - [ ] Verify in browser using dev-browser skill
 
-### US-008: Create visual indicator/legend component
+### US-007: Create visual indicator/legend component
 **Description:** As a developer, I want to see which GSAP features are active at any time so I understand what's happening in the demo.
 
 **Acceptance Criteria:**
@@ -129,7 +118,7 @@ Create a showcase gallery of 5-6 expert-level GSAP demo pages that demonstrate c
 - [ ] Typecheck passes
 - [ ] Verify in browser using dev-browser skill
 
-### US-009: Create performance metrics overlay
+### US-008: Create performance metrics overlay
 **Description:** As a developer, I want to see real-time performance metrics to understand animation efficiency.
 
 **Acceptance Criteria:**
@@ -143,7 +132,7 @@ Create a showcase gallery of 5-6 expert-level GSAP demo pages that demonstrate c
 - [ ] Typecheck passes
 - [ ] Verify in browser using dev-browser skill
 
-### US-010: Create debug mode with ScrollTrigger markers
+### US-009: Create debug mode with ScrollTrigger markers
 **Description:** As a developer, I want to enable debug mode to see ScrollTrigger markers and understand trigger boundaries.
 
 **Acceptance Criteria:**
@@ -158,7 +147,7 @@ Create a showcase gallery of 5-6 expert-level GSAP demo pages that demonstrate c
 - [ ] Typecheck passes
 - [ ] Verify in browser using dev-browser skill
 
-### US-011: Register missing GSAP plugins
+### US-010: Register missing GSAP plugins
 **Description:** As a developer, I need all required GSAP plugins registered for the advanced demos to work.
 
 **Acceptance Criteria:**
@@ -171,7 +160,7 @@ Create a showcase gallery of 5-6 expert-level GSAP demo pages that demonstrate c
 - [ ] All plugins registered client-side only (check `typeof window !== 'undefined'`)
 - [ ] Typecheck passes
 
-### US-012: Install and register GSAP bonus plugins (now free!)
+### US-011: Install and register GSAP bonus plugins (now free!)
 **Description:** As a developer, I need all GSAP bonus plugins registered since they are now free with GSAP 3.13+.
 
 **Acceptance Criteria:**
@@ -271,7 +260,6 @@ Create a showcase gallery of 5-6 expert-level GSAP demo pages that demonstrate c
 /app/advanced-patterns/
   ├── page.tsx (gallery)
   ├── cinematic-scroll/page.tsx
-  ├── physics-playground/page.tsx
   ├── svg-morph-journey/page.tsx
   ├── text-symphony/page.tsx
   ├── gesture-scroll/page.tsx

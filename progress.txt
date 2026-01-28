@@ -245,7 +245,7 @@ Started: Wed Jan 28 20:57:54 HKT 2026
 
 ## [2026-01-28] - US-012
 - Created Advanced Patterns gallery page at src/app/advanced-patterns/page.tsx
-- Gallery grid layout with 6 demo cards (cinematic-scroll, physics-playground, svg-morph-journey, text-symphony, gesture-scroll, timeline-orchestration)
+- Gallery grid layout with 5 demo cards (cinematic-scroll, svg-morph-journey, text-symphony, gesture-scroll, timeline-orchestration)
 - Each demo card shows: title, description, category badge, GSAP features as tags, preview thumbnail icon
 - Category filter chips: Scroll-based (blue), Interactive (purple), Timeline-heavy (orange), Mixed (pink)
 - Filter buttons show count per category, active filter displayed as removable chip

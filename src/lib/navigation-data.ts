@@ -210,6 +210,7 @@ export const NAVIGATION_DATA: NavigationData = {
       description: 'Expert-level GSAP demos showcasing complex composition of multiple animation patterns',
       path: '/advanced-patterns',
       category: 'Advanced',
+      difficulty: 'advanced',
     },
   ],
 };

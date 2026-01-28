@@ -91,3 +91,25 @@ Started: Wed Jan 28 20:57:54 HKT 2026
   - Pinch gesture: detect when 2 touches are active, calculate distance between touch points, track scale as currentDistance / initialDistance
   - Swipe gesture: track start point/time and end point/time, calculate distance/velocity/duration, apply thresholds for minimum distance and velocity
 ---
+
+## [2026-01-28] - US-006
+- Created Cinematic Scroll demo at src/app/advanced-patterns/cinematic-scroll/page.tsx
+- Implemented 4 pinned sections with nested GSAP timelines and advanced easing
+- HeroSection: Parallax background (y: -150, scale: 1.1), grid overlay rotation, title reveal with back.out(1.7), scale/fade exit with expo.inOut
+- TextRevealSection: Word cascade stagger (0.15s), circle expansion with elastic.out(1, 0.6), border-radius morph to square, shape exit with expo.in
+- ImageRevealSection: Three layered cards with cascade entry, "dance" animations (y, rotation changes) with elastic.out and back.out easing, particle burst from center
+- FinaleSection: Line draw animation (scaleX), shape burst with elastic.out, rotation animations with expo.inOut, final scale with back.out
+- Advanced easing used throughout: back.out(1.2-2), elastic.out(1, 0.4-0.6), expo.inOut, expo.in, expo.out
+- Proper cleanup with ScrollTrigger.getAll().forEach(t => t.kill()), tl.kill(), and gsap.killTweensOf() for all animated elements
+- Info banner at top shows "4 PINNED SECTIONS" status indicator
+- Browser verification completed via agent-browser - screenshots captured showing all 4 sections with their animations
+- Build passed successfully
+- **Learnings for future iterations:**
+  - Client components cannot export metadata in Next.js App Router - remove the export or remove 'use client' directive
+  - For cinematic scroll, use longer end values (+=1500 to +=2500) to give more scroll distance for complex animations
+  - Nested timeline positioning: use position parameter (second argument) like `0.3` to overlap animations, `1.2` for sequential ordering
+  - Stagger with from: { each: 0.05, from: 'center' } creates a burst/explosion effect from center outward
+  - elastic.out parameters: (amplitude, period) - elastic.out(1, 0.6) for medium bounce, elastic.out(1, 0.4) for tighter
+  - back.out parameters: (strength) - back.out(1.7) for stronger overshoot, back.out(2) for very dramatic
+  - For parallax, animate background elements with different y values (e.g., -150 vs -80) to create depth perception
+---

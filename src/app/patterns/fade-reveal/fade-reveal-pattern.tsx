@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap, ScrollTrigger } from '@/lib/gsap-config';
+import { gsap } from '@/lib/gsap-config';
 import { PatternHeader, CodeViewer, ReplayButton } from '@/components/patterns';
 import { RelatedPatterns } from '@/components/patterns/related-patterns';
 import { PatternNavigation } from '@/components/patterns/pattern-navigation';
@@ -11,11 +11,7 @@ import { PatternNavigation } from '@/components/patterns/pattern-navigation';
 // CODE EXAMPLE
 // ============================================================================
 
-const CODE_EXAMPLE = `// ============================================================================
-// SCROLLTRIGGER FADE REVEAL PATTERN
-// ============================================================================
-
-'use client';
+const CODE_EXAMPLE = `'use client';
 
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
@@ -325,6 +321,7 @@ export function FadeRevealPattern() {
       />
       <LiveDemo />
       <CodeViewer code={CODE_EXAMPLE} language="tsx" filename="tsx" />
+      <PatternNotes />
 
       {/* Related Patterns */}
       <RelatedPatterns currentPatternId="fade-reveal" />

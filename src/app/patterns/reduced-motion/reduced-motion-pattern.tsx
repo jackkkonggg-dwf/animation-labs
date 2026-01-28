@@ -246,10 +246,7 @@ function LiveDemo() {
 // CODE VIEWER SECTION
 // ============================================================================
 
-const CODE_EXAMPLE = `// ============================================================================
-// REDUCED MOTION SUPPORT PATTERN
-// ============================================================================
-
+const CODE_EXAMPLE = `
 'use client';
 
 import { useRef } from 'react';

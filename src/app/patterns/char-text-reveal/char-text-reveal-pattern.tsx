@@ -12,10 +12,7 @@ import { splitTextToChars } from '@/lib/text-split-utils-react';
 // CODE EXAMPLE
 // ============================================================================
 
-const CODE_EXAMPLE = `// ============================================================================
-// CHARACTER TEXT REVEAL PATTERN
-// ============================================================================
-
+const CODE_EXAMPLE = `
 'use client';
 
 import { useRef } from 'react';

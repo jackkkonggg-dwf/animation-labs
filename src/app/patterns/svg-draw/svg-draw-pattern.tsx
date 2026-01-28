@@ -11,10 +11,7 @@ import { PatternNavigation } from '@/components/patterns/pattern-navigation';
 // CODE EXAMPLE
 // ============================================================================
 
-const CODE_EXAMPLE = `// ============================================================================
-// SVG PATH DRAWING PATTERN
-// ============================================================================
-
+const CODE_EXAMPLE = `
 'use client';
 
 import { useRef } from 'react';

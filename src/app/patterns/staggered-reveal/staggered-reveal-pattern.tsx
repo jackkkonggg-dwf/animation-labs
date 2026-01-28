@@ -11,10 +11,7 @@ import { PatternNavigation } from '@/components/patterns/pattern-navigation';
 // CODE EXAMPLE
 // ============================================================================
 
-const CODE_EXAMPLE = `// ============================================================================
-// SCROLLTRIGGER STAGGERED REVEAL PATTERN
-// ============================================================================
-
+const CODE_EXAMPLE = `
 'use client';
 
 import { useRef } from 'react';
@@ -343,6 +340,7 @@ export function StaggeredRevealPattern() {
       />
       <LiveDemo />
       <CodeViewer code={CODE_EXAMPLE} language="tsx" filename="tsx" />
+      <PatternNotes />
 
       {/* Related Patterns */}
       <RelatedPatterns currentPatternId="staggered-reveal" />

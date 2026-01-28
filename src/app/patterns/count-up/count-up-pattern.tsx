@@ -94,10 +94,7 @@ function CountUpCard({ label, value, suffix = '', icon, gradient, decimals = 0 }
 // CODE EXAMPLE
 // ============================================================================
 
-const CODE_EXAMPLE = `// ============================================================================
-// GSAP COUNT UP ANIMATION PATTERN
-// ============================================================================
-
+const CODE_EXAMPLE = `
 'use client';
 
 import { useRef } from 'react';

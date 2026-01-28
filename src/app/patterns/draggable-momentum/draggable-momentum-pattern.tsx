@@ -131,10 +131,7 @@ function useMomentumDraggable(
 // CODE EXAMPLE
 // ============================================================================
 
-const CODE_EXAMPLE = `// ============================================================================
-// DRAGGABLE WITH MOMENTUM PATTERN
-// ============================================================================
-
+const CODE_EXAMPLE = `
 'use client';
 
 import { useRef } from 'react';

@@ -12,10 +12,7 @@ import { splitTextToWords } from '@/lib/text-split-utils-react';
 // CODE EXAMPLE
 // ============================================================================
 
-const CODE_EXAMPLE = `// ============================================================================
-// WORD-BY-WORD TEXT REVEAL PATTERN
-// ============================================================================
-
+const CODE_EXAMPLE = `
 'use client';
 
 import { useRef } from 'react';

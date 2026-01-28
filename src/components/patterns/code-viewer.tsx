@@ -23,6 +23,10 @@ export function CodeViewer({ code, language = 'tsx', filename = 'tsx' }: CodeVie
         const html = await codeToHtml(code, {
           lang: language,
           theme: 'github-dark',
+          colorReplacements: {
+            // github-dark's default background is #0d1117
+            '#24292e': 'transparent',
+          },
         });
         setHighlightedCode(html);
       } catch {

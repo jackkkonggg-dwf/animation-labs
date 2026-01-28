@@ -70,10 +70,7 @@ function PerfCard({ title, icon, optimized, color }: PerfCardProps) {
 // CODE EXAMPLE
 // ============================================================================
 
-const CODE_EXAMPLE = `// ============================================================================
-// GSAP PERFORMANCE OPTIMIZATION PATTERN
-// ============================================================================
-
+const CODE_EXAMPLE = `
 'use client';
 
 import { useRef, useState } from 'react';

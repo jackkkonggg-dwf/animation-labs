@@ -11,7 +11,7 @@
 
 import { useRef, useEffect } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap, ScrollTrigger } from '@/lib/gsap-config';
+import { gsap, ScrollTrigger, Draggable, InertiaPlugin } from '@/lib/gsap-config';
 
 export default function DWFLabsPage() {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -20,6 +20,7 @@ export default function DWFLabsPage() {
   const portfolioRef = useRef<HTMLDivElement>(null);
   const marqueeRowRef = useRef<HTMLDivElement>(null);
   const newsRef = useRef<HTMLDivElement>(null);
+  const patternGalleryRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
     const hero = heroRef.current;
@@ -581,6 +582,51 @@ export default function DWFLabsPage() {
     };
   }, [newsRef]);
 
+  // US-020: CTA draggable pattern gallery
+  useGSAP(() => {
+    const gallery = patternGalleryRef.current;
+    if (!gallery) return;
+
+    // Get the draggable track element
+    const track = gallery.querySelector('.pattern-gallery-track') as HTMLElement;
+    if (!track) return;
+
+    // Get all pattern cards to calculate snap points
+    const cards = gallery.querySelectorAll('.pattern-card');
+    if (cards.length === 0) return;
+
+    // Calculate card width including gap for snap points
+    // Card is w-40 (160px) + gap-4 (16px) = 176px per card
+    const cardWidth = 176;
+
+    // Generate snap points for each card position
+    const snapPoints = Array.from(cards).map((_, index) => -index * cardWidth);
+
+    // Create draggable instance with InertiaPlugin
+    const draggableInstance = Draggable.create(track, {
+      type: 'x', // Horizontal dragging only
+      bounds: {
+        // Allow dragging to show all cards (negative max = scroll left)
+        minX: -(cards.length - 1) * cardWidth - 100, // Extra buffer at end
+        maxX: 100, // Small buffer at start
+      },
+      inertia: true, // Enable InertiaPlugin for smooth momentum
+      throwResistance: 2000, // Higher = more resistance (deceleration)
+      edgeResistance: 0.8, // Resistance at bounds (0 = no resistance, 1 = no movement past edge)
+      snap: {
+        x: snapPoints, // Snap to nearest card position
+      },
+      zIndexBoost: false, // Don't change z-index during drag
+    });
+
+    // Cleanup Draggable on unmount
+    return () => {
+      if (draggableInstance[0]) {
+        draggableInstance[0].kill();
+      }
+    };
+  }, { scope: patternGalleryRef });
+
   return (
     <main className="min-h-screen bg-zinc-950">
       {/* Section 1: Hero - Kinetic Text Reveal + Multi-Layer Parallax */}
@@ -1110,13 +1156,13 @@ export default function DWFLabsPage() {
           </div>
 
           {/* Pattern Gallery Preview */}
-          <div className="pattern-gallery overflow-hidden mb-16">
+          <div ref={patternGalleryRef} className="pattern-gallery overflow-hidden mb-16">
             <div className="text-center mb-8">
               <p className="text-xs text-zinc-500 uppercase tracking-widest">
                 Animation Patterns Showcase
               </p>
             </div>
-            <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+            <div className="pattern-gallery-track flex gap-4 pb-4" style={{ width: 'max-content' }}>
               {[
                 'Fade Reveal', 'Stagger', 'Parallax', 'Scrub', 'Pinned',
                 'Count Up', 'Batch', 'Char Text', 'Word Text', 'SVG Draw',
@@ -1124,7 +1170,7 @@ export default function DWFLabsPage() {
               ].map((pattern, i) => (
                 <div
                   key={pattern}
-                  className="flex-shrink-0 w-40 h-32 bg-zinc-900 border border-zinc-800 rounded-lg flex items-center justify-center text-center p-4 hover:border-orange-500/50 transition-colors duration-200"
+                  className="pattern-card flex-shrink-0 w-40 h-32 bg-zinc-900 border border-zinc-800 rounded-lg flex items-center justify-center text-center p-4 hover:border-orange-500/50 transition-colors duration-200"
                 >
                   <div>
                     <div className="text-2xl font-black text-orange-500/40 mb-2">{String(i + 1).padStart(2, '0')}</div>

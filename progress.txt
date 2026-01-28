@@ -398,3 +398,20 @@ Started: Thu Jan 29 01:07:23 HKT 2026
   - The progress text shows 14 cards total (actual count) vs 15 in original AC
   - updateActiveCard helper keeps logic DRY - called from multiple callbacks
 ---
+
+## [2026-01-29] - US-022
+- Implemented CTA button and Footer styling updates in `src/app/dwf-labs/page.tsx`
+- CTA button: 'View Ecosystem' with bg-orange-500, text-black, hover: scale 1.05, bg-orange-400 (already existed)
+- Footer: Changed copyright from "© 2025 DWF Labs. All rights reserved." to "DWF Labs © 2025"
+- Footer border-top: Changed from border-zinc-800 to border-orange-500/20
+- Social links: Twitter, LinkedIn, Telegram with hover:text-orange-500 (already existed)
+- Additional links: Privacy Policy, Terms of Service, Contact with hover:text-orange-500 (already existed)
+- Typecheck passed
+- Files changed: `src/app/dwf-labs/page.tsx`, `prd.json`, `progress.txt`
+- **Learnings for future iterations:**
+  - Most of US-022 was already implemented in US-003 (the initial page structure)
+  - Only needed two minor changes: border-top color (zinc-800 → orange-500/20) and copyright text format
+  - The CTA button styling (bg-orange-500, hover:scale-105, hover:bg-orange-400) was already correct from initial implementation
+  - agent-browser screenshot failed with "Resource temporarily unavailable" - this can happen when the browser is busy or resources are constrained
+  - For simple styling changes, verifying via reading the file is reliable when browser tools are unavailable
+---

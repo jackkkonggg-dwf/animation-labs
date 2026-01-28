@@ -73,3 +73,21 @@ Started: Wed Jan 28 20:57:54 HKT 2026
   - When using useRef with types, always provide initial value: `useRef<NodeJS.Timeout | undefined>(undefined)`
   - pnpm dlx agent-browser@latest requires the version specifier for fresh installs, and browser should be closed after use with `agent-browser close`
 ---
+
+## [2026-01-28] - US-005
+- Created performance monitor utilities at src/lib/utils/
+- performance-monitor.ts: PerformanceMonitor class with FPS tracking using requestAnimationFrame, rolling average calculation, React hook useFPSCounter
+- scroll-velocity.ts: ScrollVelocityTracker class for position/velocity/direction tracking, smooth velocity averaging, React hooks useScrollState and useScrollVelocity
+- gesture-recognizer.ts: GestureRecognizer class for swipe and pinch detection, touch/mouse/wheel event handling, React hooks useGestureRecognizer and useSwipeCallback
+- TypeScript types for all utilities: FPSState, PerformanceMetrics, ScrollState, ScrollVelocityOptions, SwipeGesture, PinchGesture, Point, etc.
+- Helper functions: getFPSColor, getFPSBgColor, getFPSStatus, getScrollProgress, isDirectionActive, getDirectionVector, isHorizontalSwipe, isVerticalSwipe, getOppositeDirection, getSwipeDirectionVector
+- Fixed TypeScript event listener type issues (EventListener expects Event, not TouchEvent/MouseEvent/WheelEvent)
+- Build and typecheck passed successfully
+- **Learnings for future iterations:**
+  - Event listener type errors: addEventListener expects handler with Event parameter, not specific event types - cast inside handler with `const e = event as TouchEvent`
+  - React hook dependency warnings: when destructuring options in dependency array (e.g., [options.updateInterval]), the linter still wants 'options' - add eslint-disable-next-line with comment explaining intentional behavior
+  - Class-based utility pattern allows both imperative usage (new PerformanceMonitor().start()) and React integration via hooks (useFPSCounter())
+  - For gesture recognition, track active touches in Map<number, Point> to handle multi-touch scenarios properly
+  - Pinch gesture: detect when 2 touches are active, calculate distance between touch points, track scale as currentDistance / initialDistance
+  - Swipe gesture: track start point/time and end point/time, calculate distance/velocity/duration, apply thresholds for minimum distance and velocity
+---

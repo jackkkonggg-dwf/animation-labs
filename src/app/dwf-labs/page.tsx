@@ -9,7 +9,7 @@
 
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 
@@ -477,6 +477,62 @@ export default function DWFLabsPage() {
     };
   }, { scope: newsRef });
 
+  // US-018: News card 3D tilt on mouse move
+  useEffect(() => {
+    const news = newsRef.current;
+    if (!news) return;
+
+    const cards = news.querySelectorAll('.news-card');
+    const cleanupFunctions: Array<() => void> = [];
+
+    cards.forEach((card) => {
+      const handleMouseMove = (e: Event) => {
+        const mouseEvent = e as MouseEvent;
+        const rect = (card as HTMLElement).getBoundingClientRect();
+        const x = (mouseEvent.clientX - rect.left) / rect.width; // Normalize to 0-1
+        const y = (mouseEvent.clientY - rect.top) / rect.height; // Normalize to 0-1
+
+        // RotateX: (y - 0.5) * -30deg (max ±15deg)
+        // RotateY: (x - 0.5) * 30deg (max ±15deg)
+        const rotateX = (y - 0.5) * -30;
+        const rotateY = (x - 0.5) * 30;
+
+        gsap.to(card, {
+          rotateX,
+          rotateY,
+          duration: 0.3,
+          ease: 'power2.out',
+          transformPerspective: 1000,
+        });
+      };
+
+      const handleMouseLeave = () => {
+        gsap.to(card, {
+          rotateX: 0,
+          rotateY: 0,
+          duration: 0.3,
+          ease: 'power2.out',
+          transformPerspective: 1000,
+        });
+      };
+
+      card.addEventListener('mousemove', handleMouseMove);
+      card.addEventListener('mouseleave', handleMouseLeave);
+
+      // Store cleanup function for this card
+      cleanupFunctions.push(() => {
+        card.removeEventListener('mousemove', handleMouseMove);
+        card.removeEventListener('mouseleave', handleMouseLeave);
+        gsap.killTweensOf(card);
+      });
+    });
+
+    // Cleanup all event listeners and tweens on unmount
+    return () => {
+      cleanupFunctions.forEach((cleanup) => cleanup());
+    };
+  }, [newsRef]);
+
   return (
     <main className="min-h-screen bg-zinc-950">
       {/* Section 1: Hero - Kinetic Text Reveal + Multi-Layer Parallax */}
@@ -934,6 +990,7 @@ export default function DWFLabsPage() {
               <article
                 key={index}
                 className="news-card group relative bg-zinc-900 border border-zinc-800 overflow-hidden hover:border-orange-500/50 transition-all duration-200"
+                style={{ transformStyle: 'preserve-3d' }}
               >
                 {/* Shine effect overlay */}
                 <div className="news-shine absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200" />

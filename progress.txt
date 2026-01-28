@@ -311,3 +311,27 @@ Started: Thu Jan 29 01:07:23 HKT 2026
   - Agent-browser eval with Array.from() and map() provides structured data from multiple elements
   - Use `document.querySelector('#section-id').scrollIntoView()` to trigger scroll-based animations during testing
 ---
+
+## [2026-01-29] - US-018
+- Implemented News card 3D tilt on mouse move in `src/app/dwf-labs/page.tsx`
+- Added useEffect hook to handle mouse events on news cards
+- Calculate mouse position relative to card center (normalized 0-1)
+- RotateX: (y - 0.5) * -30deg (max ±15deg)
+- RotateY: (x - 0.5) * 30deg (max ±15deg)
+- Update on mousemove, reset to 0deg on mouseleave
+- Duration: 0.3s, easing: power2.out, transformPerspective: 1000
+- Added transform-style: preserve-3d to news cards for proper 3D effect
+- Proper cleanup: stored cleanup functions in array, called all in useEffect return
+- Typecheck passed, dev server running and page loads
+- Manual browser verification needed for visual tilt effect
+- Files changed: `src/app/dwf-labs/page.tsx`, `prd.json`, `progress.txt`
+- **Learnings for future iterations:**
+  - For 3D tilt effects, use useEffect with event listeners (not useGSAP which is for scroll-triggered animations)
+  - Normalize mouse position by dividing by element width/height to get 0-1 range
+  - transformPerspective: 1000 is needed for proper 3D perspective effect
+  - transformStyle: 'preserve-3d' on the card element ensures child elements maintain 3D position
+  - When adding event listeners in forEach loop, collect cleanup functions and call all in useEffect return
+  - Event type casting: use `e as MouseEvent` because addEventListener expects Event type
+  - gsap.to with rotateX/rotateY creates smooth 3D transforms with easing
+  - agent-browser skill had issues with resource availability - curl verification is a reliable fallback
+---

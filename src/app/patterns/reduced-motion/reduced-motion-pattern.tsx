@@ -3,66 +3,9 @@
 import { useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from '@/lib/gsap-config';
+import { PatternHeader, CodeViewer, ReplayButton } from '@/components/patterns';
 import { RelatedPatterns } from '@/components/patterns/related-patterns';
 import { PatternNavigation } from '@/components/patterns/pattern-navigation';
-
-// ============================================================================
-// PATTERN HEADER COMPONENT
-// ============================================================================
-
-function PatternHeader() {
-  return (
-    <header className="relative border-b border-orange-500/20 bg-zinc-900/50 backdrop-blur-sm">
-      {/* Corner accent - top left */}
-      <div className="absolute top-0 left-0 w-16 h-16 border-l-2 border-t-2 border-orange-500" />
-      {/* Corner accent - bottom right */}
-      <div className="absolute bottom-0 right-0 w-16 h-16 border-r-2 border-b-2 border-orange-500" />
-
-      {/* Diagonal stripe decoration */}
-      <div className="absolute top-0 right-0 w-64 h-1 bg-gradient-to-l from-orange-500 to-transparent opacity-50" />
-
-      <div className="max-w-6xl mx-auto px-6 py-16 md:py-24">
-        {/* Category badge */}
-        <div className="inline-flex items-center gap-2 mb-6">
-          <span className="text-orange-500 text-xs font-black tracking-[0.3em] uppercase">
-            Performance
-          </span>
-          <span className="w-8 h-px bg-orange-500/50" />
-          <span className="text-emerald-400 text-xs font-bold tracking-[0.2em] uppercase">
-            Accessibility
-          </span>
-        </div>
-
-        {/* Title */}
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white tracking-tight uppercase mb-6">
-          <span className="text-orange-500">Reduced</span> Motion Support
-        </h1>
-
-        {/* Description */}
-        <p className="text-zinc-400 text-lg md:text-xl max-w-3xl font-light leading-relaxed">
-          Respect user preferences with matchMedia. Automatically disable animations for users who prefer reduced motion,
-          ensuring accessibility and a better experience for motion-sensitive users.
-        </p>
-
-        {/* Key features */}
-        <div className="flex flex-wrap gap-4 mt-8">
-          <div className="flex items-center gap-2 px-4 py-2 bg-zinc-800/50 border border-zinc-700/50 rounded">
-            <span className="w-2 h-2 bg-orange-500 rounded-full animate-pulse" />
-            <span className="text-zinc-300 text-sm font-mono">matchMedia()</span>
-          </div>
-          <div className="flex items-center gap-2 px-4 py-2 bg-zinc-800/50 border border-zinc-700/50 rounded">
-            <span className="w-2 h-2 bg-orange-500 rounded-full animate-pulse" />
-            <span className="text-zinc-300 text-sm font-mono">prefers-reduced-motion</span>
-          </div>
-          <div className="flex items-center gap-2 px-4 py-2 bg-zinc-800/50 border border-zinc-700/50 rounded">
-            <span className="w-2 h-2 bg-orange-500 rounded-full animate-pulse" />
-            <span className="text-zinc-300 text-sm font-mono">Conditional animations</span>
-          </div>
-        </div>
-      </div>
-    </header>
-  );
-}
 
 // ============================================================================
 // REDUCED MOTION TOGGLE (for demo purposes)
@@ -292,28 +235,7 @@ function LiveDemo() {
           </div>
 
           {/* Replay button */}
-          <div className="flex justify-center mt-12">
-            <button
-              onClick={handleReplay}
-              className="group relative px-6 py-3 bg-zinc-800 border border-zinc-700 hover:border-orange-500 rounded transition-all duration-300 flex items-center gap-3"
-            >
-              <svg
-                className="w-5 h-5 text-zinc-500 group-hover:text-orange-500 transition-colors group-hover:rotate-180 transition-transform duration-500"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-              <span className="text-zinc-400 group-hover:text-orange-500 transition-colors text-sm font-bold uppercase tracking-wider">
-                Replay Animation
-              </span>
-              {/* Scan line effect */}
-              <div className="absolute inset-0 overflow-hidden rounded">
-                <div className="w-1 h-full bg-white/10 skew-x-[-12deg] translate-x-[-100%] group-hover:translate-x-[400%] transition-transform duration-700 ease-in-out" />
-              </div>
-            </button>
-          </div>
+          <ReplayButton onReplay={handleReplay} />
         </div>
       </section>
     </>
@@ -324,10 +246,7 @@ function LiveDemo() {
 // CODE VIEWER SECTION
 // ============================================================================
 
-function CodeViewer() {
-  const [copied, setCopied] = useState(false);
-
-  const code = `// ============================================================================
+const CODE_EXAMPLE = `// ============================================================================
 // REDUCED MOTION SUPPORT PATTERN
 // ============================================================================
 
@@ -395,141 +314,6 @@ export function ReducedMotionComponent() {
     </div>
   );
 }`;
-
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  return (
-    <section className="relative border-b border-zinc-800 bg-zinc-900/30">
-      {/* Diagonal stripe decoration */}
-      <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-orange-500 to-transparent" />
-
-      <div className="max-w-6xl mx-auto px-6 py-16">
-        {/* Section header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h2 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight flex items-center gap-4">
-              <span className="w-3 h-8 bg-orange-500" />
-              Code
-            </h2>
-            <p className="text-zinc-500 mt-3 ml-7">Copy and paste into your project</p>
-          </div>
-
-          {/* Copy button */}
-          <button
-            onClick={handleCopy}
-            className="group relative px-6 py-3 bg-zinc-800 border border-zinc-700 hover:border-orange-500 rounded transition-all duration-300 flex items-center gap-3"
-          >
-            <span className="text-zinc-400 group-hover:text-orange-500 transition-colors text-sm font-bold uppercase tracking-wider">
-              {copied ? 'Copied!' : 'Copy Code'}
-            </span>
-            <svg
-              className={`w-5 h-5 text-zinc-500 group-hover:text-orange-500 transition-all duration-300 ${copied ? 'scale-110' : ''}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              {copied ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-              )}
-            </svg>
-            {/* Scan line effect */}
-            <div className="absolute inset-0 overflow-hidden rounded">
-              <div className="w-1 h-full bg-white/10 skew-x-[-12deg] translate-x-[-100%] group-hover:translate-x-[400%] transition-transform duration-700 ease-in-out" />
-            </div>
-          </button>
-        </div>
-
-        {/* Code block */}
-        <div className="relative bg-zinc-950 border border-zinc-800 rounded-lg overflow-hidden">
-          {/* Corner accents */}
-          <div className="absolute top-0 left-0 w-4 h-4 border-l-2 border-t-2 border-orange-500" />
-          <div className="absolute top-0 right-0 w-4 h-4 border-r-2 border-t-2 border-orange-500" />
-
-          {/* Language badge */}
-          <div className="absolute top-4 right-4 px-3 py-1 bg-zinc-800 border border-zinc-700 rounded text-xs font-mono text-zinc-400 uppercase">
-            TSX
-          </div>
-
-          {/* Code content */}
-          <pre className="p-6 pt-8 overflow-x-auto text-sm">
-            <code className="font-mono leading-relaxed">
-              <span className="text-zinc-500">{`// ============================================================================`}</span><br />
-              <span className="text-zinc-500">{`// REDUCED MOTION SUPPORT PATTERN`}</span><br />
-              <span className="text-zinc-500">{`// ============================================================================`}</span><br />
-              <br />
-              <span className="text-purple-400">{`'use client'`}</span><span className="text-white">;</span><br />
-              <br />
-              <span className="text-purple-400">{`import`}</span><span className="text-white">{` { useRef } `}</span><span className="text-purple-400">{`from`}</span><span className="text-cyan-400">{` 'react'`}</span><span className="text-white">;</span><br />
-              <span className="text-purple-400">{`import`}</span><span className="text-white">{` { useGSAP } `}</span><span className="text-purple-400">{`from`}</span><span className="text-cyan-400">{` '@gsap/react'`}</span><span className="text-white">;</span><br />
-              <span className="text-purple-400">{`import`}</span><span className="text-white">{` { gsap, ScrollTrigger } `}</span><span className="text-purple-400">{`from`}</span><span className="text-cyan-400">{` '@/lib/gsap-config'`}</span><span className="text-white">;</span><br />
-              <br />
-              <span className="text-purple-400">{`export`}</span><span className="text-purple-400">{` function`}</span><span className="text-yellow-300">{` ReducedMotionComponent`}</span><span className="text-white">() {`{`}</span><br />
-              &nbsp;&nbsp;<span className="text-purple-400">{`const`}</span><span className="text-white">{` containerRef `}</span><span className="text-purple-400">{`= useRef`}</span><span className="text-orange-400">{`&lt;HTMLDivElement&gt;`}</span><span className="text-white">(null);</span><br />
-              <br />
-              &nbsp;&nbsp;<span className="text-blue-400">{`useGSAP`}</span><span className="text-white">(() {`=>`} {`{`}</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400">{`const`}</span><span className="text-white">{` container `}</span><span className="text-purple-400">{`= containerRef.current`}</span><span className="text-white">;</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400">{`if`}</span><span className="text-white"> (!container) </span><span className="text-purple-400">{`return`}</span><span className="text-white">;</span><br />
-              <br />
-              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400">{`const`}</span><span className="text-white">{` elements `}</span><span className="text-purple-400">{`= container.querySelectorAll`}</span><span className="text-cyan-400">{`('.animate-item')`}</span><span className="text-white">;</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400">{`const`}</span><span className="text-white">{` mm `}</span><span className="text-purple-400">{`= gsap.matchMedia`}</span><span className="text-white">();</span><br />
-              <br />
-              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-zinc-500">{`// Normal animation - full motion for users who prefer it`}</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-blue-400">{`mm.add`}</span><span className="text-white">(</span><span className="text-cyan-400">{`'(prefers-reduced-motion: no-preference)'`}</span><span className="text-white">, () {`=>`} {`{`}</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-zinc-500">{`// Set initial state`}</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-blue-400">{`gsap.set`}</span><span className="text-white">(elements, {`{`}</span><span className="text-white">{` opacity: 0, y: 60 `}</span><span className="text-white">{`}`});</span><br />
-              <br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-zinc-500">{`// Animate with full effects`}</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-blue-400">{`gsap.to`}</span><span className="text-white">(elements, {`{`}</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`opacity: 1,`}</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`y: 0,`}</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`duration: 0.6,`}</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`stagger: 0.15,`}</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`ease: 'power2.out',`}</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`scrollTrigger: {`}</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`trigger: container,`}</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`start: 'top 80%',`}</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`toggleActions: 'play none none reverse',`}</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`}`}</span><span className="text-white">{`},`}</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`}`});</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`}`});</span><br />
-              <br />
-              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-zinc-500">{`// Reduced motion - skip animation for users who prefer less motion`}</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-blue-400">{`mm.add`}</span><span className="text-white">(</span><span className="text-cyan-400">{`'(prefers-reduced-motion: reduce)'`}</span><span className="text-white">, () {`=>`} {`{`}</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-zinc-500">{`// Set final state immediately without animation`}</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-blue-400">{`gsap.set`}</span><span className="text-white">(elements, {`{`}</span><span className="text-white">{` opacity: 1, y: 0 `}</span><span className="text-white">{`}`});</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`}`});</span><br />
-              <br />
-              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-zinc-500">{`// Cleanup`}</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400">{`return`}</span><span className="text-white"> () {`=>`}</span><span className="text-white">{` {`}</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-blue-400">{`mm.kill`}</span><span className="text-white">(); </span><span className="text-zinc-500">{`// Important: kill matchMedia context`}</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-blue-400">{`ScrollTrigger.getAll`}</span><span className="text-white">().forEach(t {`=>`} t.kill());</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-white">{`}`});</span><br />
-              &nbsp;&nbsp;<span className="text-white">{`}`}</span>, <span className="text-white">{`{ scope: containerRef `}</span><span className="text-white">{`}`});</span><br />
-              <br />
-              &nbsp;&nbsp;<span className="text-purple-400">{`return`}</span><span className="text-white"> (</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400">{`&lt;div`}</span><span className="text-white">{` ref={containerRef} `}</span><span className="text-cyan-400">{`className="space-y-4"`}</span><span className="text-purple-400">{`&gt;`}</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400">{`&lt;div`}</span><span className="text-white">{` className="animate-item bg-zinc-800 p-6 rounded" `}</span><span className="text-purple-400">{`&gt;`}</span><span className="text-white">{`Card 1`}</span><span className="text-purple-400">{`&lt;/div&gt;`}</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400">{`&lt;div`}</span><span className="text-white">{` className="animate-item bg-zinc-800 p-6 rounded" `}</span><span className="text-purple-400">{`&gt;`}</span><span className="text-white">{`Card 2`}</span><span className="text-purple-400">{`&lt;/div&gt;`}</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400">{`&lt;div`}</span><span className="text-white">{` className="animate-item bg-zinc-800 p-6 rounded" `}</span><span className="text-purple-400">{`&gt;`}</span><span className="text-white">{`Card 3`}</span><span className="text-purple-400">{`&lt;/div&gt;`}</span><br />
-              &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-purple-400">{`&lt;/div&gt;`}</span><br />
-              &nbsp;&nbsp;<span className="text-white">{`);`}</span><br />
-              <span className="text-white">{`}`}</span>
-            </code>
-          </pre>
-
-          {/* Bottom scan line */}
-          <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-50" />
-        </div>
-      </div>
-    </section>
-  );
-}
 
 // ============================================================================
 // KEY CONCEPTS SECTION
@@ -672,9 +456,20 @@ function SystemPreferencesInfo() {
 export function ReducedMotionPattern() {
   return (
     <div className="min-h-screen bg-zinc-950">
-      <PatternHeader />
+      <PatternHeader
+        category="Performance"
+        difficulty="Accessibility"
+        title="Motion Support"
+        titleHighlight="Reduced"
+        description="Respect user preferences with matchMedia. Automatically disable animations for users who prefer reduced motion, ensuring accessibility and a better experience for motion-sensitive users."
+        features={[
+          { label: 'matchMedia()' },
+          { label: 'prefers-reduced-motion' },
+          { label: 'Conditional animations' },
+        ]}
+      />
       <LiveDemo />
-      <CodeViewer />
+      <CodeViewer code={CODE_EXAMPLE} language="tsx" filename="tsx" />
       <KeyConcepts />
       <SystemPreferencesInfo />
 

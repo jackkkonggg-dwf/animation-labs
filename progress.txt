@@ -27,3 +27,24 @@ Started: Thu Jan 29 01:07:23 HKT 2026
   - agent-browser CLI is available via `pnpm dlx agent-browser` for browser testing
   - Screenshots saved to `/tmp/` for verification
 ---
+
+## [2026-01-29] - US-003
+- Created complete DWF Labs page structure with all 6 sections in `src/app/dwf-labs/page.tsx`
+- Hero section: Character/word split for animations, multi-layer parallax background (grid, shapes, particles), SVG corner accents
+- Services section: Pinned badge, progress bar, 3 service cards with number badges and icons
+- Stats section: Circular SVG progress indicators, stat counters with data-target attributes
+- Portfolio section: 15 company cards in grid layout, infinite horizontal marquee placeholder
+- News section: 6 article cards with date badges, thumbnail placeholders, and shine effect overlay
+- CTA/Footer: View Ecosystem button, pattern gallery preview, footer with social links and legal links
+- Applied Animation Labs theme: bg-zinc-950, orange-500 accents, uppercase tracking, corner accents
+- All DWF content preserved from storyboard (services copy, stats numbers, portfolio companies, news articles)
+- Typecheck passed, browser verified with full-page screenshot (5589px height showing all sections)
+- Files changed: `src/app/dwf-labs/page.tsx`, `prd.json`
+- **Learnings for future iterations:**
+  - Split text into span elements for character/word animations upfront (easier than splitting later)
+  - Use data-target attributes on counter elements for count-up animations (JS reads these values)
+  - SVG circles need strokeDasharray and strokeDashoffset calculated (circumference = 2 * PI * r)
+  - Agent-browser requires separate commands: open, then screenshot --full (not in single command)
+  - Dev server must run in background before agent-browser can connect
+  - The cleanup pattern from CLAUDE.md is critical: Track ScrollTriggers array, kill in cleanup return
+---

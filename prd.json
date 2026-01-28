@@ -353,8 +353,8 @@
         "Verify in browser using agent-browser skill (Chrome DevTools Performance)"
       ],
       "priority": 23,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Added force3D: true to all GSAP animations, added will-change CSS to all animated elements (transform, opacity, stroke-dashoffset). Verified GPU transforms active via browser check. No layout properties animated. gsap.batch() used for portfolio cards."
     },
     {
       "id": "US-024",

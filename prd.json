@@ -234,8 +234,8 @@
         "Verify in browser using agent-browser skill"
       ],
       "priority": 13,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Added Advanced Patterns gallery route to navigation data. Entry point appears in mobile menu and home page navigation. Verified in browser - link works correctly."
     }
   ]
 }

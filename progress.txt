@@ -262,3 +262,19 @@ Started: Wed Jan 28 20:57:54 HKT 2026
   - GSAP timeline type: use `ReturnType<typeof gsap.timeline>` instead of trying to import a Timeline type from gsap
   - When using find() on getLabelsArray() result, add explicit type annotation for the parameter: `(label: { label: string; time: number }) => ...`
   - The demo cards follow the same pattern as the main DemoGrid component but with category filtering instead of difficulty
+
+## [2026-01-28] - US-013
+- Updated src/lib/navigation-data.ts with Advanced Patterns gallery route
+- Added navigation entry at /advanced-patterns with title "Advanced Patterns" and category "Advanced"
+- Navigation entry now appears in mobile menu and home page navigation
+- Lint passed with 0 errors (only pre-existing warnings)
+- Browser verification completed - Advanced Patterns link is visible in navigation menu and page loads correctly (HTTP 200)
+- Screenshot captured showing navigation entry on home page
+- **Learnings for future iterations:**
+  - Navigation routes are added to NAVIGATION_DATA.routes array in src/lib/navigation-data.ts
+  - Each route requires: id, title, description, path, and optional category/difficulty
+  - The mobile menu component reads from NAVIGATION_DATA.homeRoute + NAVIGATION_DATA.routes
+  - The home page DemoGrid also reads from NAVIGATION_DATA.routes to display pattern cards
+  - agent-browser can be unreliable with background processes - simpler approach is to verify with curl for HTTP status and take screenshots
+  - For browser verification, ensure dev server is running before launching agent-browser
+---

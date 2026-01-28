@@ -242,3 +242,23 @@ Started: Wed Jan 28 20:57:54 HKT 2026
   - Scrubber drag logic: calculate x relative to container bounds, then progress = x / width, clamp to 0-1
   - When adding child timelines to master, use childTl.play() which returns the timeline - master waits for child to complete
   - For state tracking in callbacks, setIsPlaying state helps keep UI in sync with timeline state
+
+## [2026-01-28] - US-012
+- Created Advanced Patterns gallery page at src/app/advanced-patterns/page.tsx
+- Gallery grid layout with 6 demo cards (cinematic-scroll, physics-playground, svg-morph-journey, text-symphony, gesture-scroll, timeline-orchestration)
+- Each demo card shows: title, description, category badge, GSAP features as tags, preview thumbnail icon
+- Category filter chips: Scroll-based (blue), Interactive (purple), Timeline-heavy (orange), Mixed (pink)
+- Filter buttons show count per category, active filter displayed as removable chip
+- Cards use hover animation (scale + shadow) matching design system with corner accents and scan line effect
+- Links to all 6 demo pages via Next.js Link component
+- Fixed TypeScript error in timeline-orchestration: changed `gsap.CoreTimeline` to `ReturnType<typeof gsap.timeline>` for proper type inference
+- Fixed TypeScript error for label parameter in getLabelsArray().find() - added explicit type annotation `{ label: string; time: number }`
+- Browser verification completed via agent-browser - screenshots captured showing gallery page
+- Build and typecheck passed successfully
+- **Learnings for future iterations:**
+  - For gallery pages, use useMemo for filtering demos to avoid recalculating on every render
+  - Category badge styles can be consolidated into a single function with switch statement for cleaner code
+  - The scan line effect is achieved with a CSS animation using a skewed div translating across the container
+  - GSAP timeline type: use `ReturnType<typeof gsap.timeline>` instead of trying to import a Timeline type from gsap
+  - When using find() on getLabelsArray() result, add explicit type annotation for the parameter: `(label: { label: string; time: number }) => ...`
+  - The demo cards follow the same pattern as the main DemoGrid component but with category filtering instead of difficulty

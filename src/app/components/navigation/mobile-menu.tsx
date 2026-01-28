@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useGSAP } from '@gsap/react';
 import { gsap } from '@/lib/gsap-config';
@@ -19,6 +19,12 @@ export function MobileMenu({ isOpen, onToggle }: MobileMenuProps) {
   const contentRef = useRef<HTMLDivElement>(null);
   const menuItemsRef = useRef<HTMLDivElement>(null);
   const gridPatternRef = useRef<HTMLDivElement>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Set mounted state on client-side after hydration
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const routes: NavigationRoute[] = [
     NAVIGATION_DATA.homeRoute,
@@ -105,7 +111,7 @@ export function MobileMenu({ isOpen, onToggle }: MobileMenuProps) {
     <>
       <HamburgerButton isOpen={isOpen} onToggle={onToggle} />
 
-      {typeof document !== 'undefined' && createPortal(
+      {isMounted && createPortal(
         <div
           ref={overlayRef}
           className="fixed inset-0 bg-black z-9999 opacity-0 pointer-events-none"

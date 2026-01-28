@@ -368,3 +368,35 @@ Started: Wed Jan 28 04:56:36 HKT 2026
   - Use Draggable.get(element)?.kill() for cleanup - the optional chaining is necessary in case element doesn't have a Draggable instance
   - Interactive patterns like Draggable require client-side JavaScript to work - browser automation may show static HTML in some testing setups
 ---
+
+## [2025-01-28] - US-018
+- Created src/app/patterns/draggable-momentum/page.tsx as the entry point for the draggable momentum pattern
+- Created src/components/patterns/draggable-momentum-pattern.tsx with full implementation
+- Draggable momentum pattern: custom velocity tracking during drag for physics-based throw effects
+- useMomentumDraggable hook implementation:
+  - Tracks position changes during onDrag to calculate velocity (pixels per millisecond)
+  - Stores velocity samples (max 5) and averages them for smooth, consistent momentum
+  - On drag end, calculates target position: current + (velocity * 1000 * duration * 0.5)
+  - Applies gsap.to() animation with duration scaled by velocity magnitude
+  - Proper bounds constraint calculation for bounded throws
+- Three demo boxes showing different momentum effects:
+  - Free Throw (🚀): Unbounded momentum with no container constraints
+  - Bounded (🎳): Bounded throw with edgeResistance: 0.9 for resistance at edges
+  - Snappy (⚡): Shorter duration (0.8s) with back.out(1.2) easing for playful bounce-back
+- Code viewer with syntax-highlighted TypeScript/JSX code showing momentum drag pattern
+- Copy to clipboard button with scan line hover effect and "Copied!" state feedback
+- Proper cleanup: Draggable.get(element)?.kill() and gsap.killTweensOf(element) in useGSAP return function
+- 4 key concept cards explaining: velocity tracking, on drag end momentum application, syncing Draggable, killing tweens
+- Follows same industrial orange design system: zinc-950 background, zinc-900 cards, orange-500 accents
+- Build and typecheck passed, browser verified with screenshot
+- **Learnings for future iterations:**
+  - GSAP InertiaPlugin is a PAID plugin - custom velocity tracking is required for free implementations
+  - Velocity calculation: store samples of (currentPosition - lastPosition) / deltaTime and average for smoothness
+  - Target position formula: current + (velocity * 1000ms * duration * 0.5) gives natural throw distance
+  - Scale animation duration by velocity magnitude: duration * Math.min(totalVelocity * 20, 1) prevents slow glide on gentle throws
+  - gsap.killTweensOf(element) in onDragStart is critical - prevents momentum animation from interfering with new drag
+  - Draggable's x and y properties are read-only in TypeScript - don't try to assign them directly
+  - When using gsap.to() on element's x/y transforms, Draggable correctly reads the computed transform on next drag without manual sync
+  - JSX parsing issue: sequences like `gsap.``}` in template literals can cause parsing errors - split into separate spans or escape properly
+  - For hook parameters with RefObjects, use `RefObject<HTMLDivElement | null>` to allow null values, then use optional chaining `containerRef?.current`
+---

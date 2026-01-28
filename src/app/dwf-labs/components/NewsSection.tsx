@@ -114,7 +114,7 @@ export function NewsSection({ prefersReducedMotion }: NewsSectionProps) {
             duration: 0.3,
             ease: 'power2.out',
             force3D: true, // GPU acceleration
-            background: `radial-gradient(circle 100px at ${xPos}px ${yPos}px, rgba(255, 255, 255, 0.3), transparent)`,
+            background: `radial-gradient(circle 100px at ${xPos}px ${yPos}px, rgba(249, 115, 22, 0.4), transparent)`,
           });
         }
 
@@ -185,13 +185,31 @@ export function NewsSection({ prefersReducedMotion }: NewsSectionProps) {
     <section
       ref={newsRef}
       id="news"
-      className="relative py-24 px-4 bg-zinc-900/50"
+      className="relative py-24 px-4 overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto">
+      {/* Animated background */}
+      <div className="absolute inset-0 pointer-events-none">
+        {/* Gradient backdrop */}
+        <div className="absolute inset-0 bg-gradient-to-b from-zinc-950 via-zinc-900/60 to-zinc-950" />
+
+        {/* Subtle orange ambient glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-orange-500/5 rounded-full blur-[200px] animate-pulse" style={{ animationDuration: '18s' }} />
+
+        {/* Grid pattern */}
+        <div className="absolute inset-0 opacity-8" style={{
+          backgroundImage: `
+            linear-gradient(rgba(249, 115, 22, 0.04) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(249, 115, 22, 0.04) 1px, transparent 1px)
+          `,
+          backgroundSize: '90px 90px'
+        }} />
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-white uppercase tracking-wider mb-4">
-            Latest <span className="text-orange-500">News</span>
+          <h2 className="text-4xl md:text-5xl font-bold text-white uppercase tracking-wider mb-4" style={{ textShadow: '0 0 40px rgba(249,115,22,0.3)' }}>
+            Latest <span className="text-orange-500" style={{ textShadow: '0 0 50px rgba(249,115,22,0.5)' }}>News</span>
           </h2>
           <p className="text-zinc-500 text-sm uppercase tracking-[0.15em]">
             Stay updated with our latest developments
@@ -203,7 +221,7 @@ export function NewsSection({ prefersReducedMotion }: NewsSectionProps) {
           {newsArticles.map((article) => (
             <article
               key={article.id}
-              className="news-card group relative bg-zinc-900 border border-zinc-800 overflow-hidden hover:border-orange-500/50 transition-all duration-200"
+              className="news-card group relative bg-zinc-900/60 backdrop-blur-sm border border-zinc-800 overflow-hidden hover:border-orange-500/50 transition-all duration-300"
               style={{ transformStyle: 'preserve-3d', willChange: 'transform' }}
             >
               {/* Shine effect overlay */}
@@ -213,27 +231,33 @@ export function NewsSection({ prefersReducedMotion }: NewsSectionProps) {
               <NewsThumbnail article={article} />
 
               {/* Content */}
-              <div className="p-6">
+              <div className="p-6 relative">
                 {/* Date badge */}
                 <div className="inline-flex items-center gap-2 bg-orange-500/10 border border-orange-500/20 rounded-full px-3 py-1 mb-4">
-                  <div className="w-1.5 h-1.5 bg-orange-500 rounded-full" />
+                  <div className="relative">
+                    <div className="w-1.5 h-1.5 bg-orange-500 rounded-full" />
+                    <div className="absolute inset-0 w-1.5 h-1.5 bg-orange-500 rounded-full animate-ping opacity-30" />
+                  </div>
                   <span className="text-xs text-orange-500 uppercase tracking-wider">{article.date}</span>
                 </div>
 
                 {/* Category badge */}
                 <div className="mb-3">
-                  <span className="text-xs text-zinc-500 uppercase tracking-wider">{article.badge}</span>
+                  <span className="text-xs text-zinc-500 uppercase tracking-wider group-hover:text-zinc-400 transition-colors duration-300">{article.badge}</span>
                 </div>
 
                 {/* Title */}
-                <h3 className="text-sm font-medium text-zinc-300 group-hover:text-white transition-colors duration-200 leading-relaxed">
+                <h3 className="text-sm font-medium text-zinc-300 group-hover:text-white transition-colors duration-300 leading-relaxed">
                   {article.title}
                 </h3>
               </div>
 
               {/* Corner accents */}
-              <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-              <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-orange-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+              <div className="absolute top-0 left-0 w-0 h-0 border-t-2 border-l-2 border-orange-500 transition-all duration-500 ease-out group-hover:w-8 group-hover:h-8" />
+              <div className="absolute bottom-0 right-0 w-0 h-0 border-b-2 border-r-2 border-orange-500 transition-all duration-500 ease-out group-hover:w-8 group-hover:h-8" />
+
+              {/* Glow effect on hover */}
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-500/0 to-orange-500/0 transition-all duration-500 group-hover:from-orange-500/5 group-hover:to-orange-500/0 pointer-events-none" />
             </article>
           ))}
         </div>

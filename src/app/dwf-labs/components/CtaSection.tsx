@@ -9,133 +9,37 @@
 
 'use client';
 
-import { useRef } from 'react';
-import { useGSAP } from '@gsap/react';
-import { gsap, ScrollTrigger, Draggable } from '@/lib/gsap-config';
-
 interface CtaSectionProps {
   prefersReducedMotion: boolean;
 }
 
 export function CtaSection({ prefersReducedMotion }: CtaSectionProps) {
-  const patternGalleryRef = useRef<HTMLDivElement>(null);
-
-  // US-020: CTA draggable pattern gallery
-  // US-021: Active card scale and progress indicator
-  useGSAP(() => {
-    // US-026: Skip all animations if reduced motion is preferred
-    if (prefersReducedMotion) return;
-
-    const gallery = patternGalleryRef.current;
-    if (!gallery) return;
-
-    // Get the draggable track element
-    const track = gallery.querySelector('.pattern-gallery-track') as HTMLElement;
-    if (!track) return;
-
-    // Get all pattern cards to calculate snap points
-    const cards = gallery.querySelectorAll('.pattern-card');
-    if (cards.length === 0) return;
-
-    // Calculate card width including gap for snap points
-    // Card is w-40 (160px) + gap-4 (16px) = 176px per card
-    const cardWidth = 176;
-
-    // Generate snap points for each card position
-    const snapPoints = Array.from(cards).map((_, index) => -index * cardWidth);
-
-    // Get progress indicator elements
-    const progressFill = gallery.querySelector('.pattern-progress-fill') as HTMLElement;
-    const progressText = gallery.querySelector('.pattern-progress-text') as HTMLElement;
-
-    // US-021: Helper function to update active card and progress
-    const updateActiveCard = (xPosition: number) => {
-      const galleryWidth = gallery.offsetWidth;
-      const galleryCenter = galleryWidth / 2;
-
-      // Calculate which card is centered
-      // xPosition is negative when scrolled right, so we add offset to find centered card
-      const centeredIndex = Math.round(-xPosition / cardWidth);
-      const clampedIndex = Math.max(0, Math.min(centeredIndex, cards.length - 1));
-
-      // Scale the active card to 1.1, reset others to 1.0
-      cards.forEach((card, index) => {
-        const isActive = index === clampedIndex;
-        gsap.to(card, {
-          scale: isActive ? 1.1 : 1.0,
-          duration: 0.3,
-          ease: 'power2.out',
-          force3D: true, // GPU acceleration
-        });
-      });
-
-      // Update progress bar width (0% to 100% based on position)
-      const totalScrollWidth = (cards.length - 1) * cardWidth;
-      const progress = Math.min(Math.max(-xPosition / totalScrollWidth, 0), 1);
-      if (progressFill) {
-        gsap.to(progressFill, {
-          width: `${progress * 100}%`,
-          duration: 0.3,
-          ease: 'power2.out',
-          force3D: true, // GPU acceleration
-        });
-      }
-
-      // Update progress text "Pattern X/14"
-      if (progressText) {
-        progressText.textContent = `Pattern ${clampedIndex + 1}/${cards.length}`;
-      }
-    };
-
-    // Create draggable instance with InertiaPlugin
-    const draggableInstance = Draggable.create(track, {
-      type: 'x', // Horizontal dragging only
-      bounds: {
-        // Allow dragging to show all cards (negative max = scroll left)
-        minX: -(cards.length - 1) * cardWidth - 100, // Extra buffer at end
-        maxX: 100, // Small buffer at start
-      },
-      inertia: true, // Enable InertiaPlugin for smooth momentum
-      throwResistance: 2000, // Higher = more resistance (deceleration)
-      edgeResistance: 0.8, // Resistance at bounds (0 = no resistance, 1 = no movement past edge)
-      snap: {
-        x: snapPoints, // Snap to nearest card position
-      },
-      zIndexBoost: false, // Don't change z-index during drag
-      // US-021: Update active card and progress during drag
-      onDrag: function() {
-        updateActiveCard(this.x);
-      },
-      // US-021: Update active card and progress when drag ends
-      onDragEnd: function() {
-        updateActiveCard(this.x);
-      },
-      // US-021: Also update on throw update (inertia animation)
-      onThrowUpdate: function() {
-        updateActiveCard(this.x);
-      },
-    });
-
-    // US-021: Initialize with first card active
-    updateActiveCard(0);
-
-    // Cleanup Draggable on unmount
-    return () => {
-      if (draggableInstance[0]) {
-        draggableInstance[0].kill();
-      }
-      gsap.killTweensOf(cards);
-      if (progressFill) gsap.killTweensOf(progressFill);
-    };
-  }, { scope: patternGalleryRef, dependencies: [prefersReducedMotion] });
 
   return (
-    <section id="cta" className="relative py-24 px-4">
-      <div className="max-w-7xl mx-auto">
+    <section id="cta" className="relative py-24 px-4 overflow-hidden">
+      {/* Animated background */}
+      <div className="absolute inset-0 pointer-events-none">
+        {/* Gradient backdrop */}
+        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-900/40 to-zinc-950" />
+
+        {/* Subtle ambient orange glow */}
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-orange-500/6 rounded-full blur-[180px] animate-pulse" style={{ animationDuration: '20s' }} />
+
+        {/* Subtle grid pattern */}
+        <div className="absolute inset-0 opacity-5" style={{
+          backgroundImage: `
+            linear-gradient(rgba(249, 115, 22, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(249, 115, 22, 0.03) 1px, transparent 1px)
+          `,
+          backgroundSize: '100px 100px'
+        }} />
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* CTA Section */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-white uppercase tracking-wider mb-6">
-            Explore Our <span className="text-orange-500">Ecosystem</span>
+          <h2 className="text-4xl md:text-5xl font-bold text-white uppercase tracking-wider mb-6" style={{ textShadow: '0 0 40px rgba(249,115,22,0.3)' }}>
+            Explore Our <span className="text-orange-500" style={{ textShadow: '0 0 50px rgba(249,115,22,0.5)' }}>Ecosystem</span>
           </h2>
           <p className="text-zinc-400 text-sm max-w-2xl mx-auto mb-8">
             Discover the full range of our services and portfolio companies
@@ -146,49 +50,13 @@ export function CtaSection({ prefersReducedMotion }: CtaSectionProps) {
             href="https://www.dwf-labs.com/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-orange-500 text-black font-semibold px-8 py-4 rounded-lg hover:bg-orange-400 hover:scale-105 transition-all duration-200"
+            className="group inline-flex items-center gap-2 bg-gradient-to-r from-orange-600 to-orange-500 text-black font-semibold px-8 py-4 rounded-lg hover:from-orange-500 hover:to-orange-400 hover:scale-105 hover:shadow-[0_0_30px_-8px_rgba(249,115,22,0.5)] transition-all duration-300"
           >
             <span>View Ecosystem</span>
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </a>
-        </div>
-
-        {/* Pattern Gallery Preview */}
-        <div ref={patternGalleryRef} className="pattern-gallery overflow-hidden mb-16">
-          <div className="text-center mb-8">
-            <p className="text-xs text-zinc-500 uppercase tracking-widest mb-4">
-              Animation Patterns Showcase
-            </p>
-            {/* US-021: Progress indicator text */}
-            <p className="pattern-progress-text text-sm text-orange-500 font-semibold">
-              Pattern 1/14
-            </p>
-          </div>
-          {/* US-021: Progress bar */}
-          <div className="pattern-progress-bar h-1 bg-zinc-800 rounded-full mb-6 overflow-hidden">
-            <div className="pattern-progress-fill h-full bg-orange-500 rounded-full w-0 transition-all duration-300" style={{ willChange: 'width, transform' }} />
-          </div>
-          <div className="pattern-gallery-track flex gap-4 pb-4" style={{ width: 'max-content' }}>
-            {[
-              'Fade Reveal', 'Stagger', 'Parallax', 'Scrub', 'Pinned',
-              'Count Up', 'Batch', 'Char Text', 'Word Text', 'SVG Draw',
-              'Button Hover', 'Card Tilt', 'Multi-Layer', 'Draggable',
-            ].map((pattern, i) => (
-              <div
-                key={pattern}
-                className="pattern-card flex-shrink-0 w-40 h-32 bg-zinc-900 border border-zinc-800 rounded-lg flex items-center justify-center text-center p-4 hover:border-orange-500/50 transition-colors duration-200"
-                data-index={i}
-                style={{ willChange: 'transform' }}
-              >
-                <div>
-                  <div className="text-2xl font-black text-orange-500/40 mb-2">{String(i + 1).padStart(2, '0')}</div>
-                  <span className="text-xs text-zinc-400 uppercase tracking-wider">{pattern}</span>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
 
         {/* Footer */}
@@ -196,8 +64,8 @@ export function CtaSection({ prefersReducedMotion }: CtaSectionProps) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
             {/* Brand */}
             <div>
-              <h3 className="text-2xl font-black text-white uppercase tracking-tighter mb-4">
-                DWF <span className="text-orange-500">LABS</span>
+              <h3 className="text-2xl font-black text-white uppercase tracking-tighter mb-4" style={{ textShadow: '0 0 30px rgba(249,115,22,0.3)' }}>
+                DWF <span className="text-orange-500" style={{ textShadow: '0 0 40px rgba(249,115,22,0.5)' }}>LABS</span>
               </h3>
               <p className="text-zinc-500 text-sm">
                 New Generation Web3 Investor and Market Maker
@@ -208,10 +76,10 @@ export function CtaSection({ prefersReducedMotion }: CtaSectionProps) {
             <div>
               <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Quick Links</h4>
               <ul className="space-y-2">
-                <li><a href="#services" className="text-sm text-zinc-500 hover:text-orange-500 transition-colors">Services</a></li>
-                <li><a href="#stats" className="text-sm text-zinc-500 hover:text-orange-500 transition-colors">Stats</a></li>
-                <li><a href="#portfolio" className="text-sm text-zinc-500 hover:text-orange-500 transition-colors">Portfolio</a></li>
-                <li><a href="#news" className="text-sm text-zinc-500 hover:text-orange-500 transition-colors">News</a></li>
+                <li><a href="#services" className="text-sm text-zinc-500 hover:text-orange-500 transition-colors duration-300">Services</a></li>
+                <li><a href="#stats" className="text-sm text-zinc-500 hover:text-orange-500 transition-colors duration-300">Stats</a></li>
+                <li><a href="#portfolio" className="text-sm text-zinc-500 hover:text-orange-500 transition-colors duration-300">Portfolio</a></li>
+                <li><a href="#news" className="text-sm text-zinc-500 hover:text-orange-500 transition-colors duration-300">News</a></li>
               </ul>
             </div>
 
@@ -223,7 +91,7 @@ export function CtaSection({ prefersReducedMotion }: CtaSectionProps) {
                   href="https://twitter.com/dwflabs"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 bg-zinc-900 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 hover:text-orange-500 hover:border-orange-500/50 transition-all duration-200"
+                  className="w-10 h-10 bg-zinc-900/80 backdrop-blur-sm border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 hover:text-orange-500 hover:border-orange-500/50 hover:shadow-[0_0_20px_-5px_rgba(249,115,22,0.4)] transition-all duration-300"
                   aria-label="Twitter"
                 >
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -234,7 +102,7 @@ export function CtaSection({ prefersReducedMotion }: CtaSectionProps) {
                   href="https://linkedin.com/company/dwflabs"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 bg-zinc-900 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 hover:text-orange-500 hover:border-orange-500/50 transition-all duration-200"
+                  className="w-10 h-10 bg-zinc-900/80 backdrop-blur-sm border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 hover:text-orange-500 hover:border-orange-500/50 hover:shadow-[0_0_20px_-5px_rgba(249,115,22,0.4)] transition-all duration-300"
                   aria-label="LinkedIn"
                 >
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -245,7 +113,7 @@ export function CtaSection({ prefersReducedMotion }: CtaSectionProps) {
                   href="https://t.me/dwflabs"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 bg-zinc-900 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 hover:text-orange-500 hover:border-orange-500/50 transition-all duration-200"
+                  className="w-10 h-10 bg-zinc-900/80 backdrop-blur-sm border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 hover:text-orange-500 hover:border-orange-500/50 hover:shadow-[0_0_20px_-5px_rgba(249,115,22,0.4)] transition-all duration-300"
                   aria-label="Telegram"
                 >
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -262,9 +130,9 @@ export function CtaSection({ prefersReducedMotion }: CtaSectionProps) {
               DWF Labs © 2025
             </p>
             <div className="flex gap-6">
-              <a href="#" className="text-sm text-zinc-600 hover:text-orange-500 transition-colors">Privacy Policy</a>
-              <a href="#" className="text-sm text-zinc-600 hover:text-orange-500 transition-colors">Terms of Service</a>
-              <a href="#" className="text-sm text-zinc-600 hover:text-orange-500 transition-colors">Contact</a>
+              <a href="#" className="text-sm text-zinc-600 hover:text-orange-500 transition-colors duration-300">Privacy Policy</a>
+              <a href="#" className="text-sm text-zinc-600 hover:text-orange-500 transition-colors duration-300">Terms of Service</a>
+              <a href="#" className="text-sm text-zinc-600 hover:text-orange-500 transition-colors duration-300">Contact</a>
             </div>
           </div>
         </footer>

@@ -186,8 +186,8 @@
         "Verify in browser using agent-browser skill"
       ],
       "priority": 12,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Timeline scrub: 1, start 'top center', end 'bottom center'. Icon transforms: scale 1.0→1.3, rotation 0→45deg, zinc-700→orange-500. Stagger: 0.2s per icon. Reverses on scroll up verified in browser."
     },
     {
       "id": "US-013",

@@ -19,22 +19,6 @@ export const NAVIGATION_DATA: NavigationData = {
     path: '/',
   },
   routes: [
-    // Legacy routes (existing demos)
-    {
-      id: 'horizontal-scroll',
-      title: 'Horizontal Scroll',
-      description: 'GSAP horizontal scroll animation with artist cards',
-      path: '/horizontal-scroll',
-      category: 'Showcase',
-    },
-    {
-      id: 'text-effects',
-      title: 'Text Effects',
-      description: 'Kinetic typography with scroll-triggered animations',
-      path: '/text-effects',
-      category: 'Showcase',
-    },
-    // ScrollTrigger Basics
     {
       id: 'fade-reveal',
       title: 'Fade Reveal',

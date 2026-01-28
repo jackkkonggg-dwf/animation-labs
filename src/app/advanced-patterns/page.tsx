@@ -138,8 +138,8 @@ export default function AdvancedPatternsPage() {
       { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }
     );
 
-    // Set initial state for cards
-    gsap.set(cards, { opacity: 0, y: 60, scale: 0.95 });
+    // Set initial state for cards - opacity is handled by CSS class
+    gsap.set(cards, { y: 60, scale: 0.95 });
 
     // Create staggered entrance animation with snappy easing
     gsap.to(cards, {
@@ -291,7 +291,7 @@ export default function AdvancedPatternsPage() {
                 <div
                   className="demo-card group relative h-80 bg-zinc-900/50 border border-white/5 overflow-hidden
                     hover:border-orange-500/50 hover:shadow-lg hover:shadow-orange-500/10
-                    transition-all duration-300"
+                    transition-all duration-300 opacity-0"
                 >
                   {/* Corner accents */}
                   <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-orange-500/0 group-hover:border-orange-500/50 transition-colors duration-300" />

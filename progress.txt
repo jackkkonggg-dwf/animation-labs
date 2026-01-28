@@ -139,3 +139,26 @@ Started: Wed Jan 28 20:57:54 HKT 2026
   - For cleanup, Draggable.create() returns an array - use [0] to get the instance or destructure
   - When using querySelectorAll with Draggable, ensure elements exist before calling create()
 ---
+
+## [2026-01-28] - US-008
+- Created SVG Morph Journey demo at src/app/advanced-patterns/svg-morph-journey/page.tsx
+- MorphingJourneySection: 4-shape morph progression (circle → square → triangle → star) with scrollTrigger, SVG filter animations (feGaussianBlur blur and glow)
+- MotionPathJourneySection: MotionPathPlugin with curved path following, auto-rotate alignment, DrawSVG-style path reveal
+- InteractiveMorphSection: Hover-triggered morph animations on 4 shapes (hexagon, diamond, cross, heart), elastic.out easing, filter glow effects, scale bounce feedback
+- CombinedShowcaseSection: MorphSVG + MotionPathPlugin combination, path morphs while element follows, particle burst animations
+- SVG filters animated via gsap.to() with attr property (e.g., attr: { stdDeviation: 3 })
+- Proper cleanup with ScrollTrigger.getAll().forEach(t => t.kill()), tl.kill(), gsap.killTweensOf()
+- Browser verification completed via agent-browser - screenshots captured showing all 4 sections
+- Build and typecheck passed successfully
+- **Learnings for future iterations:**
+  - MorphSVGPlugin with morphSVG: { shape: target, type: 'rotational' } for smoother transitions between shapes with different point counts
+  - type: 'rotational' eliminates kinks and provides more natural interpolation compared to default 'linear' type
+  - SVG filter elements (feGaussianBlur, etc.) can be queried with querySelector and animated via attr: { stdDeviation: value }
+  - SVGFEElement type doesn't exist in TypeScript - use SVGElement or add eslint-disable with 'any' type for filter elements
+  - For MotionPathPlugin, use motionPath: { path: selector, align: selector, alignOrigin: [0.5, 0.5], autoRotate: true } for centered alignment
+  - When combining morph and motionPath, the element follows the path as it morphs - creates complex, organic animations
+  - DrawSVG-style stroke animation can be achieved with strokeDasharray and strokeDashoffset (simulate DrawSVGPlugin without using it)
+  - For hover interactions in useGSAP, attach event listeners in the effect and clean them up in the return function
+  - Event listener type errors: addEventListener expects Event type, cast inside handler to specific type (e.g., MouseEvent)
+  - SVG path transformOrigin must be set via style={{ transformOrigin: '100px 100px' }} not as direct prop
+  - gsap.timeline().call() callback requires second parameter to be array (not null) for params argument

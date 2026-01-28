@@ -122,6 +122,13 @@ function CursorTrailSection() {
 function VelocityScrollSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollState = useScrollState({ updateInterval: 16 });
+  const [displayVelocity, setDisplayVelocity] = useState(0);
+  const smoothedVelocityRef = useRef({ value: 0 });
+  // Ref to track current scroll velocity for ticker callback
+  const currentVelocityRef = useRef(0);
+
+  // Keep the ref in sync with scrollState
+  currentVelocityRef.current = scrollState.velocity;
 
   useGSAP(() => {
     const container = containerRef.current;
@@ -147,44 +154,49 @@ function VelocityScrollSection() {
       },
     });
 
-    // Animate based on scroll velocity - use onUpdate for continuous updates
-    const velocityTrigger = ScrollTrigger.create({
-      trigger: container,
-      start: 'top bottom',
-      end: 'bottom top',
-      onUpdate: () => {
-        const velocity = scrollState.velocity;
-        const isFast = velocity > 1.5;
+    // Continuous smooth velocity following using ticker
+    // This avoids creating multiple tweens and provides smooth lag/decay
+    const updateVelocity = () => {
+      const targetVelocity = currentVelocityRef.current;
+      const current = smoothedVelocityRef.current.value;
 
-        // Update meter
-        const meterPercent = Math.min(velocity * 30, 100);
-        gsap.to(elements.meter, {
-          width: `${meterPercent}%`,
-          backgroundColor: isFast ? '#ef4444' : velocity > 0.7 ? '#f59e0b' : '#22c55e',
-          duration: 0.2,
-        });
+      // Lerp (linear interpolation) towards target velocity
+      // The 0.05 factor controls the lag - lower = more lag
+      const lerpFactor = 0.05;
+      const smoothedVelocity = current + (targetVelocity - current) * lerpFactor;
 
-        if (elements.meterText) {
-          elements.meterText.textContent = `${velocity.toFixed(2)} px/ms`;
-        }
+      smoothedVelocityRef.current.value = smoothedVelocity;
+      setDisplayVelocity(smoothedVelocity);
 
-        // Scale cards based on velocity
-        const scale = 1 + Math.min(velocity * 0.1, 0.3);
-        gsap.to(elements.cards, {
-          scale,
-          duration: 0.2,
-        });
-      },
-    });
+      const isFast = targetVelocity > 1.5;
+
+      // Update meter (convert px/ms to px/s by multiplying by 1000)
+      const velocityInPxPerSecond = smoothedVelocity * 1000;
+      const meterPercent = Math.min(velocityInPxPerSecond / 20, 100); // Scale: 1000px/s = 100%
+      gsap.set(elements.meter, {
+        width: `${meterPercent}%`,
+        backgroundColor: isFast ? '#ef4444' : velocityInPxPerSecond > 700 ? '#f59e0b' : '#22c55e',
+      });
+
+      if (elements.meterText) {
+        elements.meterText.textContent = `${velocityInPxPerSecond.toFixed(0)} px/s`;
+      }
+
+      // Scale cards based on smoothed velocity
+      const scale = 1 + Math.min(velocityInPxPerSecond * 0.0001, 0.3);
+      gsap.set(elements.cards, { scale });
+    };
+
+    gsap.ticker.add(updateVelocity);
 
     return () => {
-      velocityTrigger.kill();
+      gsap.ticker.remove(updateVelocity);
       gsap.killTweensOf([...elements.cards, elements.meter, elements.meterText]);
     };
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef} className="relative min-h-screen py-32 bg-gradient-to-br from-zinc-900 via-zinc-950 to-orange-950">
+    <section ref={containerRef} className="relative py-32 bg-gradient-to-br from-zinc-900 via-zinc-950 to-orange-950">
       {/* Content */}
       <div className="relative z-10 max-w-6xl mx-auto px-6">
         <p className="text-orange-500 text-sm font-mono uppercase tracking-[0.3em] mb-4">
@@ -199,16 +211,16 @@ function VelocityScrollSection() {
         <div className="mb-12 bg-zinc-800 rounded-full h-6 overflow-hidden border border-zinc-700">
           <div
             className="velocity-meter h-full bg-green-500 transition-colors duration-200"
-            style={{ width: '0%' }}
+            style={{ width: `0%` }}
           />
         </div>
         <p className="velocity-meter-text text-zinc-400 font-mono text-sm mb-12">
-          0.00 px/ms
+          {(displayVelocity * 1000).toFixed(0)} px/s
         </p>
 
         {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[...Array(3)].map((_, i) => (
+          {[...Array(6)].map((_, i) => (
             <div
               key={i}
               className="velocity-card bg-zinc-800/80 backdrop-blur border-2 border-zinc-700 rounded-2xl p-6"
@@ -237,6 +249,11 @@ function DirectionScrollSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [direction, setDirection] = useState<'up' | 'down' | 'none'>('none');
   const scrollState = useScrollState();
+  // Ref to track current direction for ScrollTrigger callback
+  const currentDirectionRef = useRef<'up' | 'down' | 'none'>('none');
+
+  // Keep the ref in sync with scrollState
+  currentDirectionRef.current = scrollState.direction;
 
   useGSAP(() => {
     const container = containerRef.current;
@@ -256,7 +273,7 @@ function DirectionScrollSection() {
       start: 'top bottom',
       end: 'bottom top',
       onUpdate: () => {
-        const currentDirection = scrollState.direction;
+        const currentDirection = currentDirectionRef.current;
 
         if (currentDirection !== lastDirection && currentDirection !== 'none') {
           lastDirection = currentDirection;
@@ -314,7 +331,7 @@ function DirectionScrollSection() {
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef} className="relative min-h-screen py-32 bg-zinc-950">
+    <section ref={containerRef} className="relative py-32 bg-zinc-950">
       {/* Content */}
       <div className="relative z-10 max-w-6xl mx-auto px-6">
         <p className="text-orange-500 text-sm font-mono uppercase tracking-[0.3em] mb-4">
@@ -429,7 +446,7 @@ function SwipeGestureSection() {
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef} className="relative min-h-screen py-32 bg-gradient-to-br from-zinc-950 via-zinc-900 to-blue-950">
+    <section ref={containerRef} className="relative py-32 bg-gradient-to-br from-zinc-950 via-zinc-900 to-blue-950">
       {/* Content */}
       <div className="relative z-10 max-w-6xl mx-auto px-6">
         <p className="text-blue-500 text-sm font-mono uppercase tracking-[0.3em] mb-4">
@@ -547,7 +564,7 @@ function PinchZoomSection() {
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef} className="relative min-h-screen py-32 bg-zinc-950">
+    <section ref={containerRef} className="relative py-32 bg-zinc-950">
       {/* Content */}
       <div className="relative z-10 max-w-6xl mx-auto px-6">
         <p className="text-orange-500 text-sm font-mono uppercase tracking-[0.3em] mb-4">
@@ -673,12 +690,13 @@ function HoverInterruptSection() {
       });
     };
 
-    container.addEventListener('mouseenter', handleMouseEnter);
-    container.addEventListener('mouseleave', handleMouseLeave);
+    // Attach event listeners to the circle, not the container
+    elements.circle.addEventListener('mouseenter', handleMouseEnter);
+    elements.circle.addEventListener('mouseleave', handleMouseLeave);
 
     return () => {
-      container.removeEventListener('mouseenter', handleMouseEnter);
-      container.removeEventListener('mouseleave', handleMouseLeave);
+      elements.circle.removeEventListener('mouseenter', handleMouseEnter);
+      elements.circle.removeEventListener('mouseleave', handleMouseLeave);
       rotationTween.kill();
       pulseTween.kill();
       colorTween.kill();
@@ -687,7 +705,7 @@ function HoverInterruptSection() {
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef} className="relative min-h-screen py-32 bg-gradient-to-br from-zinc-950 via-zinc-900 to-purple-950">
+    <section ref={containerRef} className="relative py-32 bg-gradient-to-br from-zinc-950 via-zinc-900 to-purple-950">
       {/* Content */}
       <div className="relative z-10 max-w-6xl mx-auto px-6">
         <p className="text-purple-500 text-sm font-mono uppercase tracking-[0.3em] mb-4">
@@ -728,6 +746,11 @@ function ObserverSection() {
   const boxRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [hoveredBox, setHoveredBox] = useState<number | null>(null);
   const [scrollDirection, setScrollDirection] = useState<'up' | 'down' | null>(null);
+  // Ref to track hovered box for Observer callback (avoids closure + prevents re-runs)
+  const hoveredBoxRef = useRef<number | null>(null);
+
+  // Keep ref in sync with state
+  hoveredBoxRef.current = hoveredBox;
 
   useGSAP(() => {
     const container = containerRef.current;
@@ -752,13 +775,13 @@ function ObserverSection() {
         type: 'pointer',
         onMove: (self) => {
           // Only apply tilt when this box is hovered
-          if (hoveredBox !== i) return;
+          if (hoveredBoxRef.current !== i) return;
 
           if (self.x === undefined || self.y === undefined) return;
 
           const rect = box.getBoundingClientRect();
-          const x = ((self.x - rect.left) / rect.width - 0.5) * 20; // -10 to 10
-          const y = ((self.y - rect.top) / rect.height - 0.5) * 20;
+          const x = ((self.x - rect.left) / rect.width - 0.5) * 50; // -25 to 25 (increased sensitivity)
+          const y = ((self.y - rect.top) / rect.height - 0.5) * 50;
 
           gsap.to(box, {
             rotationX: -y,
@@ -785,10 +808,10 @@ function ObserverSection() {
       boxObservers.forEach(obs => obs.kill());
       gsap.killTweensOf(boxes);
     };
-  }, { scope: containerRef, dependencies: [hoveredBox] });
+  }, { scope: containerRef }); // Removed hoveredBox from dependencies
 
   return (
-    <section ref={containerRef} className="relative min-h-screen py-32 bg-zinc-950">
+    <section ref={containerRef} className="relative py-32 bg-zinc-950">
       {/* Content */}
       <div className="relative z-10 max-w-6xl mx-auto px-6">
         <p className="text-orange-500 text-sm font-mono uppercase tracking-[0.3em] mb-4">
@@ -836,7 +859,7 @@ function ObserverSection() {
             >
               <div className="text-center">
                 <div className="text-3xl font-black text-white mb-1">0{i + 1}</div>
-                <div className="text-xs text-zinc-500 uppercase">
+                <div className={`text-xs uppercase ${hoveredBox === i ? 'text-white' : 'text-zinc-500'}`}>
                   {hoveredBox === i ? '3D Tilt!' : 'Hover me'}
                 </div>
               </div>
@@ -869,7 +892,7 @@ export default function GestureScrollPage() {
   return (
     <main className="min-h-screen">
       {/* Info banner */}
-      <div className="sticky top-0 z-50 bg-zinc-900/95 backdrop-blur border-b border-zinc-800">
+      <div className="sticky top-[72px] z-40 bg-zinc-900/95 backdrop-blur border-b border-zinc-800">
         <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <span className="text-orange-500 text-xs font-black tracking-[0.2em] uppercase">

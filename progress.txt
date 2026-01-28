@@ -483,4 +483,23 @@ Started: Thu Jan 29 01:07:23 HKT 2026
   - GSAP Draggable automatically handles touch events - no additional configuration needed
   - Add `overflow-x-hidden` to prevent horizontal scroll on mobile from transforms going off-screen
 ---
+
+## [2026-01-29] - US-026
+- Implemented reduced motion support for all GSAP animations in `src/app/dwf-labs/page.tsx`
+- Added `prefersReducedMotion` state with `window.matchMedia('(prefers-reduced-motion: reduce)')` detection
+- Created `setFinalStateIfReducedMotion()` helper that sets all animated elements to final visible state (opacity: 1, transform: none) using `gsap.set()` with `clearProps: 'all'`
+- All 8 useGSAP hooks check `prefersReducedMotion` state and return early if true
+- useEffect hook for mouse move effects (3D tilt, shine) also checks `prefersReducedMotion`
+- Added `dependencies: [prefersReducedMotion]` to all useGSAP config objects to re-run when preference changes
+- Final state settings include: hero text (opacity 1), tagline words (opacity 1), corner paths (strokeDashoffset 0), service cards/icons (opacity 1, scale 1), stat values (target numbers), progress circles (strokeDashoffset 0), portfolio cards (opacity 1), news cards (opacity 1), marquee (xPercent 0)
+- Typecheck passed
+- Files changed: `src/app/dwf-labs/page.tsx`, `prd.json`, `progress.txt`
+- **Learnings for future iterations:**
+  - useGSAP from @gsap/react supports dependencies in the config object: `{ scope: ref, dependencies: [state] }`
+  - The `prefers-reduced-motion` media query should be checked with `window.matchMedia()` in a useEffect
+  - Add change listener to media query with `addEventListener('change', handleChange)` for real-time preference updates
+  - When reducing motion, use `gsap.set()` with `clearProps: 'all'` to set final state and remove GSAP inline styles
+  - For stat counters, manually set textContent to target value instead of animating
+  - All animation hooks need the reduced motion check at the start (early return pattern)
+  - The dependencies array ensures useGSAP re-runs when the preference changes, enabling dynamic behavior
 ---

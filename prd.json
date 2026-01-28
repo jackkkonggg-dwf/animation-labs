@@ -399,8 +399,8 @@
         "Verify in browser using agent-browser skill (with reduced motion)"
       ],
       "priority": 26,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Added prefers-reduced-motion detection with matchMedia(), setFinalStateIfReducedMotion() helper sets all elements to final visible state, all useGSAP hooks skip animations when reduced motion is true, useGSAP dependencies include prefersReducedMotion state to re-run on preference change"
     },
     {
       "id": "US-027",

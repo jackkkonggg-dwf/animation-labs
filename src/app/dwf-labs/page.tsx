@@ -22,7 +22,71 @@ export default function DWFLabsPage() {
   const newsRef = useRef<HTMLDivElement>(null);
   const patternGalleryRef = useRef<HTMLDivElement>(null);
 
+  // US-026: Check for reduced motion preference
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    // Check if user prefers reduced motion
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mediaQuery.matches);
+
+    // Listen for changes in preference
+    const handleChange = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    mediaQuery.addEventListener('change', handleChange);
+
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
+
+  // US-026: Helper to set final state immediately when reduced motion is preferred
+  const setFinalStateIfReducedMotion = () => {
+    if (!prefersReducedMotion) return false;
+
+    // Set all animated elements to their final visible state
+    // Hero elements
+    const titleChars = document.querySelectorAll('.hero-title span');
+    const taglineWords = document.querySelectorAll('.hero-tagline span');
+    const cornerPaths = document.querySelectorAll('.corner-draw-path');
+    gsap.set([...titleChars, ...taglineWords], { opacity: 1, clearProps: 'all' });
+    gsap.set(cornerPaths, { strokeDashoffset: 0, clearProps: 'all' });
+
+    // Services elements
+    const serviceCards = document.querySelectorAll('.service-card');
+    const serviceIcons = document.querySelectorAll('.service-icon svg');
+    gsap.set(serviceCards, { opacity: 1, scale: 1, clearProps: 'all' });
+    gsap.set(serviceIcons, { scale: 1, rotation: 0, clearProps: 'all' });
+
+    // Stats elements
+    const statValues = document.querySelectorAll('.stat-value');
+    const progressCircles = document.querySelectorAll('.stat-progress-circle');
+    const statIcons = document.querySelectorAll('.stat-icon svg');
+    statValues.forEach((statValue) => {
+      const target = (statValue as HTMLElement).dataset.target || '0';
+      (statValue as HTMLElement).textContent = target;
+    });
+    gsap.set(progressCircles, { strokeDashoffset: 0, clearProps: 'all' });
+    gsap.set(statIcons, { clearProps: 'all' });
+
+    // Portfolio elements
+    const portfolioCards = document.querySelectorAll('.portfolio-card');
+    gsap.set(portfolioCards, { opacity: 1, scale: 1, clearProps: 'all' });
+
+    // News elements
+    const newsCards = document.querySelectorAll('.news-card');
+    gsap.set(newsCards, { opacity: 1, clearProps: 'all' });
+
+    // Marquee - stop animation, show static content
+    const marqueeRow = document.querySelector('.marquee-row');
+    if (marqueeRow) {
+      gsap.set(marqueeRow, { xPercent: 0, clearProps: 'all' });
+    }
+
+    return true; // Reduced motion is active, skip animations
+  };
+
   useGSAP(() => {
+    // US-026: Skip all animations if reduced motion is preferred
+    if (setFinalStateIfReducedMotion()) return;
+
     const hero = heroRef.current;
     if (!hero) return;
 
@@ -155,10 +219,13 @@ export default function DWFLabsPage() {
       gsap.killTweensOf(cornerPaths);
       triggers.forEach((t) => t.kill());
     };
-  }, { scope: heroRef });
+  }, { scope: heroRef, dependencies: [prefersReducedMotion] });
 
   // US-008: Services pinned section with progress bar
   useGSAP(() => {
+    // US-026: Skip all animations if reduced motion is preferred
+    if (prefersReducedMotion) return;
+
     const services = servicesRef.current;
     if (!services) return;
 
@@ -251,10 +318,13 @@ export default function DWFLabsPage() {
       gsap.killTweensOf(serviceCards);
       gsap.killTweensOf(serviceIcons);
     };
-  }, { scope: servicesRef });
+  }, { scope: servicesRef, dependencies: [prefersReducedMotion] });
 
   // US-011: Stats count up animation
   useGSAP(() => {
+    // US-026: Skip all animations if reduced motion is preferred
+    if (prefersReducedMotion) return;
+
     const stats = statsRef.current;
     if (!stats) return;
 
@@ -320,10 +390,13 @@ export default function DWFLabsPage() {
       gsap.killTweensOf(statValues);
       gsap.killTweensOf(progressCircles);
     };
-  }, { scope: statsRef });
+  }, { scope: statsRef, dependencies: [prefersReducedMotion] });
 
   // US-012: Stats scrub timeline and icon transforms
   useGSAP(() => {
+    // US-026: Skip all animations if reduced motion is preferred
+    if (prefersReducedMotion) return;
+
     const stats = statsRef.current;
     if (!stats) return;
 
@@ -367,10 +440,13 @@ export default function DWFLabsPage() {
       triggers.forEach((t) => t.kill());
       gsap.killTweensOf(statIcons);
     };
-  }, { scope: statsRef });
+  }, { scope: statsRef, dependencies: [prefersReducedMotion] });
 
   // US-014: Portfolio grid batch reveal
   useGSAP(() => {
+    // US-026: Skip all animations if reduced motion is preferred
+    if (prefersReducedMotion) return;
+
     const portfolio = portfolioRef.current;
     if (!portfolio) return;
 
@@ -433,10 +509,13 @@ export default function DWFLabsPage() {
       triggers.forEach((t) => t.kill());
       gsap.killTweensOf(portfolioCards);
     };
-  }, { scope: portfolioRef });
+  }, { scope: portfolioRef, dependencies: [prefersReducedMotion] });
 
   // US-015: Portfolio infinite horizontal marquee
   useGSAP(() => {
+    // US-026: Skip all animations if reduced motion is preferred
+    if (prefersReducedMotion) return;
+
     const marqueeRow = marqueeRowRef.current;
     if (!marqueeRow) return;
 
@@ -453,10 +532,13 @@ export default function DWFLabsPage() {
     return () => {
       gsap.killTweensOf(marqueeRow);
     };
-  }, { scope: marqueeRowRef });
+  }, { scope: marqueeRowRef, dependencies: [prefersReducedMotion] });
 
   // US-017: News staggered list reveal
   useGSAP(() => {
+    // US-026: Skip all animations if reduced motion is preferred
+    if (prefersReducedMotion) return;
+
     const news = newsRef.current;
     if (!news) return;
 
@@ -495,11 +577,14 @@ export default function DWFLabsPage() {
       triggers.forEach((t) => t.kill());
       gsap.killTweensOf(newsCards);
     };
-  }, { scope: newsRef });
+  }, { scope: newsRef, dependencies: [prefersReducedMotion] });
 
   // US-018: News card 3D tilt on mouse move
   // US-019: News shine effect and thumbnail zoom
   useEffect(() => {
+    // US-026: Skip mouse move effects if reduced motion is preferred
+    if (prefersReducedMotion) return;
+
     const news = newsRef.current;
     if (!news) return;
 
@@ -610,6 +695,9 @@ export default function DWFLabsPage() {
   // US-020: CTA draggable pattern gallery
   // US-021: Active card scale and progress indicator
   useGSAP(() => {
+    // US-026: Skip all animations if reduced motion is preferred
+    if (prefersReducedMotion) return;
+
     const gallery = patternGalleryRef.current;
     if (!gallery) return;
 
@@ -711,7 +799,7 @@ export default function DWFLabsPage() {
       gsap.killTweensOf(cards);
       if (progressFill) gsap.killTweensOf(progressFill);
     };
-  }, { scope: patternGalleryRef });
+  }, { scope: patternGalleryRef, dependencies: [prefersReducedMotion] });
 
   return (
     <main className="min-h-screen bg-zinc-950 overflow-x-hidden">

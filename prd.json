@@ -171,8 +171,8 @@
         "Verify in browser using agent-browser skill"
       ],
       "priority": 11,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Count up animation: 0 to target (800, 10, 20), duration: 2s, ease: power2.out, snap: 1 (whole integers), ScrollTrigger: start 'top center', toggleActions: 'play none none reverse'"
     },
     {
       "id": "US-012",

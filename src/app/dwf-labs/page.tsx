@@ -16,6 +16,7 @@ import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 export default function DWFLabsPage() {
   const heroRef = useRef<HTMLDivElement>(null);
   const servicesRef = useRef<HTMLDivElement>(null);
+  const statsRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
     const hero = heroRef.current;
@@ -238,6 +239,52 @@ export default function DWFLabsPage() {
     };
   }, { scope: servicesRef });
 
+  // US-011: Stats count up animation
+  useGSAP(() => {
+    const stats = statsRef.current;
+    if (!stats) return;
+
+    // Track all ScrollTriggers for cleanup
+    const triggers: ScrollTrigger[] = [];
+
+    // Get all stat value elements with their data-target attributes
+    const statValues = stats.querySelectorAll('.stat-value');
+
+    statValues.forEach((statValue) => {
+      const target = parseInt((statValue as HTMLElement).dataset.target || '0', 10);
+      const counterObj = { value: 0 };
+
+      // Count up animation from 0 to target
+      gsap.to(counterObj, {
+        value: target,
+        duration: 2,
+        ease: 'power2.out',
+        snap: { value: 1 }, // Snap to whole integers
+        scrollTrigger: {
+          trigger: stats,
+          start: 'top center',
+          toggleActions: 'play none none reverse',
+        },
+        onUpdate: () => {
+          // Update the element text with current value
+          (statValue as HTMLElement).textContent = Math.round(counterObj.value).toString();
+        },
+      });
+    });
+
+    // Collect ScrollTriggers for cleanup
+    ScrollTrigger.getAll().forEach((trigger) => {
+      if (trigger.trigger === stats || stats.contains(trigger.trigger as Element)) {
+        triggers.push(trigger);
+      }
+    });
+
+    return () => {
+      triggers.forEach((t) => t.kill());
+      gsap.killTweensOf(statValues);
+    };
+  }, { scope: statsRef });
+
   return (
     <main className="min-h-screen bg-zinc-950">
       {/* Section 1: Hero - Kinetic Text Reveal + Multi-Layer Parallax */}
@@ -435,6 +482,7 @@ export default function DWFLabsPage() {
 
       {/* Section 3: Stats - Count Up + Scrub Timeline */}
       <section
+        ref={statsRef}
         id="stats"
         className="relative py-24 px-4 bg-zinc-900/50"
       >

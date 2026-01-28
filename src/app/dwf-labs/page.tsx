@@ -1250,7 +1250,7 @@ export default function DWFLabsPage() {
           </div>
 
           {/* Footer */}
-          <footer className="border-t border-zinc-800 pt-12">
+          <footer className="border-t border-orange-500/20 pt-12">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
               {/* Brand */}
               <div>
@@ -1317,7 +1317,7 @@ export default function DWFLabsPage() {
             {/* Bottom bar */}
             <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-zinc-800">
               <p className="text-zinc-600 text-sm mb-4 md:mb-0">
-                © 2025 DWF Labs. All rights reserved.
+                DWF Labs © 2025
               </p>
               <div className="flex gap-6">
                 <a href="#" className="text-sm text-zinc-600 hover:text-orange-500 transition-colors">Privacy Policy</a>

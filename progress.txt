@@ -352,3 +352,23 @@ Started: Thu Jan 29 01:07:23 HKT 2026
   - Remember to add tweens to cleanup function: `gsap.killTweensOf(shine)` and `gsap.killTweensOf(thumbnail)`
   - The shine element already existed in HTML (`.news-shine`), just needed GSAP animation for position/opacity
 ---
+
+## [2026-01-29] - US-020
+- Implemented CTA draggable pattern gallery with GSAP Draggable and InertiaPlugin
+- Added Draggable with horizontal type, bounds, throwResistance 2000, edgeResistance 0.8
+- Snap functionality: snaps to nearest card position (14 patterns at 176px intervals)
+- Pattern cards: Fade Reveal, Stagger, Parallax, Scrub, Pinned, Count Up, Batch, Char Text, Word Text, SVG Draw, Button Hover, Card Tilt, Multi-Layer, Draggable
+- Updated HTML structure: changed from overflow-x-auto to draggable track with max-content width
+- Browser verified: pattern gallery visible with all 14 cards, page loads without errors
+- Typecheck passed
+- Files changed: `src/app/dwf-labs/page.tsx`, `prd.json`, `progress.txt`
+- **Learnings for future iterations:**
+  - Draggable requires InertiaPlugin to be registered for smooth momentum effects
+  - When using Draggable.create(), the element must have positioning (relative/absolute) for transform to work
+  - For snap points, calculate card width + gap (e.g., w-40 = 160px + gap-4 = 16px = 176px per card)
+  - Use `Draggable.create(track, {...})[0].kill()` in cleanup to properly dispose the Draggable instance
+  - The draggable instance is returned as an array by Draggable.create(), so access with `[0]`
+  - track.style.transform shows the current x position during drag (e.g., "translateX(-176px)")
+  - agent-browser eval has issues with certain JS syntax - use simple expressions or test visually
+  - The pre-existing hydration error in Navbar is unrelated to Draggable implementation
+---

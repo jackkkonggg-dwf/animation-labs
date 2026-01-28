@@ -12,6 +12,8 @@
 import { useRef, useEffect, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger, Draggable, InertiaPlugin } from '@/lib/gsap-config';
+import { PortfolioLogo } from '@/components/PortfolioLogo';
+import { portfolioCompanies } from '@/lib/portfolio-logos';
 
 export default function DWFLabsPage() {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -1153,23 +1155,7 @@ export default function DWFLabsPage() {
 
           {/* Portfolio Grid - 1 col mobile, 2 col tablet, 3 col desktop, 5 col wide */}
           <div className="portfolio-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-16">
-            {[
-              { name: 'TRON', num: '01' },
-              { name: 'Algorand', num: '02' },
-              { name: 'Notcoin', num: '03' },
-              { name: 'Mantle', num: '04' },
-              { name: 'Jupiter', num: '05' },
-              { name: 'TON', num: '06' },
-              { name: 'Gala', num: '07' },
-              { name: 'Celo', num: '08' },
-              { name: 'Fetch.ai', num: '09' },
-              { name: 'YGG', num: '10' },
-              { name: 'Beam', num: '11' },
-              { name: 'Sonic', num: '12' },
-              { name: 'WLFI', num: '13' },
-              { name: 'Vaultek', num: '14' },
-              { name: 'Floki', num: '15' },
-            ].map((item) => (
+            {portfolioCompanies.map((item) => (
               <div
                 key={item.name}
                 className="portfolio-card group relative aspect-square bg-zinc-900 border border-zinc-800 p-4 flex flex-col items-center justify-center hover:border-orange-500 hover:scale-105 transition-all duration-200 cursor-pointer"
@@ -1182,9 +1168,9 @@ export default function DWFLabsPage() {
                 {/* Number badge */}
                 <div className="absolute top-3 right-3 text-xs font-mono text-orange-500/40">{item.num}</div>
 
-                {/* Logo placeholder - grayscale to orange-500 on hover */}
-                <div className="w-16 h-16 bg-zinc-800 rounded-lg flex items-center justify-center grayscale group-hover:grayscale-0 transition-all duration-200">
-                  <span className="text-xs font-bold text-zinc-600 group-hover:text-orange-500 transition-colors duration-200">{item.name.slice(0, 2)}</span>
+                {/* Logo - grayscale to orange-500 on hover */}
+                <div className="relative w-16 h-16 bg-zinc-800 rounded-lg flex items-center justify-center grayscale group-hover:grayscale-0 transition-all duration-200">
+                  <PortfolioLogo id={item.id} name={item.name} className="w-12 h-12" />
                 </div>
 
                 {/* Name */}
@@ -1200,18 +1186,12 @@ export default function DWFLabsPage() {
             <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-zinc-950 to-transparent z-10" />
             <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-zinc-950 to-transparent z-10" />
             <div ref={marqueeRowRef} className="marquee-row flex items-center gap-8 whitespace-nowrap py-8" style={{ willChange: 'transform' }}>
-              {[
-                'TRON', 'Algorand', 'Notcoin', 'Mantle', 'Jupiter', 'TON', 'Gala', 'Celo',
-                'Fetch.ai', 'YGG', 'Beam', 'Sonic', 'WLFI', 'Vaultek', 'Floki',
-                // Duplicate for seamless loop
-                'TRON', 'Algorand', 'Notcoin', 'Mantle', 'Jupiter', 'TON', 'Gala', 'Celo',
-                'Fetch.ai', 'YGG', 'Beam', 'Sonic', 'WLFI', 'Vaultek', 'Floki',
-              ].map((name, i) => (
+              {[...portfolioCompanies, ...portfolioCompanies].map((item, i) => (
                 <div
-                  key={`${name}-${i}`}
+                  key={`${item.id}-${i}`}
                   className="inline-flex items-center gap-2 px-6 py-3 bg-zinc-900 border border-zinc-800 rounded-full"
                 >
-                  <span className="text-sm font-medium text-zinc-400">{name}</span>
+                  <span className="text-sm font-medium text-zinc-400">{item.name}</span>
                 </div>
               ))}
             </div>

@@ -28,21 +28,17 @@ export function ServicesSection({ prefersReducedMotion }: ServicesSectionProps) 
     const services = servicesRef.current;
     if (!services) return;
 
-    // Track all ScrollTriggers for cleanup
-    const triggers: ScrollTrigger[] = [];
-
     // US-006: Multi-layer parallax background
     const layer1 = services.querySelector('.parallax-layer-1');
     const layer2 = services.querySelector('.parallax-layer-2');
     const layer3 = services.querySelector('.parallax-layer-3');
     const layer4 = services.querySelector('.parallax-layer-4');
 
-    // Layer 1: Grid pattern - slowest (speed: 0.2)
+    // Parallax layers benefit from GPU acceleration (continuous scroll-linked animation)
     if (layer1) {
       gsap.to(layer1, {
         y: 100,
         ease: 'none',
-        force3D: true,
         scrollTrigger: {
           trigger: services,
           start: 'top top',
@@ -52,12 +48,10 @@ export function ServicesSection({ prefersReducedMotion }: ServicesSectionProps) 
       });
     }
 
-    // Layer 2: Glowing shapes - slow (speed: 0.5)
     if (layer2) {
       gsap.to(layer2, {
         y: 250,
         ease: 'none',
-        force3D: true,
         scrollTrigger: {
           trigger: services,
           start: 'top top',
@@ -67,12 +61,10 @@ export function ServicesSection({ prefersReducedMotion }: ServicesSectionProps) 
       });
     }
 
-    // Layer 3: Data particles - medium (speed: 0.8)
     if (layer3) {
       gsap.to(layer3, {
         y: 400,
         ease: 'none',
-        force3D: true,
         scrollTrigger: {
           trigger: services,
           start: 'top top',
@@ -82,12 +74,10 @@ export function ServicesSection({ prefersReducedMotion }: ServicesSectionProps) 
       });
     }
 
-    // Layer 4: Content - fastest (speed: 1.0)
     if (layer4) {
       gsap.to(layer4, {
         y: 500,
         ease: 'none',
-        force3D: true,
         scrollTrigger: {
           trigger: services,
           start: 'top top',
@@ -99,7 +89,7 @@ export function ServicesSection({ prefersReducedMotion }: ServicesSectionProps) 
 
     // US-009: Services staggered card reveal
     const serviceCards = services.querySelectorAll('.service-card');
-    gsap.set(serviceCards, { y: 100, opacity: 0, scale: 0.9, force3D: true });
+    gsap.set(serviceCards, { y: 100, opacity: 0, scale: 0.9 });
 
     gsap.to(serviceCards, {
       y: 0,
@@ -108,7 +98,6 @@ export function ServicesSection({ prefersReducedMotion }: ServicesSectionProps) 
       duration: 0.8,
       stagger: 0.2,
       ease: 'back.out(1.2)',
-      force3D: true,
       scrollTrigger: {
         trigger: services,
         start: 'top center',
@@ -127,7 +116,6 @@ export function ServicesSection({ prefersReducedMotion }: ServicesSectionProps) 
       duration: 0.6,
       stagger: 0.15,
       ease: 'back.out(1)',
-      force3D: true,
       scrollTrigger: {
         trigger: services,
         start: 'top center',
@@ -135,20 +123,7 @@ export function ServicesSection({ prefersReducedMotion }: ServicesSectionProps) 
       },
     });
 
-    // Collect ScrollTriggers for cleanup
-    ScrollTrigger.getAll().forEach((trigger) => {
-      if (trigger.trigger === services || services.contains(trigger.trigger as Element)) {
-        if (!triggers.includes(trigger)) {
-          triggers.push(trigger);
-        }
-      }
-    });
-
-    return () => {
-      triggers.forEach((t) => t.kill());
-      gsap.killTweensOf(serviceCards);
-      gsap.killTweensOf(serviceIcons);
-    };
+    // Cleanup is automatic with useGSAP
   }, { scope: servicesRef, dependencies: [prefersReducedMotion] });
 
   return (

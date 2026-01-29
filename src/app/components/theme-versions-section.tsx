@@ -120,12 +120,9 @@ export function ThemeVersionsSection() {
       },
     });
 
-    ScrollTrigger.refresh();
-
-    return () => {
-      gsap.killTweensOf(cards);
-    };
-  }, []);
+    // CRITICAL: Cleanup is automatic with useGSAP - all tweens and triggers
+    // in this context are reverted when component unmounts
+  }, { scope: containerRef });
 
   return (
     <section

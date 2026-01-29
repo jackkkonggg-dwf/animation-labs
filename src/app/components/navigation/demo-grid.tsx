@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useGSAP } from '@gsap/react';
@@ -49,8 +49,8 @@ export function DemoGrid() {
   const categoryFilter = searchParams.get('category') || '';
   const difficultyFilter = searchParams.get('difficulty') || '';
 
-  // Update URL params when filters change
-  const updateFilters = (updates: { search?: string; category?: string; difficulty?: string }) => {
+  // Update URL params when filters change - memoized to prevent unnecessary re-renders
+  const updateFilters = useCallback((updates: { search?: string; category?: string; difficulty?: string }) => {
     const params = new URLSearchParams(searchParams.toString());
 
     if (updates.search !== undefined) {
@@ -76,12 +76,12 @@ export function DemoGrid() {
     }
 
     router.push(`/?${params.toString()}`, { scroll: false });
-  };
+  }, [searchParams, router]);
 
-  // Clear all filters
-  const clearAllFilters = () => {
+  // Clear all filters - memoized to prevent unnecessary re-renders
+  const clearAllFilters = useCallback(() => {
     router.push('/', { scroll: false });
-  };
+  }, [router]);
 
   // Get unique categories from routes
   const categories = useMemo(() => {
@@ -150,14 +150,9 @@ export function DemoGrid() {
       },
     });
 
-    // Refresh after animations are created
-    ScrollTrigger.refresh();
-
-    // Cleanup function
-    return () => {
-      gsap.killTweensOf(cards);
-    };
-  }, [filteredRoutes.length]); // Re-run animation when filtered routes change
+    // CRITICAL: Cleanup is automatic with useGSAP - all tweens and triggers
+    // in this context are reverted when component unmounts
+  }, { scope: containerRef, dependencies: [filteredRoutes.length] }); // Re-run animation when filtered routes change
 
   return (
     <section ref={containerRef} className="min-h-screen bg-zinc-950 pt-32 md:pt-40 pb-16 px-4 md:px-6 relative overflow-hidden">

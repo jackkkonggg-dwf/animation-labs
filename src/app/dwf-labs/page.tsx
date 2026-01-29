@@ -38,16 +38,24 @@ export default function DWFLabsPage() {
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
-  // US-027: Refresh ScrollTrigger after all animations are initialized
-  // This ensures proper positioning and prevents scroll-related issues on navigation
+  // CRITICAL: Kill all ScrollTriggers when component unmounts/navigates away
+  // This prevents memory leaks and high CPU usage on other pages
   useEffect(() => {
-    // Small delay to ensure all useGSAP hooks have completed their setup
-    const refreshTimer = setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 100);
+    return () => {
+      const allTriggers = ScrollTrigger.getAll();
+      allTriggers.forEach((trigger) => {
+        trigger.kill(true); // true = also remove scroll listeners
+      });
 
-    return () => clearTimeout(refreshTimer);
-  }, [prefersReducedMotion]); // Re-refresh when reduced motion preference changes
+      // Also clear any matchMedia listeners
+      ScrollTrigger.clearMatchMedia();
+
+      // Debug logging to verify cleanup (remove in production)
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[DWF Labs] Cleaned up', allTriggers.length, 'ScrollTriggers');
+      }
+    };
+  }, []);
 
   return (
     <main className="min-h-screen bg-zinc-950 overflow-x-hidden">

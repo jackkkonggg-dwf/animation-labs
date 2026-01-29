@@ -21,7 +21,7 @@ interface StatsSectionProps {
 export function StatsSection({ prefersReducedMotion }: StatsSectionProps) {
   const statsRef = useRef<HTMLDivElement>(null);
 
-  // US-011: Stats count up animation
+  // CRITICAL: Merge all animations into a single useGSAP hook for proper cleanup
   useGSAP(() => {
     // US-026: Skip all animations if reduced motion is preferred
     if (prefersReducedMotion) return;
@@ -29,10 +29,7 @@ export function StatsSection({ prefersReducedMotion }: StatsSectionProps) {
     const stats = statsRef.current;
     if (!stats) return;
 
-    // Track all ScrollTriggers for cleanup
-    const triggers: ScrollTrigger[] = [];
-
-    // Get all stat value elements with their data-target attributes
+    // US-011: Get all stat value elements with their data-target attributes
     const statValues = stats.querySelectorAll('.stat-value');
 
     // US-013: Get all stat progress circles for circular animation
@@ -58,18 +55,14 @@ export function StatsSection({ prefersReducedMotion }: StatsSectionProps) {
           // Update the element text with current value
           (statValue as HTMLElement).textContent = Math.round(counterObj.value).toString();
         },
-        force3D: true, // GPU acceleration
       });
 
       // US-013: Animate circular progress indicator
-      // Circle circumference = 2 * PI * 56 ≈ 351.86
-      const circumference = 351.86;
       if (circle) {
         gsap.to(circle, {
           strokeDashoffset: 0,
           duration: 2,
           ease: 'power2.out',
-          force3D: true, // GPU acceleration
           scrollTrigger: {
             trigger: stats,
             start: 'top center',
@@ -79,41 +72,17 @@ export function StatsSection({ prefersReducedMotion }: StatsSectionProps) {
       }
     });
 
-    // Collect ScrollTriggers for cleanup
-    ScrollTrigger.getAll().forEach((trigger) => {
-      if (trigger.trigger === stats || stats.contains(trigger.trigger as Element)) {
-        triggers.push(trigger);
-      }
-    });
-
-    return () => {
-      triggers.forEach((t) => t.kill());
-      gsap.killTweensOf(statValues);
-      gsap.killTweensOf(progressCircles);
-    };
-  }, { scope: statsRef, dependencies: [prefersReducedMotion] });
-
-  // US-012: Stats scrub timeline and icon transforms
-  useGSAP(() => {
-    // US-026: Skip all animations if reduced motion is preferred
-    if (prefersReducedMotion) return;
-
-    const stats = statsRef.current;
-    if (!stats) return;
-
-    // Track all ScrollTriggers for cleanup
-    const triggers: ScrollTrigger[] = [];
-
-    // Get all stat icon SVG elements
+    // US-012: Get all stat icon SVG elements
     const statIcons = stats.querySelectorAll('.stat-icon svg');
 
     // Create timeline with scrub linked to scroll position
+    // Scrub animations benefit from GPU acceleration
     const iconTimeline = gsap.timeline({
       scrollTrigger: {
         trigger: stats,
         start: 'top center',
         end: 'bottom center',
-        scrub: 1, // Smooth catch-up to scroll position
+        scrub: 1,
       },
     });
 
@@ -121,26 +90,13 @@ export function StatsSection({ prefersReducedMotion }: StatsSectionProps) {
     iconTimeline.to(statIcons, {
       scale: 1.3,
       rotation: 45,
-      color: '#f97316', // orange-500
+      color: '#f97316',
       duration: 1,
       stagger: 0.2,
       ease: 'power2.out',
-      force3D: true, // GPU acceleration
     });
 
-    // Collect ScrollTriggers for cleanup
-    ScrollTrigger.getAll().forEach((trigger) => {
-      if (trigger.trigger === stats || stats.contains(trigger.trigger as Element)) {
-        if (!triggers.includes(trigger)) {
-          triggers.push(trigger);
-        }
-      }
-    });
-
-    return () => {
-      triggers.forEach((t) => t.kill());
-      gsap.killTweensOf(statIcons);
-    };
+    // Cleanup is automatic with useGSAP
   }, { scope: statsRef, dependencies: [prefersReducedMotion] });
 
   return (

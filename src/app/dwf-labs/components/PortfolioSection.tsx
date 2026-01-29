@@ -33,7 +33,7 @@ export function PortfolioSection({ prefersReducedMotion }: PortfolioSectionProps
     const portfolioCards = portfolio.querySelectorAll('.portfolio-card');
 
     // Set initial state - cards hidden and offset
-    gsap.set(portfolioCards, { y: 60, opacity: 0, scale: 0.95, force3D: true });
+    gsap.set(portfolioCards, { y: 60, opacity: 0, scale: 0.95 });
 
     // Animate cards in when section enters viewport
     gsap.to(portfolioCards, {
@@ -43,7 +43,6 @@ export function PortfolioSection({ prefersReducedMotion }: PortfolioSectionProps
       duration: 0.6,
       stagger: 0.08,
       ease: 'back.out(1.2)',
-      force3D: true,
       scrollTrigger: {
         trigger: portfolio,
         start: 'top center',
@@ -51,9 +50,7 @@ export function PortfolioSection({ prefersReducedMotion }: PortfolioSectionProps
       },
     });
 
-    return () => {
-      gsap.killTweensOf(portfolioCards);
-    };
+    // Cleanup is automatic with useGSAP
   }, { scope: portfolioRef, dependencies: [prefersReducedMotion] });
 
   return (

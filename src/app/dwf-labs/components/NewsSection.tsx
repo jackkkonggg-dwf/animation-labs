@@ -10,7 +10,7 @@
 
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 import { NewsThumbnail } from './NewsThumbnail';
@@ -31,14 +31,11 @@ export function NewsSection({ prefersReducedMotion }: NewsSectionProps) {
     const news = newsRef.current;
     if (!news) return;
 
-    // Track all ScrollTriggers for cleanup
-    const triggers: ScrollTrigger[] = [];
-
     // Get all news cards for staggered reveal
     const newsCards = news.querySelectorAll('.news-card');
 
     // Set initial state for staggered reveal
-    gsap.set(newsCards, { y: 60, opacity: 0, force3D: true });
+    gsap.set(newsCards, { y: 60, opacity: 0 });
 
     // Create staggered reveal animation
     gsap.to(newsCards, {
@@ -47,7 +44,6 @@ export function NewsSection({ prefersReducedMotion }: NewsSectionProps) {
       duration: 0.6,
       stagger: 0.15,
       ease: 'power3.out',
-      force3D: true, // GPU acceleration
       scrollTrigger: {
         trigger: news,
         start: 'top center',
@@ -55,22 +51,14 @@ export function NewsSection({ prefersReducedMotion }: NewsSectionProps) {
       },
     });
 
-    // Collect ScrollTriggers for cleanup
-    ScrollTrigger.getAll().forEach((trigger) => {
-      if (trigger.trigger === news || news.contains(trigger.trigger as Element)) {
-        triggers.push(trigger);
-      }
-    });
-
-    return () => {
-      triggers.forEach((t) => t.kill());
-      gsap.killTweensOf(newsCards);
-    };
+    // Cleanup is automatic with useGSAP
   }, { scope: newsRef, dependencies: [prefersReducedMotion] });
 
   // US-018: News card 3D tilt on mouse move
   // US-019: News shine effect and thumbnail zoom
-  useEffect(() => {
+  // CRITICAL: Using contextSafe() ensures GSAP tweens created in event handlers
+  // are bound to the GSAP context for automatic cleanup on unmount/navigation
+  useGSAP((context, contextSafe) => {
     // US-026: Skip mouse move effects if reduced motion is preferred
     if (prefersReducedMotion) return;
 
@@ -84,14 +72,14 @@ export function NewsSection({ prefersReducedMotion }: NewsSectionProps) {
       const shine = card.querySelector('.news-shine') as HTMLElement;
       const thumbnail = card.querySelector('.news-thumbnail > div') as HTMLElement;
 
-      const handleMouseMove = (e: Event) => {
+      // CRITICAL: Wrap handlers in contextSafe() so tweens are cleaned up properly
+      const handleMouseMove = contextSafe((e: Event) => {
         const mouseEvent = e as MouseEvent;
         const rect = (card as HTMLElement).getBoundingClientRect();
-        const x = (mouseEvent.clientX - rect.left) / rect.width; // Normalize to 0-1
-        const y = (mouseEvent.clientY - rect.top) / rect.height; // Normalize to 0-1
+        const x = (mouseEvent.clientX - rect.left) / rect.width;
+        const y = (mouseEvent.clientY - rect.top) / rect.height;
 
-        // US-018: RotateX: (y - 0.5) * -30deg (max ±15deg)
-        // US-018: RotateY: (x - 0.5) * 30deg (max ±15deg)
+        // US-018: 3D rotation - benefits from GPU acceleration
         const rotateX = (y - 0.5) * -30;
         const rotateY = (x - 0.5) * 30;
 
@@ -101,19 +89,16 @@ export function NewsSection({ prefersReducedMotion }: NewsSectionProps) {
           duration: 0.3,
           ease: 'power2.out',
           transformPerspective: 1000,
-          force3D: true, // GPU acceleration
         });
 
         // US-019: Shine effect follows mouse
-        // Position the radial gradient at mouse coordinates
-        const xPos = (mouseEvent.clientX - rect.left) / 1; // Pixel position
+        const xPos = (mouseEvent.clientX - rect.left) / 1;
         const yPos = (mouseEvent.clientY - rect.top) / 1;
         if (shine) {
           gsap.to(shine, {
             opacity: 0.3,
             duration: 0.3,
             ease: 'power2.out',
-            force3D: true, // GPU acceleration
             background: `radial-gradient(circle 100px at ${xPos}px ${yPos}px, rgba(249, 115, 22, 0.4), transparent)`,
           });
         }
@@ -124,62 +109,51 @@ export function NewsSection({ prefersReducedMotion }: NewsSectionProps) {
             scale: 1.1,
             duration: 0.3,
             ease: 'power2.out',
-            force3D: true, // GPU acceleration
             transformOrigin: 'center center',
           });
         }
-      };
+      });
 
-      const handleMouseLeave = () => {
+      const handleMouseLeave = contextSafe(() => {
         gsap.to(card, {
           rotateX: 0,
           rotateY: 0,
           duration: 0.3,
           ease: 'power2.out',
           transformPerspective: 1000,
-          force3D: true, // GPU acceleration
         });
 
-        // US-019: Reset shine opacity
         if (shine) {
           gsap.to(shine, {
             opacity: 0,
             duration: 0.3,
             ease: 'power2.out',
-            force3D: true, // GPU acceleration
           });
         }
 
-        // US-019: Reset thumbnail scale
         if (thumbnail) {
           gsap.to(thumbnail, {
             scale: 1.0,
             duration: 0.3,
             ease: 'power2.out',
             transformOrigin: 'center center',
-            force3D: true, // GPU acceleration
           });
         }
-      };
+      });
 
       card.addEventListener('mousemove', handleMouseMove);
       card.addEventListener('mouseleave', handleMouseLeave);
 
-      // Store cleanup function for this card
       cleanupFunctions.push(() => {
         card.removeEventListener('mousemove', handleMouseMove);
         card.removeEventListener('mouseleave', handleMouseLeave);
-        gsap.killTweensOf(card);
-        if (shine) gsap.killTweensOf(shine);
-        if (thumbnail) gsap.killTweensOf(thumbnail);
       });
     });
 
-    // Cleanup all event listeners and tweens on unmount
     return () => {
       cleanupFunctions.forEach((cleanup) => cleanup());
     };
-  }, [prefersReducedMotion]);
+  }, { scope: newsRef, dependencies: [prefersReducedMotion] });
 
   return (
     <section

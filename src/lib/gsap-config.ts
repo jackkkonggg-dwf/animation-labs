@@ -2,34 +2,11 @@
 
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { MotionPathPlugin } from 'gsap/MotionPathPlugin';
-import Draggable from 'gsap/src/Draggable';
 
-// Bonus plugins (free with GSAP 3.13+)
-import { SplitText } from 'gsap/SplitText';
-import { ScrollSmoother } from 'gsap/ScrollSmoother';
-import { InertiaPlugin } from 'gsap/InertiaPlugin';
-import { MorphSVGPlugin } from 'gsap/MorphSVGPlugin';
-import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin';
-import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin';
-import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
-import { Observer } from 'gsap/Observer';
-
-// Register plugins - GSAP handles duplicate registration gracefully
+// Only register plugins that are actively used in the application
+// This significantly reduces bundle size
 if (typeof window !== 'undefined') {
-  gsap.registerPlugin(
-    ScrollTrigger,
-    MotionPathPlugin,
-    Draggable,
-    SplitText,
-    ScrollSmoother,
-    InertiaPlugin,
-    MorphSVGPlugin,
-    DrawSVGPlugin,
-    ScrambleTextPlugin,
-    ScrollToPlugin,
-    Observer
-  );
+  gsap.registerPlugin(ScrollTrigger);
 
   // Set global defaults for animations
   gsap.defaults({
@@ -38,17 +15,19 @@ if (typeof window !== 'undefined') {
   });
 }
 
-export {
-  gsap,
-  ScrollTrigger,
-  MotionPathPlugin,
-  Draggable,
-  SplitText,
-  ScrollSmoother,
-  InertiaPlugin,
-  MorphSVGPlugin,
-  DrawSVGPlugin,
-  ScrambleTextPlugin,
-  ScrollToPlugin,
-  Observer,
+export { gsap, ScrollTrigger };
+
+// Lazy load additional plugins only when needed
+export const loadDraggable = async () => {
+  const Draggable = (await import('gsap/src/Draggable')).default;
+  gsap.registerPlugin(Draggable);
+  return Draggable;
 };
+
+export const loadSplitText = async () => {
+  const { SplitText } = await import('gsap/SplitText');
+  gsap.registerPlugin(SplitText);
+  return SplitText;
+};
+
+// Add other plugin loaders as needed

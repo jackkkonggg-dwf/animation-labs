@@ -30,12 +30,9 @@ export function HeroSection({ prefersReducedMotion, setFinalStateIfReducedMotion
     const hero = heroRef.current;
     if (!hero) return;
 
-    // Track all ScrollTriggers for cleanup
-    const triggers: ScrollTrigger[] = [];
-
     // US-004: Hero character text reveal animation
     const titleChars = hero.querySelectorAll('.hero-title span');
-    gsap.set(titleChars, { y: 100, opacity: 0, rotation: -5, force3D: true });
+    gsap.set(titleChars, { y: 100, opacity: 0, rotation: -5 });
 
     gsap.to(titleChars, {
       y: 0,
@@ -45,12 +42,11 @@ export function HeroSection({ prefersReducedMotion, setFinalStateIfReducedMotion
       stagger: 0.03,
       ease: 'back.out(1.7)',
       delay: 0.2,
-      force3D: true, // GPU acceleration
     });
 
     // US-005: Hero tagline word reveal animation
     const taglineWords = hero.querySelectorAll('.hero-tagline span');
-    gsap.set(taglineWords, { y: 50, opacity: 0, force3D: true });
+    gsap.set(taglineWords, { y: 50, opacity: 0 });
 
     gsap.to(taglineWords, {
       y: 0,
@@ -59,7 +55,6 @@ export function HeroSection({ prefersReducedMotion, setFinalStateIfReducedMotion
       stagger: 0.15,
       ease: 'power2.out',
       delay: 0.3, // Delay after character reveal
-      force3D: true, // GPU acceleration
     });
 
     // US-006: Hero multi-layer parallax background
@@ -68,12 +63,12 @@ export function HeroSection({ prefersReducedMotion, setFinalStateIfReducedMotion
     const layer3 = hero.querySelector('.parallax-layer-3');
     const layer4 = hero.querySelector('.parallax-layer-4');
 
+    // Parallax layers benefit from GPU acceleration (continuous scroll animation)
     // Layer 1: Grid pattern - slowest (speed: 0.2)
     if (layer1) {
       gsap.to(layer1, {
         y: 100,
         ease: 'none',
-        force3D: true, // GPU acceleration
         scrollTrigger: {
           trigger: hero,
           start: 'top top',
@@ -88,7 +83,6 @@ export function HeroSection({ prefersReducedMotion, setFinalStateIfReducedMotion
       gsap.to(layer2, {
         y: 250,
         ease: 'none',
-        force3D: true, // GPU acceleration
         scrollTrigger: {
           trigger: hero,
           start: 'top top',
@@ -103,7 +97,6 @@ export function HeroSection({ prefersReducedMotion, setFinalStateIfReducedMotion
       gsap.to(layer3, {
         y: 400,
         ease: 'none',
-        force3D: true, // GPU acceleration
         scrollTrigger: {
           trigger: hero,
           start: 'top top',
@@ -118,7 +111,6 @@ export function HeroSection({ prefersReducedMotion, setFinalStateIfReducedMotion
       gsap.to(layer4, {
         y: 500,
         ease: 'none',
-        force3D: true, // GPU acceleration
         scrollTrigger: {
           trigger: hero,
           start: 'top top',
@@ -143,22 +135,9 @@ export function HeroSection({ prefersReducedMotion, setFinalStateIfReducedMotion
       duration: 0.8,
       ease: 'power2.out',
       delay: 0.5,
-      force3D: true, // GPU acceleration
     });
 
-    // Collect ScrollTriggers for cleanup
-    ScrollTrigger.getAll().forEach((trigger) => {
-      if (trigger.trigger === hero || hero.contains(trigger.trigger as Element)) {
-        triggers.push(trigger);
-      }
-    });
-
-    return () => {
-      gsap.killTweensOf(titleChars);
-      gsap.killTweensOf(taglineWords);
-      gsap.killTweensOf(cornerPaths);
-      triggers.forEach((t) => t.kill());
-    };
+    // Cleanup is automatic with useGSAP
   }, { scope: heroRef, dependencies: [prefersReducedMotion] });
 
   return (

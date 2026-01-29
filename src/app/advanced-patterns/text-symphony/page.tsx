@@ -1,8 +1,8 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap, ScrollTrigger, SplitText } from '@/lib/gsap-config';
+import { gsap, ScrollTrigger, loadSplitText } from '@/lib/gsap-config';
 
 // ============================================================================
 // HERO SECTION - Auto-playing timeline with SplitText choreography
@@ -12,10 +12,15 @@ function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
+  const [splitTextLoaded, setSplitTextLoaded] = useState(false);
 
-  useGSAP(() => {
+  useGSAP(async () => {
     const container = containerRef.current;
     if (!container || !titleRef.current || !subtitleRef.current) return;
+
+    // Load SplitText plugin dynamically
+    const SplitText = await loadSplitText();
+    setSplitTextLoaded(true);
 
     // Split text into characters and words
     const titleSplit = new SplitText(titleRef.current, { type: 'chars, words' });
@@ -121,10 +126,15 @@ function HeroSection() {
 function CharacterCascadeSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLHeadingElement>(null);
+  const [splitTextLoaded, setSplitTextLoaded] = useState(false);
 
-  useGSAP(() => {
+  useGSAP(async () => {
     const container = containerRef.current;
     if (!container || !textRef.current) return;
+
+    // Load SplitText plugin dynamically
+    const SplitText = await loadSplitText();
+    setSplitTextLoaded(true);
 
     const split = new SplitText(textRef.current, { type: 'chars' });
 
@@ -205,10 +215,15 @@ function WordRevealSection() {
   const line1Ref = useRef<HTMLHeadingElement>(null);
   const line2Ref = useRef<HTMLHeadingElement>(null);
   const line3Ref = useRef<HTMLHeadingElement>(null);
+  const [splitTextLoaded, setSplitTextLoaded] = useState(false);
 
-  useGSAP(() => {
+  useGSAP(async () => {
     const container = containerRef.current;
     if (!container || !line1Ref.current || !line2Ref.current || !line3Ref.current) return;
+
+    // Load SplitText plugin dynamically
+    const SplitText = await loadSplitText();
+    setSplitTextLoaded(true);
 
     const split1 = new SplitText(line1Ref.current, { type: 'words' });
     const split2 = new SplitText(line2Ref.current, { type: 'words' });
@@ -296,10 +311,15 @@ function WordRevealSection() {
 function LineByLineSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
+  const [splitTextLoaded, setSplitTextLoaded] = useState(false);
 
-  useGSAP(() => {
+  useGSAP(async () => {
     const container = containerRef.current;
     if (!container || !textRef.current) return;
+
+    // Load SplitText plugin dynamically
+    const SplitText = await loadSplitText();
+    setSplitTextLoaded(true);
 
     const split = new SplitText(textRef.current, {
       type: 'lines',
@@ -365,10 +385,15 @@ function LineByLineSection() {
 function ScrollScrubSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLHeadingElement>(null);
+  const [splitTextLoaded, setSplitTextLoaded] = useState(false);
 
-  useGSAP(() => {
+  useGSAP(async () => {
     const container = containerRef.current;
     if (!container || !textRef.current) return;
+
+    // Load SplitText plugin dynamically
+    const SplitText = await loadSplitText();
+    setSplitTextLoaded(true);
 
     const split = new SplitText(textRef.current, { type: 'chars' });
 
@@ -454,10 +479,15 @@ function ScrollScrubSection() {
 function GradientBlendSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLHeadingElement>(null);
+  const [splitTextLoaded, setSplitTextLoaded] = useState(false);
 
-  useGSAP(() => {
+  useGSAP(async () => {
     const container = containerRef.current;
     if (!container || !textRef.current) return;
+
+    // Load SplitText plugin dynamically
+    const SplitText = await loadSplitText();
+    setSplitTextLoaded(true);
 
     const split = new SplitText(textRef.current, { type: 'words' });
 

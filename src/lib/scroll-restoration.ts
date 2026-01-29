@@ -21,11 +21,12 @@ export function isBackNavigation(): boolean {
     return navEntry.type === 'back_forward';
   }
 
-  // Fallback to checking performance marks
-  const hasNavigationTiming = 'navigation' in performance;
-  if (hasNavigationTiming) {
-    // @ts-expect-error - navigation is experimental
-    return performance.navigation?.type === 2; // TYPE_BACK_FORWARD = 2
+  // Fallback to checking performance navigation (deprecated API)
+  // Use ts-ignore since we're accessing a deprecated property
+  // @ts-ignore - performance.navigation is deprecated but still exists
+  const navType = performance.navigation?.type;
+  if (typeof navType === 'number') {
+    return navType === 2; // TYPE_BACK_FORWARD = 2
   }
 
   // Final fallback: check session storage

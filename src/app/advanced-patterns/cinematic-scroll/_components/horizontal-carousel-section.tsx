@@ -48,7 +48,9 @@ export function HorizontalCarouselSection() {
       end: () => `+=${scrollDistance}`,
       scrub: 1,
       pin: true,
+      pinSpacing: true,
       anticipatePin: 1,
+      invalidateOnRefresh: true,
       animation: gsap.to(wrapper, {
         x: () => -scrollDistance,
         ease: 'none',

@@ -28,6 +28,9 @@ export function LineByLineSection() {
         start: 'top top',
         end: '+=1200',
         pin: true,
+        pinSpacing: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
         toggleActions: 'play none none reverse',
       },
     });

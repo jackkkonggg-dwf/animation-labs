@@ -40,6 +40,9 @@ export function CombinedShowcaseSection() {
         end: '+=3000',
         scrub: 1,
         pin: true,
+        pinSpacing: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
       },
     });
 

@@ -24,6 +24,9 @@ export function ScrollScrubSection() {
         end: '+=2000',
         scrub: 1,
         pin: true,
+        pinSpacing: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
       },
     });
 

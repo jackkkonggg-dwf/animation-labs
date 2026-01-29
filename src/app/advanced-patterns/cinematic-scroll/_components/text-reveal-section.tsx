@@ -25,6 +25,9 @@ export function TextRevealSection() {
         end: '+=1800',
         scrub: 1,
         pin: true,
+        pinSpacing: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
       },
     });
 

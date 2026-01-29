@@ -25,6 +25,9 @@ export function MotionPathJourneySection() {
         end: '+=2000',
         scrub: 1,
         pin: true,
+        pinSpacing: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
       },
     });
 
@@ -47,6 +50,9 @@ export function MotionPathJourneySection() {
       ease: 'none',
       duration: 2,
     }, 0);
+
+    // Refresh ScrollTrigger after setup
+    ScrollTrigger.refresh();
 
     return () => {
       ScrollTrigger.getAll().forEach((t) => t.kill());

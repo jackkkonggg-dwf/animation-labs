@@ -49,6 +49,9 @@ export function MorphingJourneySection() {
         end: '+=2500',
         scrub: 1,
         pin: true,
+        pinSpacing: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
         onUpdate: (self) => {
           if (labels.progress) {
             labels.progress.textContent = `Progress: ${Math.round(self.progress * 100)}%`;
@@ -59,7 +62,7 @@ export function MorphingJourneySection() {
 
     // Set initial state - morph shape starts with circle path
     gsap.set(morphShape, {
-      attr: { d: targetCircle.getAttribute('d') },
+      attr: { d: targetCircle.getAttribute('d') || '' },
       opacity: 1,
     });
 
@@ -127,9 +130,6 @@ export function MorphingJourneySection() {
         if (labels.state) labels.state.textContent = 'Final State: Star';
       },
     }, 2.5);
-
-    // Refresh ScrollTrigger after setup
-    ScrollTrigger.refresh();
 
     return () => {
       ScrollTrigger.getAll().forEach((t) => t.kill());

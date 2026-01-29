@@ -168,6 +168,42 @@ export function MyComponent() {
 | Scroll positions misaligned | Call `ScrollTrigger.refresh()` after init |
 | Event listeners leak | Remove listeners in cleanup |
 
+## GSAP ScrollTrigger Pin Configuration Pattern
+
+**Critical for multiple pinned sections**: When using `pin: true` with multiple sequential sections, proper configuration is essential to prevent blank sections, premature triggers, and overlapping animations.
+
+### Required Configuration for Pinned Sections
+
+```typescript
+const tl = gsap.timeline({
+  scrollTrigger: {
+    trigger: container,
+    start: 'top top',
+    end: '+=2500',
+    scrub: 1,
+    pin: true,
+    pinSpacing: true,        // Required: Explicitly adds spacing for pinned element
+    anticipatePin: 1,         // Required: Prepares pin 1s before trigger (prevents jumping)
+    invalidateOnRefresh: true, // Required: Recalculates positions on refresh/resize
+  },
+});
+```
+
+### Why Each Property Is Required
+
+| Property | Purpose | What Happens Without It |
+|----------|---------|------------------------|
+| `pinSpacing: true` | Adds scroll distance for pinned element | Next section starts early, overlap occurs |
+| `anticipatePin: 1` | Prepares pin before trigger point | Blank flash, jumping on scroll start |
+| `invalidateOnRefresh: true` | Recalculates on window resize/refresh | Positions break after resize |
+
+### Common Issues
+
+1. **Section goes blank when scroll starts** → Add `anticipatePin: 1`
+2. **Next section starts during current animation** → Add `pinSpacing: true`
+3. **Animations overlap or trigger early** → Ensure ALL pinned sections have these 3 properties
+4. **Positions break after resize** → Add `invalidateOnRefresh: true`
+
 ### Resources
 - [Optimizing GSAP in Next.js 15](https://medium.com/@thomasaugot/optimizing-gsap-animations-in-next-js-15-best-practices-for-initialization-and-cleanup-2ebaba7d0232)
 - [ScrollTrigger.kill() docs](https://gsap.com/docs/v3/Plugins/ScrollTrigger/#kill)

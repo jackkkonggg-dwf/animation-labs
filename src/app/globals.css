@@ -180,3 +180,28 @@ body {
     animation: scan 1.5s ease-in-out infinite;
   }
 }
+
+/* ============================================================================
+   Scroll Restoration - Skip animations on back navigation
+   ============================================================================ */
+
+/* When skip-animations class is present, show content immediately */
+.skip-animations * {
+  animation: none !important;
+  transition: none !important;
+}
+
+.skip-animations .demo-card {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* Prevent flash of unstyled content when restoring scroll position */
+html {
+  scroll-behavior: auto;
+}
+
+/* Only enable smooth scrolling for same-page anchor links */
+html:has(:target) {
+  scroll-behavior: smooth;
+}

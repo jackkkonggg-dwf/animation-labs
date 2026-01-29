@@ -1,11 +1,12 @@
 'use client';
 
-import { useRef, useMemo, useCallback } from 'react';
+import { useRef, useMemo, useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 import { NAVIGATION_DATA } from '@/lib/navigation-data';
+import { shouldSkipAnimations, setupBackNavigationListener } from '@/lib/scroll-restoration';
 import type { Difficulty } from '@/types/pattern';
 
 // Difficulty badge styles
@@ -40,9 +41,21 @@ export function DemoGrid() {
   const cardsRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const [skipAnimations, setSkipAnimations] = useState(false);
 
   const searchParams = useSearchParams();
   const router = useRouter();
+
+  // Check if we should skip animations (back navigation or reduced motion)
+  useEffect(() => {
+    if (shouldSkipAnimations()) {
+      setSkipAnimations(true);
+    }
+
+    // Set up listener for back navigation
+    const cleanup = setupBackNavigationListener();
+    return cleanup;
+  }, []);
 
   // Get filter values from URL params
   const searchQuery = searchParams.get('search') || '';
@@ -125,6 +138,14 @@ export function DemoGrid() {
 
     if (!container || !cards || cards.length === 0) return;
 
+    // Skip animations on back navigation or reduced motion
+    if (skipAnimations) {
+      // Set final state immediately without animation
+      gsap.set(titleRef.current, { y: 0, opacity: 1 });
+      gsap.set(cards, { opacity: 1, y: 0, scale: 1 });
+      return;
+    }
+
     // Animate title with aggressive entrance
     gsap.fromTo(
       titleRef.current,
@@ -152,7 +173,7 @@ export function DemoGrid() {
 
     // CRITICAL: Cleanup is automatic with useGSAP - all tweens and triggers
     // in this context are reverted when component unmounts
-  }, { scope: containerRef, dependencies: [filteredRoutes.length] }); // Re-run animation when filtered routes change
+  }, { scope: containerRef, dependencies: [filteredRoutes.length, skipAnimations] }); // Re-run animation when filtered routes change or skipAnimations changes
 
   return (
     <section ref={containerRef} className="min-h-screen bg-zinc-950 pt-32 md:pt-40 pb-16 px-4 md:px-6 relative overflow-hidden">

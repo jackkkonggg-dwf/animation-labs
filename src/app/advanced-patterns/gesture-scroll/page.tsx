@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger, loadObserver } from '@/lib/gsap-config';
 import { useScrollState } from '@/lib/utils/scroll-velocity';
@@ -127,8 +127,10 @@ function VelocityScrollSection() {
   // Ref to track current scroll velocity for ticker callback
   const currentVelocityRef = useRef(0);
 
-  // Keep the ref in sync with scrollState
-  currentVelocityRef.current = scrollState.velocity;
+  // Update ref when scrollState changes (not during render)
+  useEffect(() => {
+    currentVelocityRef.current = scrollState.velocity;
+  }, [scrollState.velocity]);
 
   useGSAP(() => {
     const container = containerRef.current;
@@ -159,6 +161,11 @@ function VelocityScrollSection() {
     const updateVelocity = () => {
       const targetVelocity = currentVelocityRef.current;
       const current = smoothedVelocityRef.current.value;
+
+      // Skip update if velocity hasn't changed significantly (optimization)
+      if (Math.abs(targetVelocity - current) < 0.01) {
+        return;
+      }
 
       // Lerp (linear interpolation) towards target velocity
       // The 0.05 factor controls the lag - lower = more lag
@@ -210,7 +217,7 @@ function VelocityScrollSection() {
         {/* Velocity meter */}
         <div className="mb-12 bg-zinc-800 rounded-full h-6 overflow-hidden border border-zinc-700">
           <div
-            className="velocity-meter h-full bg-green-500 transition-colors duration-200"
+            className="velocity-meter h-full bg-green-500"
             style={{ width: `0%` }}
           />
         </div>
@@ -252,8 +259,10 @@ function DirectionScrollSection() {
   // Ref to track current direction for ScrollTrigger callback
   const currentDirectionRef = useRef<'up' | 'down' | 'none'>('none');
 
-  // Keep the ref in sync with scrollState
-  currentDirectionRef.current = scrollState.direction;
+  // Update ref when scrollState changes (not during render)
+  useEffect(() => {
+    currentDirectionRef.current = scrollState.direction;
+  }, [scrollState.direction]);
 
   useGSAP(() => {
     const container = containerRef.current;
@@ -749,8 +758,10 @@ function ObserverSection() {
   // Ref to track hovered box for Observer callback (avoids closure + prevents re-runs)
   const hoveredBoxRef = useRef<number | null>(null);
 
-  // Keep ref in sync with state
-  hoveredBoxRef.current = hoveredBox;
+  // Update ref when hoveredBox changes (not during render)
+  useEffect(() => {
+    hoveredBoxRef.current = hoveredBox;
+  }, [hoveredBox]);
 
   useGSAP(async () => {
     const container = containerRef.current;

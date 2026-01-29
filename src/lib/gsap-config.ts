@@ -30,4 +30,28 @@ export const loadSplitText = async () => {
   return SplitText;
 };
 
+export const loadObserver = async () => {
+  const { Observer } = await import('gsap/Observer');
+  gsap.registerPlugin(Observer);
+  return Observer;
+};
+
+export const loadMorphSVGPlugin = async () => {
+  const { MorphSVGPlugin } = await import('gsap/MorphSVGPlugin');
+  gsap.registerPlugin(MorphSVGPlugin);
+  return MorphSVGPlugin;
+};
+
+export const loadMotionPathPlugin = async () => {
+  const { MotionPathPlugin } = await import('gsap/MotionPathPlugin');
+  gsap.registerPlugin(MotionPathPlugin);
+  return MotionPathPlugin;
+};
+
+export const loadDrawSVGPlugin = async () => {
+  const { DrawSVGPlugin } = await import('gsap/DrawSVGPlugin');
+  gsap.registerPlugin(DrawSVGPlugin);
+  return DrawSVGPlugin;
+};
+
 // Add other plugin loaders as needed

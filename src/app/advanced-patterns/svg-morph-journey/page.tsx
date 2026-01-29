@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap, ScrollTrigger, MorphSVGPlugin, MotionPathPlugin, DrawSVGPlugin } from '@/lib/gsap-config';
+import { gsap, ScrollTrigger, loadMorphSVGPlugin, loadMotionPathPlugin, loadDrawSVGPlugin } from '@/lib/gsap-config';
 
 // ============================================================================
 // SECTION 1 - Morphing Shapes Journey
@@ -16,9 +16,12 @@ interface MorphShape {
 function MorphingJourneySection() {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(() => {
+  useGSAP(async () => {
     const container = containerRef.current;
     if (!container) return;
+
+    // Load MorphSVGPlugin dynamically
+    await loadMorphSVGPlugin();
 
     const shapes = {
       circle: container.querySelector('#morph-circle') as SVGPathElement,
@@ -262,9 +265,12 @@ function MorphingJourneySection() {
 function MotionPathJourneySection() {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(() => {
+  useGSAP(async () => {
     const container = containerRef.current;
     if (!container) return;
+
+    // Load plugins dynamically
+    await Promise.all([loadMotionPathPlugin(), loadDrawSVGPlugin()]);
 
     const traveler = container.querySelector('.motion-traveler') as HTMLElement;
     const path = container.querySelector('.motion-path') as SVGPathElement;
@@ -395,9 +401,12 @@ const SHAPE_PATHS = {
 function InteractiveMorphSection() {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(() => {
+  useGSAP(async () => {
     const container = containerRef.current;
     if (!container) return;
+
+    // Load MorphSVGPlugin dynamically
+    await loadMorphSVGPlugin();
 
     const morphShape = container.querySelector('.interactive-morph') as SVGPathElement;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -540,9 +549,12 @@ function InteractiveMorphSection() {
 function CombinedShowcaseSection() {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(() => {
+  useGSAP(async () => {
     const container = containerRef.current;
     if (!container) return;
+
+    // Load plugins dynamically
+    await Promise.all([loadMorphSVGPlugin(), loadMotionPathPlugin()]);
 
     const morphPath = container.querySelector('.showcase-morph-path') as SVGPathElement;
     const follower = container.querySelector('.showcase-follower') as HTMLElement;

@@ -1,8 +1,8 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
-import { Draggable, gsap } from '@/lib/gsap-config';
+import { loadDraggable, gsap } from '@/lib/gsap-config';
 import { PatternHeader, CodeViewer } from '@/components/patterns';
 import { RelatedPatterns } from '@/components/patterns/related-patterns';
 import { PatternNavigation } from '@/components/patterns/pattern-navigation';
@@ -24,10 +24,13 @@ function useMomentumDraggable(
 ) {
   const { enabled = true, resistance = 0.8, duration = 1.5, easing = 'power2.out' } = options;
 
-  useGSAP(() => {
+  useGSAP(async () => {
     const element = elementRef.current;
     const container = containerRef?.current;
     if (!element || !enabled) return;
+
+    // Load Draggable plugin dynamically
+    const Draggable = await loadDraggable();
 
     // Velocity tracking
     let lastX = 0;
@@ -137,16 +140,19 @@ const CODE_EXAMPLE = `
 
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
-import { Draggable, gsap } from '@/lib/gsap-config';
+import { loadDraggable, gsap } from '@/lib/gsap-config';
 
 export function MomentumDraggable() {
   const boxRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(() => {
+  useGSAP(async () => {
     const box = boxRef.current;
     const container = containerRef.current;
     if (!box || !container) return;
+
+    // Load Draggable plugin dynamically
+    const Draggable = await loadDraggable();
 
     // Velocity tracking variables
     let lastX = 0;

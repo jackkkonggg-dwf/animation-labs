@@ -59,6 +59,8 @@ export function NewsSection({ prefersReducedMotion }: NewsSectionProps) {
   // CRITICAL: Using contextSafe() ensures GSAP tweens created in event handlers
   // are bound to the GSAP context for automatic cleanup on unmount/navigation
   useGSAP((context, contextSafe) => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const safe = contextSafe!;
     // US-026: Skip mouse move effects if reduced motion is preferred
     if (prefersReducedMotion) return;
 
@@ -73,7 +75,7 @@ export function NewsSection({ prefersReducedMotion }: NewsSectionProps) {
       const thumbnail = card.querySelector('.news-thumbnail > div') as HTMLElement;
 
       // CRITICAL: Wrap handlers in contextSafe() so tweens are cleaned up properly
-      const handleMouseMove = contextSafe((e: Event) => {
+      const handleMouseMove = safe((e: Event) => {
         const mouseEvent = e as MouseEvent;
         const rect = (card as HTMLElement).getBoundingClientRect();
         const x = (mouseEvent.clientX - rect.left) / rect.width;
@@ -114,7 +116,7 @@ export function NewsSection({ prefersReducedMotion }: NewsSectionProps) {
         }
       });
 
-      const handleMouseLeave = contextSafe(() => {
+      const handleMouseLeave = safe(() => {
         gsap.to(card, {
           rotateX: 0,
           rotateY: 0,

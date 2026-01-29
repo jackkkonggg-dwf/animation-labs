@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap, ScrollTrigger, loadSplitText } from '@/lib/gsap-config';
+import { gsap, ScrollTrigger, SplitText } from '@/lib/gsap-config';
 
 export function WordRevealSection() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -10,12 +10,9 @@ export function WordRevealSection() {
   const line2Ref = useRef<HTMLHeadingElement>(null);
   const line3Ref = useRef<HTMLHeadingElement>(null);
 
-  useGSAP(async () => {
+  useGSAP(() => {
     const container = containerRef.current;
     if (!container || !line1Ref.current || !line2Ref.current || !line3Ref.current) return;
-
-    // Load SplitText plugin dynamically
-    const SplitText = await loadSplitText();
 
     const split1 = new SplitText(line1Ref.current, { type: 'words' });
     const split2 = new SplitText(line2Ref.current, { type: 'words' });
@@ -76,10 +73,17 @@ export function WordRevealSection() {
       ease: 'power2.in',
     }, 1.5);
 
+    // Refresh ScrollTrigger after setup
     ScrollTrigger.refresh();
 
+    // Track the specific ScrollTrigger for cleanup
+    const scrollTrigger = tl.scrollTrigger;
+
     return () => {
-      ScrollTrigger.getAll().forEach((t) => t.kill());
+      // Only kill the ScrollTrigger we created, not all global triggers
+      if (scrollTrigger) {
+        scrollTrigger.kill();
+      }
       tl.kill();
       split1.revert();
       split2.revert();

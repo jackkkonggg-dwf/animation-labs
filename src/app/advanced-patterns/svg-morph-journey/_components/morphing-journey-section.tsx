@@ -2,17 +2,14 @@
 
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap, ScrollTrigger, loadMorphSVGPlugin } from '@/lib/gsap-config';
+import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 
 export function MorphingJourneySection() {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(async () => {
+  useGSAP(() => {
     const container = containerRef.current;
     if (!container) return;
-
-    // Load MorphSVGPlugin dynamically
-    await loadMorphSVGPlugin();
 
     // Get the morphing shape (the visible one)
     const morphShape = container.querySelector('#morph-shape-active') as SVGPathElement;
@@ -131,8 +128,17 @@ export function MorphingJourneySection() {
       },
     }, 2.5);
 
+    // Track the specific ScrollTrigger for cleanup (not all triggers globally)
+    const scrollTrigger = tl.scrollTrigger;
+
+    // Refresh ScrollTrigger after setup
+    ScrollTrigger.refresh();
+
     return () => {
-      ScrollTrigger.getAll().forEach((t) => t.kill());
+      // Only kill the ScrollTrigger we created, not all global triggers
+      if (scrollTrigger) {
+        scrollTrigger.kill();
+      }
       tl.kill();
       if (morphShape) gsap.killTweensOf(morphShape);
       if (filters.blur) gsap.killTweensOf(filters.blur);

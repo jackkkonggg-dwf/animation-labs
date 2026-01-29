@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
-import { loadDraggable } from '@/lib/gsap-config';
+import { Draggable } from '@/lib/gsap-config';
 import { PatternHeader, CodeViewer } from '@/components/patterns';
 import { RelatedPatterns } from '@/components/patterns/related-patterns';
 import { PatternNavigation } from '@/components/patterns/pattern-navigation';
@@ -17,17 +17,14 @@ const CODE_EXAMPLE = `
 
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
-import { loadDraggable } from '@/lib/gsap-config';
+import { Draggable } from '@/lib/gsap-config';
 
 export function BasicDraggableComponent() {
   const boxRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(async () => {
+  useGSAP(() => {
     const box = boxRef.current;
     if (!box) return;
-
-    // Load Draggable plugin dynamically
-    const Draggable = await loadDraggable();
 
     // Make element draggable
     Draggable.create(box, {
@@ -73,15 +70,13 @@ function LiveDemo() {
   const box3Ref = useRef<HTMLDivElement>(null);
   const [draggableLoaded, setDraggableLoaded] = useState(false);
 
-  useGSAP(async () => {
+  useGSAP(() => {
     const box1 = box1Ref.current;
     const box2 = box2Ref.current;
     const box3 = box3Ref.current;
 
     if (!box1 || !box2 || !box3) return;
 
-    // Load Draggable plugin dynamically
-    const Draggable = await loadDraggable();
     setDraggableLoaded(true);
 
     // Free drag - no constraints

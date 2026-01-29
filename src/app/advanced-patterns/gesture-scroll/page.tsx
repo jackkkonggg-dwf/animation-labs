@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap, ScrollTrigger, loadObserver } from '@/lib/gsap-config';
+import { gsap, ScrollTrigger, Observer } from '@/lib/gsap-config';
 import { useScrollState } from '@/lib/utils/scroll-velocity';
 import { useSwipeCallback, useGestureRecognizer, type SwipeDirection } from '@/lib/utils/gesture-recognizer';
 
@@ -763,14 +763,11 @@ function ObserverSection() {
     hoveredBoxRef.current = hoveredBox;
   }, [hoveredBox]);
 
-  useGSAP(async () => {
+  useGSAP(() => {
     const container = containerRef.current;
     if (!container) return;
 
     const boxes = boxRefs.current.filter(Boolean) as HTMLDivElement[];
-
-    // Load Observer plugin dynamically
-    const Observer = await loadObserver();
 
     // Observer for scroll direction tracking
     const scrollObserver = Observer.create({

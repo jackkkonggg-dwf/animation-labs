@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap, loadMorphSVGPlugin } from '@/lib/gsap-config';
+import { gsap } from '@/lib/gsap-config';
 
 interface MorphShape {
   id: string;
@@ -26,12 +26,9 @@ const SHAPE_PATHS = {
 export function InteractiveMorphSection() {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(async () => {
+  useGSAP(() => {
     const container = containerRef.current;
     if (!container) return;
-
-    // Load MorphSVGPlugin dynamically
-    await loadMorphSVGPlugin();
 
     const morphShape = container.querySelector('.interactive-morph') as SVGPathElement;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

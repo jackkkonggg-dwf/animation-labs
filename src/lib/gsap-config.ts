@@ -2,56 +2,42 @@
 
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { MorphSVGPlugin } from 'gsap/MorphSVGPlugin';
+import { MotionPathPlugin } from 'gsap/MotionPathPlugin';
+import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin';
+import { Draggable } from 'gsap/Draggable';
+import { SplitText } from 'gsap/SplitText';
+import { Observer } from 'gsap/Observer';
 
-// Only register plugins that are actively used in the application
-// This significantly reduces bundle size
+// Register all GSAP plugins upfront on client side
+// This eliminates async timing issues with ScrollTrigger
 if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(
+    ScrollTrigger,
+    MorphSVGPlugin,
+    MotionPathPlugin,
+    DrawSVGPlugin,
+    Draggable,
+    SplitText,
+    Observer
+  );
 
   // Set global defaults for animations
   gsap.defaults({
     ease: 'power3.out',
     duration: 0.5,
   });
+
+  // Normalize scroll to prevent flickering across browsers/devices
+  // especially on iOS Safari and mobile devices
+  // ScrollTrigger.normalizeScroll(true);
 }
 
+// Export GSAP and plugins for use in components
 export { gsap, ScrollTrigger };
-
-// Lazy load additional plugins only when needed
-export const loadDraggable = async () => {
-  const Draggable = (await import('gsap/src/Draggable')).default;
-  gsap.registerPlugin(Draggable);
-  return Draggable;
-};
-
-export const loadSplitText = async () => {
-  const { SplitText } = await import('gsap/SplitText');
-  gsap.registerPlugin(SplitText);
-  return SplitText;
-};
-
-export const loadObserver = async () => {
-  const { Observer } = await import('gsap/Observer');
-  gsap.registerPlugin(Observer);
-  return Observer;
-};
-
-export const loadMorphSVGPlugin = async () => {
-  const { MorphSVGPlugin } = await import('gsap/MorphSVGPlugin');
-  gsap.registerPlugin(MorphSVGPlugin);
-  return MorphSVGPlugin;
-};
-
-export const loadMotionPathPlugin = async () => {
-  const { MotionPathPlugin } = await import('gsap/MotionPathPlugin');
-  gsap.registerPlugin(MotionPathPlugin);
-  return MotionPathPlugin;
-};
-
-export const loadDrawSVGPlugin = async () => {
-  const { DrawSVGPlugin } = await import('gsap/DrawSVGPlugin');
-  gsap.registerPlugin(DrawSVGPlugin);
-  return DrawSVGPlugin;
-};
-
-// Add other plugin loaders as needed
+export { Draggable } from 'gsap/Draggable';
+export { SplitText } from 'gsap/SplitText';
+export { Observer } from 'gsap/Observer';
+export { MorphSVGPlugin } from 'gsap/MorphSVGPlugin';
+export { MotionPathPlugin } from 'gsap/MotionPathPlugin';
+export { DrawSVGPlugin } from 'gsap/DrawSVGPlugin';

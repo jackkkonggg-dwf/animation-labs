@@ -2,19 +2,16 @@
 
 import { useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap, loadSplitText } from '@/lib/gsap-config';
+import { gsap, SplitText } from '@/lib/gsap-config';
 
 export function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
 
-  useGSAP(async () => {
+  useGSAP(() => {
     const container = containerRef.current;
     if (!container || !titleRef.current || !subtitleRef.current) return;
-
-    // Load SplitText plugin dynamically
-    const SplitText = await loadSplitText();
 
     // Split text into characters and words
     const titleSplit = new SplitText(titleRef.current, { type: 'chars, words' });

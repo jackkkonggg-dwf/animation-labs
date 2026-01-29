@@ -110,8 +110,17 @@ export function ImageRevealSection() {
       duration: 1,
     }, 2.2);
 
+    // Refresh ScrollTrigger after setup
+    ScrollTrigger.refresh();
+
+    // Track the specific ScrollTrigger for cleanup
+    const scrollTrigger = tl.scrollTrigger;
+
     return () => {
-      ScrollTrigger.getAll().forEach((t) => t.kill());
+      // Only kill the ScrollTrigger we created, not all global triggers
+      if (scrollTrigger) {
+        scrollTrigger.kill();
+      }
       tl.kill();
       gsap.killTweensOf([elements.card1, elements.card2, elements.card3, elements.title, ...elements.particles]);
     };

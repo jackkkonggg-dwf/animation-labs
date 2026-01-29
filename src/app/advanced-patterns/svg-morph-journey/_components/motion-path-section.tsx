@@ -2,20 +2,29 @@
 
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap, ScrollTrigger, loadMotionPathPlugin, loadDrawSVGPlugin } from '@/lib/gsap-config';
+import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 
 export function MotionPathJourneySection() {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(async () => {
+  useGSAP(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    // Load plugins dynamically
-    await Promise.all([loadMotionPathPlugin(), loadDrawSVGPlugin()]);
-
     const traveler = container.querySelector('.motion-traveler') as HTMLElement;
     const path = container.querySelector('.motion-path') as SVGPathElement;
+
+    // Set initial state for traveler at start of path
+    gsap.set(traveler, {
+      motionPath: {
+        path: path,
+        align: path,
+        alignOrigin: [0.5, 0.5],
+        autoRotate: true,
+      },
+      transformOrigin: '50% 50%',
+      progress: 0,
+    });
 
     // Scroll-triggered motion path animation
     const tl = gsap.timeline({
@@ -51,11 +60,17 @@ export function MotionPathJourneySection() {
       duration: 2,
     }, 0);
 
+    // Track the specific ScrollTrigger for cleanup
+    const scrollTrigger = tl.scrollTrigger;
+
     // Refresh ScrollTrigger after setup
     ScrollTrigger.refresh();
 
     return () => {
-      ScrollTrigger.getAll().forEach((t) => t.kill());
+      // Only kill the ScrollTrigger we created, not all global triggers
+      if (scrollTrigger) {
+        scrollTrigger.kill();
+      }
       tl.kill();
       gsap.killTweensOf([traveler, path]);
     };

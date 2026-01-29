@@ -2,17 +2,14 @@
 
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap, ScrollTrigger, loadMorphSVGPlugin, loadMotionPathPlugin } from '@/lib/gsap-config';
+import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 
 export function CombinedShowcaseSection() {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useGSAP(async () => {
+  useGSAP(() => {
     const container = containerRef.current;
     if (!container) return;
-
-    // Load plugins dynamically
-    await Promise.all([loadMorphSVGPlugin(), loadMotionPathPlugin()]);
 
     // Get the morphing path (visible element)
     const morphPath = container.querySelector('#showcase-morph-path') as SVGPathElement;
@@ -105,10 +102,17 @@ export function CombinedShowcaseSection() {
       ease: 'back.out(2)',
     }, 2.5);
 
+    // Track the specific ScrollTrigger for cleanup
+    const scrollTrigger = tl.scrollTrigger;
+
+    // Refresh ScrollTrigger after setup
     ScrollTrigger.refresh();
 
     return () => {
-      ScrollTrigger.getAll().forEach((t) => t.kill());
+      // Only kill the ScrollTrigger we created, not all global triggers
+      if (scrollTrigger) {
+        scrollTrigger.kill();
+      }
       tl.kill();
       gsap.killTweensOf([morphPath, follower, ...particles]);
     };

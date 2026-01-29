@@ -2,18 +2,15 @@
 
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap, ScrollTrigger, loadSplitText } from '@/lib/gsap-config';
+import { gsap, ScrollTrigger, SplitText } from '@/lib/gsap-config';
 
 export function CharacterCascadeSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLHeadingElement>(null);
 
-  useGSAP(async () => {
+  useGSAP(() => {
     const container = containerRef.current;
     if (!container || !textRef.current) return;
-
-    // Load SplitText plugin dynamically
-    const SplitText = await loadSplitText();
     const split = new SplitText(textRef.current, { type: 'chars' });
 
     // Scroll-triggered character cascade
@@ -57,10 +54,17 @@ export function CharacterCascadeSection() {
       ease: 'none',
     }, 0.3);
 
+    // Refresh ScrollTrigger after setup
     ScrollTrigger.refresh();
 
+    // Track the specific ScrollTrigger for cleanup
+    const scrollTrigger = tl.scrollTrigger;
+
     return () => {
-      ScrollTrigger.getAll().forEach((t) => t.kill());
+      // Only kill the ScrollTrigger we created, not all global triggers
+      if (scrollTrigger) {
+        scrollTrigger.kill();
+      }
       tl.kill();
       split.revert();
       gsap.killTweensOf(split.chars);

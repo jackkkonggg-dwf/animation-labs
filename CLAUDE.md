@@ -114,7 +114,9 @@ export { gsap, ScrollTrigger };
 
 ### Component Cleanup Pattern
 
-Always track ScrollTriggers and return a cleanup function from `useGSAP`:
+**CRITICAL**: Never use `ScrollTrigger.getAll().forEach((t) => t.kill())` in component cleanup. This kills ALL ScrollTriggers globally, including those from other components on the same page.
+
+Always track the specific ScrollTrigger instance and only kill what you created:
 
 ```typescript
 'use client';
@@ -130,26 +132,44 @@ export function MyComponent() {
     const container = containerRef.current;
     if (!container) return;
 
-    // Track all ScrollTriggers for cleanup
-    const triggers: ScrollTrigger[] = [];
-
     const elements = container.querySelectorAll('.item');
     gsap.set(elements, { opacity: 0 });
 
-    gsap.to(elements, {
-      opacity: 1,
+    // Create timeline with ScrollTrigger
+    const tl = gsap.timeline({
       scrollTrigger: {
         trigger: container,
         start: 'top center',
+        end: '+=1000',
+        scrub: 1,
+        pin: true,
+        pinSpacing: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
       },
     });
 
-    // Important: Refresh after creating animations
+    // Add animations to timeline
+    tl.to(elements, {
+      opacity: 1,
+      y: 0,
+      stagger: 0.15,
+      ease: 'power2.out',
+    });
+
+    // CRITICAL: Refresh after setup for proper positioning
     ScrollTrigger.refresh();
+
+    // Track the specific ScrollTrigger for cleanup
+    const scrollTrigger = tl.scrollTrigger;
 
     // Cleanup - kill only what we created
     return () => {
-      triggers.forEach((t) => t.kill());
+      // Only kill the ScrollTrigger we created, not all global triggers
+      if (scrollTrigger) {
+        scrollTrigger.kill();
+      }
+      tl.kill();
       gsap.killTweensOf(elements);
     };
   }, { scope: containerRef });
@@ -164,9 +184,33 @@ export function MyComponent() {
 |-------|----------|
 | ScrollTriggers persist across routes | Return cleanup function from `useGSAP` |
 | Duplicate plugin registration | Use centralized `gsap-config.ts` |
-| Pinned elements leave artifacts | Call `.kill()` on each ScrollTrigger |
-| Scroll positions misaligned | Call `ScrollTrigger.refresh()` after init |
+| Other components' animations break | Track `tl.scrollTrigger` and only kill that instance |
+| `ScrollTrigger.getAll()` is dangerous | Kills ALL triggers globally, never use in components |
+| Scroll positions misaligned after navigation | Call `ScrollTrigger.refresh()` after setup |
 | Event listeners leak | Remove listeners in cleanup |
+
+### Common Pitfall: Global Kill Pattern
+
+**NEVER do this in component cleanup:**
+```typescript
+// ❌ WRONG - This kills ALL ScrollTriggers on the page!
+return () => {
+  ScrollTrigger.getAll().forEach((t) => t.kill());
+  tl.kill();
+};
+```
+
+**ALWAYS do this instead:**
+```typescript
+// ✅ CORRECT - Only kill the ScrollTrigger we created
+const scrollTrigger = tl.scrollTrigger;
+return () => {
+  if (scrollTrigger) {
+    scrollTrigger.kill();
+  }
+  tl.kill();
+};
+```
 
 ## GSAP ScrollTrigger Pin Configuration Pattern
 

@@ -1,305 +1,67 @@
-# GSAP Animation Showcase - Development Guidelines
+# GSAP Animation Showcase - Guidelines
 
 ## Tech Stack
+React 19.2.3 | Next.js 16.1.5 | Tailwind 4.x | GSAP 3.14.2 | @gsap/react 2.1.2 | TypeScript 5.x
 
-| Tool | Version | Purpose |
-|------|---------|---------|
-| React | 19.2.3 | UI framework with Server Components |
-| Next.js | 16.1.5 | App Router with React Server Components |
-| Tailwind CSS | 4.x | Utility-first styling |
-| GSAP | 3.14.2 | Animation library with all plugins (100% free) |
-| @gsap/react | 2.1.2 | React integration with useGSAP hook |
-| TypeScript | 5.x | Type safety |
-
-## Package Management Rule
-
-> **ALWAYS use `pnpm` for package management. Never use `npm` or `yarn`.**
->
-> - Use `pnpm install` instead of `npm install`
-> - Use `pnpm add` instead of `npm install <package>`
-> - Use `pnpm dlx` instead of `npx` for executing packages
-> - Use `pnpm run <script>` instead of `npm run <script>`
->
-> This ensures consistent dependency resolution and prevents package manager conflicts.
-
-## Critical Design Rule
-
-> **ALWAYS use the `frontend-design` skill when making ANY type of design decision.**
->
-> Before implementing any UI/UX changes, launch the frontend design skill to ensure:
-> - Production-grade visual quality
-> - Distinctive, non-generic aesthetics
-> - Consistency with the industrial orange design system
-> - Accessibility best practices
->
-> To invoke: `/frontend-design` or use the Skill tool with `frontend-design`
-
-## Browser Testing Rule
-
-> **Use the `agent-browser` skill for any browser-based checks or testing.**
->
-> When you need to verify visual output, test interactions, capture screenshots, or validate animations in a browser:
-> - Use the agent-browser skill for automated browser interactions
-> - Captures screenshots, videos, and traces for debugging
-> - Essential for verifying GSAP animations and scroll behaviors
->
-> To invoke: `/agent-browser` or use the Skill tool with `agent-browser`
+## Rules
+- **Package manager**: Always use `pnpm` (never npm/yarn)
+- **Design decisions**: Use `/frontend-design` skill before UI/UX changes
+- **Browser testing**: Use `/agent-browser` skill for visual verification
 
 ## Design System
-
-- **Theme**: Industrial orange with dark zinc backgrounds
-- **Primary accent**: `orange-500` (#f97316)
-- **Backgrounds**: `zinc-950` (main), `zinc-900` (cards), `zinc-800` (elevated)
-- **Typography**: Uppercase headers with tight tracking, Geist Mono font
-- **Visual motifs**: Corner accents, diagonal stripes, scan line effects, grid patterns
-- **Easing**: Aggressive, snappy (back.out, power4.out, power3.out)
-- **Animations**: Fast durations (0.2s - 0.6s) with stagger delays
+- **Theme**: Industrial orange (`orange-500`) + dark zinc (`zinc-950/900/800`)
+- **Typography**: Uppercase headers, tight tracking, Geist Mono
+- **Motifs**: Corner accents, diagonal stripes, scan lines, grid patterns
+- **Easing**: `back.out`, `power4.out`, `power3.out`
+- **Timing**: 0.2s-0.6s durations with stagger delays
 
 ---
 
-# GSAP Components
+# GSAP Patterns
 
-## GSAP Stagger Animation Pattern
-
-When creating staggered entry animations with ScrollTrigger:
-- Use `gsap.set()` to set initial state before animation
-- Query elements using `container.querySelectorAll('.class-name')`
-- Use `stagger` option with delay value (e.g., 0.15 for 150ms between elements)
-- Set initial state: `opacity: 0, x: 100` (invisible and offset)
-- Animate to: `opacity: 1, x: 0` (visible and natural position)
-- Use `scrollTrigger.start: 'top center'` to trigger when section enters viewport
-- Use `toggleActions: 'play none none reverse'` for proper enter/exit behavior
-
-Example:
+## Stagger Animation
 ```typescript
-// Set initial state
 gsap.set(cards, { opacity: 0, x: 100 });
-
-// Create staggered entry animation
 gsap.to(cards, {
-  opacity: 1,
-  x: 0,
-  duration: 0.8,
-  stagger: 0.15,
-  ease: 'power2.out',
-  scrollTrigger: {
-    trigger: container,
-    start: 'top center',
-    toggleActions: 'play none none reverse',
-  },
+  opacity: 1, x: 0, duration: 0.8, stagger: 0.15, ease: 'power2.out',
+  scrollTrigger: { trigger: container, start: 'top center', toggleActions: 'play none none reverse' }
 });
 ```
 
-## GSAP with Next.js Navigation (Cleanup Pattern)
-
-**Critical for SPA navigation**: ScrollTrigger instances persist across route changes in Next.js. Proper cleanup is essential.
-
-### Centralized GSAP Config (`src/lib/gsap-config.ts`)
-
-Create a single source of truth for GSAP to prevent duplicate registrations:
-
+## Centralized Config (`src/lib/gsap-config.ts`)
 ```typescript
-'use client';
-
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-// Register ScrollTrigger - GSAP handles duplicate registration gracefully
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-}
-
+if (typeof window !== 'undefined') gsap.registerPlugin(ScrollTrigger);
 export { gsap, ScrollTrigger };
 ```
 
-### Component Cleanup Pattern
-
-**CRITICAL**: Never use `ScrollTrigger.getAll().forEach((t) => t.kill())` in component cleanup. This kills ALL ScrollTriggers globally, including those from other components on the same page.
-
-Always track the specific ScrollTrigger instance and only kill what you created:
-
+## Cleanup Pattern (Critical)
 ```typescript
-'use client';
+const scrollTrigger = tl.scrollTrigger; // Track before cleanup
+return () => {
+  if (scrollTrigger) scrollTrigger.kill(); // Only kill what you created
+  tl.kill();
+};
+// NEVER: ScrollTrigger.getAll().forEach((t) => t.kill()) - kills ALL triggers globally
+```
 
-import { useRef } from 'react';
-import { useGSAP } from '@gsap/react';
-import { gsap, ScrollTrigger } from '@/lib/gsap-config';
+## Chrome Performance
+- **Never** use inline `will-change` styles on animated elements
+- GSAP's `force3D: 'auto'` handles GPU optimization
+- Use `scrub: true` for direct linkage (best performance)
+- Use `scrub: 1` only for smooth catch-up in pinned storytelling
 
-export function MyComponent() {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useGSAP(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    const elements = container.querySelectorAll('.item');
-    gsap.set(elements, { opacity: 0 });
-
-    // Create timeline with ScrollTrigger
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: container,
-        start: 'top center',
-        end: '+=1000',
-        scrub: 1,
-        pin: true,
-        pinSpacing: true,
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-      },
-    });
-
-    // Add animations to timeline
-    tl.to(elements, {
-      opacity: 1,
-      y: 0,
-      stagger: 0.15,
-      ease: 'power2.out',
-    });
-
-    // CRITICAL: Refresh after setup for proper positioning
-    ScrollTrigger.refresh();
-
-    // Track the specific ScrollTrigger for cleanup
-    const scrollTrigger = tl.scrollTrigger;
-
-    // Cleanup - kill only what we created
-    return () => {
-      // Only kill the ScrollTrigger we created, not all global triggers
-      if (scrollTrigger) {
-        scrollTrigger.kill();
-      }
-      tl.kill();
-      gsap.killTweensOf(elements);
-    };
-  }, { scope: containerRef });
-
-  return <div ref={containerRef}>...</div>;
+## Pin Configuration (Required for multiple pinned sections)
+```typescript
+scrollTrigger: {
+  trigger: container,
+  start: 'top top',
+  end: '+=2500',
+  scrub: 1,
+  pin: true,
+  pinSpacing: true,         // Prevents overlap
+  anticipatePin: 1,         // Prevents blank flash
+  invalidateOnRefresh: true // Fixes resize breaks
 }
 ```
-
-### Key Points
-
-| Issue | Solution |
-|-------|----------|
-| ScrollTriggers persist across routes | Return cleanup function from `useGSAP` |
-| Duplicate plugin registration | Use centralized `gsap-config.ts` |
-| Other components' animations break | Track `tl.scrollTrigger` and only kill that instance |
-| `ScrollTrigger.getAll()` is dangerous | Kills ALL triggers globally, never use in components |
-| Scroll positions misaligned after navigation | Call `ScrollTrigger.refresh()` after setup |
-| Event listeners leak | Remove listeners in cleanup |
-
-### Common Pitfall: Global Kill Pattern
-
-**NEVER do this in component cleanup:**
-```typescript
-// ❌ WRONG - This kills ALL ScrollTriggers on the page!
-return () => {
-  ScrollTrigger.getAll().forEach((t) => t.kill());
-  tl.kill();
-};
-```
-
-**ALWAYS do this instead:**
-```typescript
-// ✅ CORRECT - Only kill the ScrollTrigger we created
-const scrollTrigger = tl.scrollTrigger;
-return () => {
-  if (scrollTrigger) {
-    scrollTrigger.kill();
-  }
-  tl.kill();
-};
-```
-
-## GSAP Chrome Performance Fixes
-
-**Chrome-specific scrolling issues**: Chrome-based browsers may exhibit flashing or jitter during scroll animations. This is caused by rendering conflicts between GSAP ScrollTrigger and CSS properties.
-
-### Root Cause
-
-According to GSAP documentation:
-> **`will-change: transform` can interfere with `position: fixed` behavior in browsers**, irrespective of GSAP or ScrollTrigger. Chrome uses transform-based pinning by default, and `will-change` creates rendering conflicts.
-
-### The Fix: Remove `will-change` Inline Styles
-
-**NEVER use inline `will-change` styles on animated elements:**
-
-```tsx
-// ❌ WRONG - Causes flashing in Chrome
-<div style={{ willChange: 'transform, color' }}>...</div>
-
-// ✅ CORRECT - Let GSAP handle GPU optimization
-<div>...</div>
-```
-
-### Why This Works
-
-| Issue | Explanation |
-|-------|-------------|
-| `will-change` creates new stacking contexts | Interferes with ScrollTrigger's position calculations |
-| Chrome handles scroll on separate thread | `will-change` exacerbates synchronization issues |
-| GSAP's `force3D: "auto"` is sufficient | Already handles GPU layer optimization correctly |
-
-### Correct GSAP Configuration
-
-```typescript
-// In gsap-config.ts
-gsap.defaults({ force3D: 'auto' }); // Let GSAP manage GPU layers
-```
-
-### Additional Chrome Optimizations
-
-- Use `scrub: true` for direct scroll linkage (best for simple parallax and performance)
-- Use `scrub: 1` only when you need smooth catch-up delay (e.g., pinned storytelling sequences)
-- Use `invalidateOnRefresh: true` for proper resize handling
-- Avoid `will-change`, `transform: translateZ(0)`, and other manual GPU hints on animated elements
-
-## GSAP ScrollTrigger Pin Configuration Pattern
-
-**Critical for multiple pinned sections**: When using `pin: true` with multiple sequential sections, proper configuration is essential to prevent blank sections, premature triggers, and overlapping animations.
-
-### Required Configuration for Pinned Sections
-
-```typescript
-const tl = gsap.timeline({
-  scrollTrigger: {
-    trigger: container,
-    start: 'top top',
-    end: '+=2500',
-    scrub: 1,                // Note: scrub: true for instant, scrub: 1 for 1s smooth catch-up
-    pin: true,
-    pinSpacing: true,        // Required: Explicitly adds spacing for pinned element
-    anticipatePin: 1,         // Required: Prepares pin 1s before trigger (prevents jumping)
-    invalidateOnRefresh: true, // Required: Recalculates positions on refresh/resize
-  },
-});
-```
-
-### Understanding `scrub` Configuration
-
-| Value | Behavior | Use Case |
-|-------|----------|----------|
-| `scrub: true` | Direct 1:1 scroll linkage (instant) | Best for Chrome performance, simple parallax |
-| `scrub: 1` | 1-second smooth catch-up delay | Pinned sections, storytelling sequences |
-| `scrub: 0.5` | 0.5-second smooth catch-up | Shorter smoothing, snappier feel |
-
-### Why Each Property Is Required
-
-| Property | Purpose | What Happens Without It |
-|----------|---------|------------------------|
-| `pinSpacing: true` | Adds scroll distance for pinned element | Next section starts early, overlap occurs |
-| `anticipatePin: 1` | Prepares pin before trigger point | Blank flash, jumping on scroll start |
-| `invalidateOnRefresh: true` | Recalculates on window resize/refresh | Positions break after resize |
-
-### Common Issues
-
-1. **Section goes blank when scroll starts** → Add `anticipatePin: 1`
-2. **Next section starts during current animation** → Add `pinSpacing: true`
-3. **Animations overlap or trigger early** → Ensure ALL pinned sections have these 3 properties
-4. **Positions break after resize** → Add `invalidateOnRefresh: true`
-
-### Resources
-- [Optimizing GSAP in Next.js 15](https://medium.com/@thomasaugot/optimizing-gsap-animations-in-next-js-15-best-practices-for-initialization-and-cleanup-2ebaba7d0232)
-- [ScrollTrigger.kill() docs](https://gsap.com/docs/v3/Plugins/ScrollTrigger/#kill)
-

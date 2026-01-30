@@ -250,7 +250,8 @@ gsap.defaults({ force3D: 'auto' }); // Let GSAP manage GPU layers
 
 ### Additional Chrome Optimizations
 
-- Use `scrub: true` (direct scroll linkage) instead of `scrub: 1` (with smoothing)
+- Use `scrub: true` for direct scroll linkage (best for simple parallax and performance)
+- Use `scrub: 1` only when you need smooth catch-up delay (e.g., pinned storytelling sequences)
 - Use `invalidateOnRefresh: true` for proper resize handling
 - Avoid `will-change`, `transform: translateZ(0)`, and other manual GPU hints on animated elements
 
@@ -266,7 +267,7 @@ const tl = gsap.timeline({
     trigger: container,
     start: 'top top',
     end: '+=2500',
-    scrub: 1,
+    scrub: 1,                // Note: scrub: true for instant, scrub: 1 for 1s smooth catch-up
     pin: true,
     pinSpacing: true,        // Required: Explicitly adds spacing for pinned element
     anticipatePin: 1,         // Required: Prepares pin 1s before trigger (prevents jumping)
@@ -274,6 +275,14 @@ const tl = gsap.timeline({
   },
 });
 ```
+
+### Understanding `scrub` Configuration
+
+| Value | Behavior | Use Case |
+|-------|----------|----------|
+| `scrub: true` | Direct 1:1 scroll linkage (instant) | Best for Chrome performance, simple parallax |
+| `scrub: 1` | 1-second smooth catch-up delay | Pinned sections, storytelling sequences |
+| `scrub: 0.5` | 0.5-second smooth catch-up | Shorter smoothing, snappier feel |
 
 ### Why Each Property Is Required
 
@@ -294,77 +303,3 @@ const tl = gsap.timeline({
 - [Optimizing GSAP in Next.js 15](https://medium.com/@thomasaugot/optimizing-gsap-animations-in-next-js-15-best-practices-for-initialization-and-cleanup-2ebaba7d0232)
 - [ScrollTrigger.kill() docs](https://gsap.com/docs/v3/Plugins/ScrollTrigger/#kill)
 
-## GSAP Plugin Registration Pattern
-
-When using GSAP with Next.js App Router and TypeScript:
-- Import GSAP plugins dynamically with `.default` for the main gsap import
-- Pattern: `const gsap = (await import('gsap')).default;`
-- Pattern: `const { ScrollTrigger } = await import('gsap/ScrollTrigger');`
-- Must use 'use client' directive in components that use GSAP
-- Register plugins before use with `gsap.registerPlugin(PluginName)`
-
-Example:
-```typescript
-'use client';
-
-import { useEffect } from 'react';
-
-export function GSAPProvider() {
-  useEffect(() => {
-    const registerPlugins = async () => {
-      const gsap = (await import('gsap')).default;
-      const { ScrollTrigger } = await import('gsap/ScrollTrigger');
-      gsap.registerPlugin(ScrollTrigger);
-    };
-    registerPlugins();
-  }, []);
-
-  return null;
-}
-```
-
-**Note**: For new code, prefer the centralized config pattern above over dynamic imports.
-
-## Orphaned Next.js Dev Processes
-
-**Issue**: When using background tasks or running dev servers, orphaned `next-server` and build processes can accumulate and consume memory/CPU.
-
-### Finding Orphaned Processes
-
-```bash
-# Find all Next.js processes
-ps aux | grep -E "(next-server|next dev)" | grep -v grep
-
-# Find related build processes
-ps aux | grep -E "\.next/dev" | grep -v grep
-```
-
-### Cleaning Up Orphaned Processes
-
-```bash
-# Kill all next-server processes
-pkill -f "next-server"
-
-# Kill all Next.js dev servers
-pkill -f "next dev"
-
-# Kill related build processes
-pkill -f "webpack-loaders.*animations"
-pkill -f "postcss.*animations"
-
-# Force kill by PID if needed
-kill -9 <PID>
-```
-
-### Prevention
-
-When running background dev servers with Bash tool using `run_in_background=true`:
-- Store the returned `shell_id` or `task_id`
-- Use `TaskStop` with the ID to terminate when done
-- Or manually kill the process group after completion
-
-Example cleanup command:
-```bash
-# Clean up all Next.js processes from this project
-ps aux | grep -E "next-server" | grep animations | awk '{print $2}' | xargs kill -9 2>/dev/null
-```

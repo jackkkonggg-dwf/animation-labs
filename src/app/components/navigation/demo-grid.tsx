@@ -1,10 +1,10 @@
 'use client';
 
-import { useRef, useMemo, useCallback, useEffect, useState } from 'react';
+import { useRef, useMemo, useCallback, useEffect, useState, memo } from 'react';
 import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useGSAP } from '@gsap/react';
-import { gsap, ScrollTrigger } from '@/lib/gsap-config';
+import { gsap } from '@/lib/gsap-config';
 import { NAVIGATION_DATA } from '@/lib/navigation-data';
 import { shouldSkipAnimations, setupBackNavigationListener } from '@/lib/scroll-restoration';
 import type { Difficulty } from '@/types/pattern';
@@ -36,7 +36,7 @@ const getDifficultyStyles = (difficulty: Difficulty) => {
   }
 };
 
-export function DemoGrid() {
+function DemoGridInner() {
   const containerRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
@@ -90,6 +90,19 @@ export function DemoGrid() {
 
     router.push(`/?${params.toString()}`, { scroll: false });
   }, [searchParams, router]);
+
+  // Memoized event handlers to prevent inline function recreation
+  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    updateFilters({ search: e.target.value });
+  }, [updateFilters]);
+
+  const handleCategoryChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
+    updateFilters({ category: e.target.value });
+  }, [updateFilters]);
+
+  const handleDifficultyChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
+    updateFilters({ difficulty: e.target.value });
+  }, [updateFilters]);
 
   // Clear all filters - memoized to prevent unnecessary re-renders
   const clearAllFilters = useCallback(() => {
@@ -216,7 +229,7 @@ export function DemoGrid() {
               ref={searchInputRef}
               type="text"
               value={searchQuery}
-              onChange={(e) => updateFilters({ search: e.target.value })}
+              onChange={handleSearchChange}
               placeholder="Search patterns..."
               className="w-full bg-zinc-900/50 border border-white/10 text-white placeholder-zinc-500
                 px-4 py-3 pr-10 focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50
@@ -235,7 +248,7 @@ export function DemoGrid() {
             <div className="relative">
               <select
                 value={categoryFilter}
-                onChange={(e) => updateFilters({ category: e.target.value })}
+                onChange={handleCategoryChange}
                 className="appearance-none bg-zinc-900/50 border border-white/10 text-white px-4 py-2 pr-10
                   focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50
                   transition-all duration-200 uppercase tracking-wider text-xs cursor-pointer
@@ -259,7 +272,7 @@ export function DemoGrid() {
             <div className="relative">
               <select
                 value={difficultyFilter}
-                onChange={(e) => updateFilters({ difficulty: e.target.value })}
+                onChange={handleDifficultyChange}
                 className="appearance-none bg-zinc-900/50 border border-white/10 text-white px-4 py-2 pr-10
                   focus:outline-none focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50
                   transition-all duration-200 uppercase tracking-wider text-xs cursor-pointer
@@ -433,3 +446,6 @@ export function DemoGrid() {
     </section>
   );
 }
+
+// Memoize the entire component to prevent unnecessary re-renders when parent updates
+export const DemoGrid = memo(DemoGridInner);

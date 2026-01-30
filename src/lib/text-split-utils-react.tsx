@@ -8,6 +8,11 @@
 import React from 'react';
 import { splitElementToChars, splitElementToWords } from './text-split-utils';
 
+// Hoisted style constants to prevent object recreation on every render
+const INLINE_BLOCK_STYLE = { display: 'inline-block', position: 'relative' } as const;
+const WORD_SPAN_STYLE = { display: 'inline-block', whiteSpace: 'nowrap' } as const;
+const SPACE_SPAN_STYLE = { display: 'inline-block', minWidth: '0.25em' } as const;
+
 /**
  * Split text string into character spans (returns React elements)
  * Use this for rendering split text in React components
@@ -20,7 +25,7 @@ export function splitTextToChars(text: string, className: string = 'char-split')
   const chars: React.ReactElement[] = [];
   text.split('').forEach((char, index) => {
     chars.push(
-      <span key={`${className}-${index}`} className={className} style={{ display: 'inline-block', position: 'relative' }}>
+      <span key={`${className}-${index}`} className={className} style={INLINE_BLOCK_STYLE}>
         {char === ' ' ? '\u00A0' : char}
       </span>
     );
@@ -46,7 +51,7 @@ export function splitTextToWords(text: string, className: string = 'word-split')
       <span
         key={`${className}-word-${wordIndex}`}
         className={className}
-        style={{ display: 'inline-block', whiteSpace: 'nowrap' }}
+        style={WORD_SPAN_STYLE}
       >
         {word}
       </span>
@@ -57,7 +62,7 @@ export function splitTextToWords(text: string, className: string = 'word-split')
       spans.push(
         <span
           key={`${className}-space-${wordIndex}`}
-          style={{ display: 'inline-block', minWidth: '0.25em' }}
+          style={SPACE_SPAN_STYLE}
         >
           {'\u00A0'}
         </span>

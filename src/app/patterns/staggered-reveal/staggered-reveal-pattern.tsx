@@ -52,7 +52,6 @@ export function StaggeredRevealComponent() {
     // Cleanup - kill tweens and triggers
     return () => {
       gsap.killTweensOf(elements);
-      ScrollTrigger.getAll().forEach(t => t.kill());
     };
   }, { scope: containerRef });
 
@@ -86,7 +85,8 @@ interface DemoCard {
   color: string;
 }
 
-const DEMO_CARDS: DemoCard[] = [
+// Hoisted outside component to prevent array recreation on every render
+const DEMO_CARDS: readonly DemoCard[] = [
   {
     id: 1,
     title: 'STAGGER DELAY',
@@ -143,7 +143,7 @@ const DEMO_CARDS: DemoCard[] = [
     icon: '📦',
     color: 'from-teal-500 to-cyan-500',
   },
-];
+] as const;
 
 function LiveDemo() {
   const containerRef = useRef<HTMLDivElement>(null);

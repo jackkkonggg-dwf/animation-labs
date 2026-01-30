@@ -76,13 +76,14 @@ export function StatsSection({ prefersReducedMotion }: StatsSectionProps) {
     const statIcons = stats.querySelectorAll('.stat-icon svg');
 
     // Create timeline with scrub linked to scroll position
-    // Scrub animations benefit from GPU acceleration
+    // PERFORMANCE: Using scrub: true for direct scroll linkage instead of scrub: 1
     const iconTimeline = gsap.timeline({
       scrollTrigger: {
         trigger: stats,
         start: 'top center',
         end: 'bottom center',
-        scrub: 1,
+        scrub: true, // Direct scroll linkage for responsiveness
+        invalidateOnRefresh: true,
       },
     });
 
@@ -174,11 +175,11 @@ export function StatsSection({ prefersReducedMotion }: StatsSectionProps) {
                     strokeDasharray="351.86"
                     strokeDashoffset="351.86"
                     strokeLinecap="round"
-                    style={{ willChange: 'stroke-dashoffset, transform', filter: 'drop-shadow(0 0 8px rgba(249,115,22,0.4))' }}
+                    style={{ filter: 'drop-shadow(0 0 8px rgba(249,115,22,0.4))' }}
                   />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="stat-icon w-12 h-12 bg-zinc-800/80 backdrop-blur-sm rounded-lg flex items-center justify-center text-zinc-400 border border-zinc-700/50 transition-all duration-500 group-hover:bg-zinc-800 group-hover:scale-110 group-hover:shadow-[0_0_25px_-5px_rgba(249,115,22,0.3)]" style={{ willChange: 'transform, color' }}>
+                  <div className="stat-icon w-12 h-12 bg-zinc-800/80 backdrop-blur-sm rounded-lg flex items-center justify-center text-zinc-400 border border-zinc-700/50 transition-all duration-500 group-hover:bg-zinc-800 group-hover:scale-110 group-hover:shadow-[0_0_25px_-5px_rgba(249,115,22,0.3)]">
                     <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                     </svg>
@@ -218,7 +219,7 @@ export function StatsSection({ prefersReducedMotion }: StatsSectionProps) {
                     strokeDasharray="351.86"
                     strokeDashoffset="351.86"
                     strokeLinecap="round"
-                    style={{ willChange: 'stroke-dashoffset, transform', filter: 'drop-shadow(0 0 8px rgba(249,115,22,0.4))' }}
+                    style={{ filter: 'drop-shadow(0 0 8px rgba(249,115,22,0.4))' }}
                   />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -262,7 +263,7 @@ export function StatsSection({ prefersReducedMotion }: StatsSectionProps) {
                     strokeDasharray="351.86"
                     strokeDashoffset="351.86"
                     strokeLinecap="round"
-                    style={{ willChange: 'stroke-dashoffset, transform', filter: 'drop-shadow(0 0 8px rgba(249,115,22,0.4))' }}
+                    style={{ filter: 'drop-shadow(0 0 8px rgba(249,115,22,0.4))' }}
                   />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">

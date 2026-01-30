@@ -85,7 +85,6 @@ export function PortfolioSection({ prefersReducedMotion }: PortfolioSectionProps
             <div
               key={item.name}
               className="portfolio-card group relative aspect-square bg-zinc-900/80 backdrop-blur-sm p-4 flex flex-col items-center justify-center cursor-pointer overflow-hidden"
-              style={{ willChange: 'transform, opacity' }}
             >
               {/* Expanding border effect on hover */}
               <div className="absolute inset-0 border-2 border-transparent group-hover:border-orange-500/50 transition-all duration-500 ease-out" />

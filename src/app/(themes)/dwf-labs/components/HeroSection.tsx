@@ -63,61 +63,37 @@ export function HeroSection({ prefersReducedMotion, setFinalStateIfReducedMotion
     const layer3 = hero.querySelector('.parallax-layer-3');
     const layer4 = hero.querySelector('.parallax-layer-4');
 
-    // Parallax layers benefit from GPU acceleration (continuous scroll animation)
+    // PERFORMANCE: Combine all parallax layers into a single timeline with one ScrollTrigger
+    // Using scrub: true (direct 1:1 mapping) instead of scrub: 1 (1-second catch-up) for better responsiveness
+    // Added invalidateOnRefresh for proper resize handling
+    const parallaxTimeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: hero,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true, // Direct scroll linkage instead of 1-second smoothing
+        invalidateOnRefresh: true, // Recalculate on resize
+      },
+    });
+
     // Layer 1: Grid pattern - slowest (speed: 0.2)
     if (layer1) {
-      gsap.to(layer1, {
-        y: 100,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: hero,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 1,
-        },
-      });
+      parallaxTimeline.to(layer1, { y: 100, ease: 'none' }, 0);
     }
 
-    // Layer 2: Crypto symbols (circles, hexagons, lines) - slow (speed: 0.5)
+    // Layer 2: Crypto symbols - slow (speed: 0.5)
     if (layer2) {
-      gsap.to(layer2, {
-        y: 250,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: hero,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 1,
-        },
-      });
+      parallaxTimeline.to(layer2, { y: 250, ease: 'none' }, 0);
     }
 
     // Layer 3: Data particles - medium (speed: 0.8)
     if (layer3) {
-      gsap.to(layer3, {
-        y: 400,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: hero,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 1,
-        },
-      });
+      parallaxTimeline.to(layer3, { y: 400, ease: 'none' }, 0);
     }
 
     // Layer 4: Text/content - fastest (speed: 1.0)
     if (layer4) {
-      gsap.to(layer4, {
-        y: 500,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: hero,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 1,
-        },
-      });
+      parallaxTimeline.to(layer4, { y: 500, ease: 'none' }, 0);
     }
 
     // US-007: Hero SVG corner accents drawing animation
@@ -219,25 +195,25 @@ export function HeroSection({ prefersReducedMotion, setFinalStateIfReducedMotion
       <div className="parallax-layer-4 relative z-10 text-center px-4 max-w-6xl mx-auto">
         {/* Character reveal: DWF LABS */}
         <h1 className="hero-title text-6xl md:text-8xl lg:text-9xl font-black text-white tracking-tighter uppercase mb-6" style={{ textShadow: '0 0 80px rgba(249,115,22,0.3)' }}>
-          <span className="inline-block" style={{ willChange: 'transform, opacity' }}>D</span>
-          <span className="inline-block" style={{ willChange: 'transform, opacity' }}>W</span>
-          <span className="inline-block" style={{ willChange: 'transform, opacity' }}>F</span>
-          <span className="inline-block" style={{ willChange: 'transform, opacity' }}>&nbsp;</span>
-          <span className="inline-block text-orange-500" style={{ textShadow: '0 0 60px rgba(249,115,22,0.5), 0 0 100px rgba(249,115,22,0.3)', willChange: 'transform, opacity' }}>L</span>
-          <span className="inline-block text-orange-500" style={{ textShadow: '0 0 60px rgba(249,115,22,0.5), 0 0 100px rgba(249,115,22,0.3)', willChange: 'transform, opacity' }}>A</span>
-          <span className="inline-block text-orange-500" style={{ textShadow: '0 0 60px rgba(249,115,22,0.5), 0 0 100px rgba(249,115,22,0.3)', willChange: 'transform, opacity' }}>B</span>
-          <span className="inline-block text-orange-500" style={{ textShadow: '0 0 60px rgba(249,115,22,0.5), 0 0 100px rgba(249,115,22,0.3)', willChange: 'transform, opacity' }}>S</span>
+          <span className="inline-block">D</span>
+          <span className="inline-block">W</span>
+          <span className="inline-block">F</span>
+          <span className="inline-block">&nbsp;</span>
+          <span className="inline-block text-orange-500" style={{ textShadow: '0 0 60px rgba(249,115,22,0.5), 0 0 100px rgba(249,115,22,0.3)' }}>L</span>
+          <span className="inline-block text-orange-500" style={{ textShadow: '0 0 60px rgba(249,115,22,0.5), 0 0 100px rgba(249,115,22,0.3)' }}>A</span>
+          <span className="inline-block text-orange-500" style={{ textShadow: '0 0 60px rgba(249,115,22,0.5), 0 0 100px rgba(249,115,22,0.3)' }}>B</span>
+          <span className="inline-block text-orange-500" style={{ textShadow: '0 0 60px rgba(249,115,22,0.5), 0 0 100px rgba(249,115,22,0.3)' }}>S</span>
         </h1>
 
         {/* Word reveal: Tagline */}
         <p className="hero-tagline text-lg md:text-xl lg:text-2xl text-zinc-400 uppercase tracking-[0.2em] mb-4">
-          <span className="inline-block mr-3" style={{ willChange: 'transform, opacity' }}>New</span>
-          <span className="inline-block mr-3" style={{ willChange: 'transform, opacity' }}>Generation</span>
-          <span className="inline-block mr-3" style={{ willChange: 'transform, opacity' }}>Web3</span>
-          <span className="inline-block mr-3" style={{ willChange: 'transform, opacity' }}>Investor</span>
-          <span className="inline-block mr-3" style={{ willChange: 'transform, opacity' }}>&</span>
-          <span className="inline-block mr-3" style={{ willChange: 'transform, opacity' }}>Market</span>
-          <span className="inline-block" style={{ willChange: 'transform, opacity' }}>Maker</span>
+          <span className="inline-block mr-3">New</span>
+          <span className="inline-block mr-3">Generation</span>
+          <span className="inline-block mr-3">Web3</span>
+          <span className="inline-block mr-3">Investor</span>
+          <span className="inline-block mr-3">&</span>
+          <span className="inline-block mr-3">Market</span>
+          <span className="inline-block">Maker</span>
         </p>
 
         {/* Description */}
@@ -247,16 +223,16 @@ export function HeroSection({ prefersReducedMotion, setFinalStateIfReducedMotion
 
         {/* SVG Corner Accents - smaller on mobile */}
         <svg className="absolute top-4 left-4 w-10 h-10 sm:top-8 sm:left-8 sm:w-16 sm:h-16 text-orange-500 opacity-60 drop-shadow-[0_0_10px_rgba(249,115,22,0.5)]" viewBox="0 0 60 60">
-          <path className="corner-draw-path" style={{ willChange: 'stroke-dashoffset' }} d="M5,5 L55,5 L55,55" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path className="corner-draw-path" d="M5,5 L55,5 L55,55" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
         <svg className="absolute top-4 right-4 w-10 h-10 sm:top-8 sm:right-8 sm:w-16 sm:h-16 text-orange-500 opacity-60 drop-shadow-[0_0_10px_rgba(249,115,22,0.5)]" viewBox="0 0 60 60">
-          <path className="corner-draw-path" style={{ willChange: 'stroke-dashoffset' }} d="M55,5 L5,5 L5,55" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path className="corner-draw-path" d="M55,5 L5,5 L5,55" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
         <svg className="absolute bottom-4 left-4 w-10 h-10 sm:bottom-8 sm:left-8 sm:w-16 sm:h-16 text-orange-500 opacity-60 drop-shadow-[0_0_10px_rgba(249,115,22,0.5)]" viewBox="0 0 60 60">
-          <path className="corner-draw-path" style={{ willChange: 'stroke-dashoffset' }} d="M5,55 L55,55 L55,5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path className="corner-draw-path" d="M5,55 L55,55 L55,5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
         <svg className="absolute bottom-4 right-4 w-10 h-10 sm:bottom-8 sm:right-8 sm:w-16 sm:h-16 text-orange-500 opacity-60 drop-shadow-[0_0_10px_rgba(249,115,22,0.5)]" viewBox="0 0 60 60">
-          <path className="corner-draw-path" style={{ willChange: 'stroke-dashoffset' }} d="M55,55 L5,55 L5,5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path className="corner-draw-path" d="M55,55 L5,55 L5,5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </div>
 

@@ -34,57 +34,30 @@ export function ServicesSection({ prefersReducedMotion }: ServicesSectionProps) 
     const layer3 = services.querySelector('.parallax-layer-3');
     const layer4 = services.querySelector('.parallax-layer-4');
 
-    // Parallax layers benefit from GPU acceleration (continuous scroll-linked animation)
+    // PERFORMANCE: Combine all parallax layers into a single timeline with one ScrollTrigger
+    // Using scrub: true (direct 1:1 mapping) instead of scrub: 1 for better responsiveness
+    const parallaxTimeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: services,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true, // Direct scroll linkage for responsiveness
+        invalidateOnRefresh: true, // Recalculate on resize
+      },
+    });
+
+    // All layers animate simultaneously at different speeds
     if (layer1) {
-      gsap.to(layer1, {
-        y: 100,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: services,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 1,
-        },
-      });
+      parallaxTimeline.to(layer1, { y: 100, ease: 'none' }, 0);
     }
-
     if (layer2) {
-      gsap.to(layer2, {
-        y: 250,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: services,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 1,
-        },
-      });
+      parallaxTimeline.to(layer2, { y: 250, ease: 'none' }, 0);
     }
-
     if (layer3) {
-      gsap.to(layer3, {
-        y: 400,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: services,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 1,
-        },
-      });
+      parallaxTimeline.to(layer3, { y: 400, ease: 'none' }, 0);
     }
-
     if (layer4) {
-      gsap.to(layer4, {
-        y: 500,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: services,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 1,
-        },
-      });
+      parallaxTimeline.to(layer4, { y: 500, ease: 'none' }, 0);
     }
 
     // US-009: Services staggered card reveal
@@ -212,7 +185,7 @@ export function ServicesSection({ prefersReducedMotion }: ServicesSectionProps) 
         {/* Service Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {/* Card 1: Market Making */}
-          <div className="service-card group relative bg-zinc-900/60 backdrop-blur-sm border border-zinc-800 p-8 hover:border-orange-500/50 transition-all duration-300" style={{ willChange: 'transform, opacity' }}>
+          <div className="service-card group relative bg-zinc-900/60 backdrop-blur-sm border border-zinc-800 p-8 hover:border-orange-500/50 transition-all duration-300">
             {/* Corner accent */}
             <div className="absolute top-0 left-0 w-0 h-0 border-t-2 border-l-2 border-orange-500 transition-all duration-500 ease-out group-hover:w-10 group-hover:h-10" />
             <div className="absolute bottom-0 right-0 w-0 h-0 border-b-2 border-r-2 border-orange-500 transition-all duration-500 ease-out group-hover:w-10 group-hover:h-10" />
@@ -238,7 +211,7 @@ export function ServicesSection({ prefersReducedMotion }: ServicesSectionProps) 
           </div>
 
           {/* Card 2: OTC Trading */}
-          <div className="service-card group relative bg-zinc-900/60 backdrop-blur-sm border border-zinc-800 p-8 hover:border-orange-500/50 transition-all duration-300" style={{ willChange: 'transform, opacity' }}>
+          <div className="service-card group relative bg-zinc-900/60 backdrop-blur-sm border border-zinc-800 p-8 hover:border-orange-500/50 transition-all duration-300">
             {/* Corner accent */}
             <div className="absolute top-0 left-0 w-0 h-0 border-t-2 border-l-2 border-orange-500 transition-all duration-500 ease-out group-hover:w-10 group-hover:h-10" />
             <div className="absolute bottom-0 right-0 w-0 h-0 border-b-2 border-r-2 border-orange-500 transition-all duration-500 ease-out group-hover:w-10 group-hover:h-10" />
@@ -264,7 +237,7 @@ export function ServicesSection({ prefersReducedMotion }: ServicesSectionProps) 
           </div>
 
           {/* Card 3: Ventures */}
-          <div className="service-card group relative bg-zinc-900/60 backdrop-blur-sm border border-zinc-800 p-8 hover:border-orange-500/50 transition-all duration-300" style={{ willChange: 'transform, opacity' }}>
+          <div className="service-card group relative bg-zinc-900/60 backdrop-blur-sm border border-zinc-800 p-8 hover:border-orange-500/50 transition-all duration-300">
             {/* Corner accent */}
             <div className="absolute top-0 left-0 w-0 h-0 border-t-2 border-l-2 border-orange-500 transition-all duration-500 ease-out group-hover:w-10 group-hover:h-10" />
             <div className="absolute bottom-0 right-0 w-0 h-0 border-b-2 border-r-2 border-orange-500 transition-all duration-500 ease-out group-hover:w-10 group-hover:h-10" />

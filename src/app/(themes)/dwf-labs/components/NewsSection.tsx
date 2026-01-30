@@ -12,7 +12,7 @@
 
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
-import { gsap, ScrollTrigger } from '@/lib/gsap-config';
+import { gsap } from '@/lib/gsap-config';
 import { NewsThumbnail } from './NewsThumbnail';
 import { newsArticles } from '../lib/news-data';
 
@@ -72,81 +72,90 @@ export function NewsSection({ prefersReducedMotion }: NewsSectionProps) {
 
     cards.forEach((card) => {
       const shine = card.querySelector('.news-shine') as HTMLElement;
-      const thumbnail = card.querySelector('.news-thumbnail > div') as HTMLElement;
+      const thumbnailImg = card.querySelector('.news-thumbnail img') as HTMLElement | null;
 
-      // CRITICAL: Wrap handlers in contextSafe() so tweens are cleaned up properly
-      const handleMouseMove = safe((e: Event) => {
-        const mouseEvent = e as MouseEvent;
-        const rect = (card as HTMLElement).getBoundingClientRect();
-        const x = (mouseEvent.clientX - rect.left) / rect.width;
-        const y = (mouseEvent.clientY - rect.top) / rect.height;
+      // High-performance hover: avoid layout reads + tween creation on every mousemove.
+      // - Cache bounds on enter/resize
+      // - rAF-throttle pointer updates
+      // - use quickTo/quickSetter for transform/CSS vars
+      const cardEl = card as HTMLElement;
+      let rect = cardEl.getBoundingClientRect();
+      let rafId: number | null = null;
+      let pendingX = rect.width / 2;
+      let pendingY = rect.height / 2;
 
-        // US-018: 3D rotation - benefits from GPU acceleration
-        const rotateX = (y - 0.5) * -30;
-        const rotateY = (x - 0.5) * 30;
+      const rotateXTo = gsap.quickTo(cardEl, 'rotateX', { duration: 0.25, ease: 'power2.out' });
+      const rotateYTo = gsap.quickTo(cardEl, 'rotateY', { duration: 0.25, ease: 'power2.out' });
 
-        gsap.to(card, {
-          rotateX,
-          rotateY,
-          duration: 0.3,
-          ease: 'power2.out',
-          transformPerspective: 1000,
-        });
+      const thumbScaleTo = thumbnailImg
+        ? gsap.quickTo(thumbnailImg, 'scale', { duration: 0.25, ease: 'power2.out' })
+        : null;
 
-        // US-019: Shine effect follows mouse
-        const xPos = (mouseEvent.clientX - rect.left) / 1;
-        const yPos = (mouseEvent.clientY - rect.top) / 1;
-        if (shine) {
-          gsap.to(shine, {
-            opacity: 0.3,
-            duration: 0.3,
-            ease: 'power2.out',
-            background: `radial-gradient(circle 100px at ${xPos}px ${yPos}px, rgba(249, 115, 22, 0.4), transparent)`,
-          });
+      // Use CSS vars for shine so we don't rebuild gradients on every move
+      const setShineX = shine ? gsap.quickSetter(shine, '--mx', 'px') : null;
+      const setShineY = shine ? gsap.quickSetter(shine, '--my', 'px') : null;
+      const shineOpacityTo = shine ? gsap.quickTo(shine, 'opacity', { duration: 0.25, ease: 'power2.out' }) : null;
+
+      gsap.set(cardEl, { transformPerspective: 1000, transformStyle: 'preserve-3d' });
+      if (shine) {
+        gsap.set(shine, { opacity: 0 });
+        // Initialize shine position to center (prevents first-hover "jump")
+        if (setShineX && setShineY) {
+          setShineX(rect.width / 2);
+          setShineY(rect.height / 2);
+        }
+      }
+
+      const update = () => {
+        rafId = null;
+        const x = pendingX / rect.width;
+        const y = pendingY / rect.height;
+
+        rotateXTo((y - 0.5) * -24);
+        rotateYTo((x - 0.5) * 24);
+
+        if (setShineX && setShineY && shineOpacityTo) {
+          setShineX(pendingX);
+          setShineY(pendingY);
+          shineOpacityTo(0.35);
         }
 
-        // US-019: Thumbnail zoom to 1.1 on hover
-        if (thumbnail) {
-          gsap.to(thumbnail, {
-            scale: 1.1,
-            duration: 0.3,
-            ease: 'power2.out',
-            transformOrigin: 'center center',
-          });
+        if (thumbScaleTo) {
+          thumbScaleTo(1.08);
+        }
+      };
+
+      const handleMouseEnter = safe(() => {
+        rect = cardEl.getBoundingClientRect();
+      });
+
+      // CRITICAL: Wrap handlers in contextSafe() so they are cleaned up properly
+      const handleMouseMove = safe((e: Event) => {
+        const mouseEvent = e as MouseEvent;
+        pendingX = mouseEvent.clientX - rect.left;
+        pendingY = mouseEvent.clientY - rect.top;
+        if (rafId === null) {
+          rafId = window.requestAnimationFrame(update);
         }
       });
 
       const handleMouseLeave = safe(() => {
-        gsap.to(card, {
-          rotateX: 0,
-          rotateY: 0,
-          duration: 0.3,
-          ease: 'power2.out',
-          transformPerspective: 1000,
-        });
-
-        if (shine) {
-          gsap.to(shine, {
-            opacity: 0,
-            duration: 0.3,
-            ease: 'power2.out',
-          });
+        if (rafId !== null) {
+          window.cancelAnimationFrame(rafId);
+          rafId = null;
         }
-
-        if (thumbnail) {
-          gsap.to(thumbnail, {
-            scale: 1.0,
-            duration: 0.3,
-            ease: 'power2.out',
-            transformOrigin: 'center center',
-          });
-        }
+        rotateXTo(0);
+        rotateYTo(0);
+        if (shineOpacityTo) shineOpacityTo(0);
+        if (thumbScaleTo) thumbScaleTo(1);
       });
 
+      card.addEventListener('mouseenter', handleMouseEnter);
       card.addEventListener('mousemove', handleMouseMove);
       card.addEventListener('mouseleave', handleMouseLeave);
 
       cleanupFunctions.push(() => {
+        card.removeEventListener('mouseenter', handleMouseEnter);
         card.removeEventListener('mousemove', handleMouseMove);
         card.removeEventListener('mouseleave', handleMouseLeave);
       });
@@ -166,7 +175,7 @@ export function NewsSection({ prefersReducedMotion }: NewsSectionProps) {
       {/* Animated background */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Gradient backdrop */}
-        <div className="absolute inset-0 bg-gradient-to-b from-zinc-950 via-zinc-900/60 to-zinc-950" />
+        <div className="absolute inset-0 bg-linear-to-b from-zinc-950 via-zinc-900/60 to-zinc-950" />
 
         {/* Subtle orange ambient glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-orange-500/5 rounded-full blur-[200px] animate-pulse" style={{ animationDuration: '18s' }} />
@@ -198,10 +207,16 @@ export function NewsSection({ prefersReducedMotion }: NewsSectionProps) {
             <article
               key={article.id}
               className="news-card group relative bg-zinc-900/60 backdrop-blur-sm border border-zinc-800 overflow-hidden hover:border-orange-500/50 transition-all duration-300"
-              style={{ transformStyle: 'preserve-3d', willChange: 'transform' }}
+              style={{ transformStyle: 'preserve-3d' }}
             >
               {/* Shine effect overlay */}
-              <div className="news-shine absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200" style={{ willChange: 'opacity, background' }} />
+              <div
+                className="news-shine absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-200"
+                style={{
+                  // CSS-var-driven shine: cheaper than rebuilding the gradient string each mousemove
+                  background: 'radial-gradient(circle 120px at var(--mx) var(--my), rgba(249, 115, 22, 0.4), transparent)',
+                }}
+              />
 
               {/* Thumbnail with lazy loading */}
               <NewsThumbnail article={article} />
@@ -233,7 +248,7 @@ export function NewsSection({ prefersReducedMotion }: NewsSectionProps) {
               <div className="absolute bottom-0 right-0 w-0 h-0 border-b-2 border-r-2 border-orange-500 transition-all duration-500 ease-out group-hover:w-8 group-hover:h-8" />
 
               {/* Glow effect on hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-500/0 to-orange-500/0 transition-all duration-500 group-hover:from-orange-500/5 group-hover:to-orange-500/0 pointer-events-none" />
+              <div className="absolute inset-0 bg-linear-to-br from-orange-500/0 to-orange-500/0 transition-all duration-500 group-hover:from-orange-500/5 group-hover:to-orange-500/0 pointer-events-none" />
             </article>
           ))}
         </div>

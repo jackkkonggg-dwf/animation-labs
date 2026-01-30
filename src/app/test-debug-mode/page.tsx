@@ -3,7 +3,7 @@
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from '@/lib/gsap-config';
-import { DebugModeProvider, DebugModeToggle } from '@/components/DebugModeToggle';
+import { DebugModeProvider, DebugModeToggle } from '@/components/debug-mode-toggle';
 
 export default function TestDebugModePage() {
   const containerRef = useRef<HTMLDivElement>(null);

@@ -3,7 +3,8 @@
 import { useRef, useState } from 'react';
 import { useGSAP } from '@gsap/react';
 import { Draggable } from '@/lib/gsap-config';
-import { PatternHeader, CodeViewer } from '@/components/patterns';
+import { PatternHeader } from '@/components/patterns/pattern-header';
+import { CodeViewer } from '@/components/patterns/code-viewer';
 import { RelatedPatterns } from '@/components/patterns/related-patterns';
 import { PatternNavigation } from '@/components/patterns/pattern-navigation';
 import Link from 'next/link';

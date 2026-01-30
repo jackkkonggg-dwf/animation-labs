@@ -13,13 +13,13 @@
 'use client';
 
 import { useSyncExternalStore } from 'react';
-import { HeroSection } from './components/HeroSection';
-import { ServicesSection } from './components/ServicesSection';
-import { StatsSection } from './components/StatsSection';
-import { PortfolioSection } from './components/PortfolioSection';
-import { NewsSection } from './components/NewsSection';
-import { CtaSection } from './components/CtaSection';
-import { setFinalStateIfReducedMotion } from './lib/reduced-motion';
+import { HeroSection } from './_components/hero-section';
+import { ServicesSection } from './_components/services-section';
+import { StatsSection } from './_components/stats-section';
+import { PortfolioSection } from './_components/portfolio-section';
+import { NewsSection } from './_components/news-section';
+import { CtaSection } from './_components/cta-section';
+import { setFinalStateIfReducedMotion } from './_lib/reduced-motion';
 
 function subscribePrefersReducedMotion(onStoreChange: () => void) {
   const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');

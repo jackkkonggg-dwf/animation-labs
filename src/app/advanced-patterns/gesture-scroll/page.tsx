@@ -1,12 +1,12 @@
 'use client';
 
-import { CursorTrailSection } from './components/CursorTrailSection';
-import { VelocityScrollSection } from './components/VelocityScrollSection';
-import { DirectionScrollSection } from './components/DirectionScrollSection';
-import { SwipeGestureSection } from './components/SwipeGestureSection';
-import { PinchZoomSection } from './components/PinchZoomSection';
-import { HoverInterruptSection } from './components/HoverInterruptSection';
-import { ObserverSection } from './components/ObserverSection';
+import { CursorTrailSection } from './_components/cursor-trail-section';
+import { VelocityScrollSection } from './_components/velocity-scroll-section';
+import { DirectionScrollSection } from './_components/direction-scroll-section';
+import { SwipeGestureSection } from './_components/swipe-gesture-section';
+import { PinchZoomSection } from './_components/pinch-zoom-section';
+import { HoverInterruptSection } from './_components/hover-interrupt-section';
+import { ObserverSection } from './_components/observer-section';
 
 export default function GestureScrollPage() {
   return (

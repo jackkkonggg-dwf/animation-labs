@@ -3,7 +3,7 @@
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from '@/lib/gsap-config';
-import { PerformanceMetrics } from '@/components/PerformanceMetrics';
+import { PerformanceMetrics } from '@/components/performance-metrics';
 
 export default function TestPerformanceMetricsPage() {
   const containerRef = useRef<HTMLDivElement>(null);

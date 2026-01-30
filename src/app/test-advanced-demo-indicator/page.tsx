@@ -8,7 +8,7 @@ import {
   ActivePluginsProvider,
   useActivePlugins,
   type GSAPPlugin,
-} from '@/components/AdvancedDemoIndicator';
+} from '@/components/advanced-demo-indicator';
 
 // ============================================================================
 // TEST COMPONENTS FOR DIFFERENT PLUGINS

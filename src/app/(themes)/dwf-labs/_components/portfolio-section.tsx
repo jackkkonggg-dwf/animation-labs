@@ -12,8 +12,8 @@
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from '@/lib/gsap-config';
-import { PortfolioLogo } from './PortfolioLogo';
-import { portfolioCompanies } from '../lib/portfolio-logos';
+import { PortfolioLogo } from './portfolio-logo';
+import { portfolioCompanies } from '../_lib/portfolio-logos';
 
 interface PortfolioSectionProps {
   prefersReducedMotion: boolean;

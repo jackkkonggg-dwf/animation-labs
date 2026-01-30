@@ -11,7 +11,7 @@
 'use client';
 
 import { useRef, useState, useEffect } from 'react';
-import { NewsArticle } from '../lib/news-data';
+import { NewsArticle } from '../_lib/news-data';
 
 interface NewsThumbnailProps {
   article: NewsArticle;

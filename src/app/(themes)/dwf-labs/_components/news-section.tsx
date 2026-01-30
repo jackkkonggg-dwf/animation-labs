@@ -13,8 +13,8 @@
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap } from '@/lib/gsap-config';
-import { NewsThumbnail } from './NewsThumbnail';
-import { newsArticles } from '../lib/news-data';
+import { NewsThumbnail } from './news-thumbnail';
+import { newsArticles } from '../_lib/news-data';
 
 interface NewsSectionProps {
   prefersReducedMotion: boolean;

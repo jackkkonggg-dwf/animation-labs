@@ -223,7 +223,7 @@ export function StatsSection({ prefersReducedMotion }: StatsSectionProps) {
                   />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="stat-icon w-12 h-12 bg-zinc-800/80 backdrop-blur-sm rounded-lg flex items-center justify-center text-zinc-400 border border-zinc-700/50 transition-all duration-500 group-hover:bg-zinc-800 group-hover:scale-110 group-hover:shadow-[0_0_25px_-5px_rgba(249,115,22,0.3)]" style={{ willChange: 'transform, color' }}>
+                  <div className="stat-icon w-12 h-12 bg-zinc-800/80 backdrop-blur-sm rounded-lg flex items-center justify-center text-zinc-400 border border-zinc-700/50 transition-all duration-500 group-hover:bg-zinc-800 group-hover:scale-110 group-hover:shadow-[0_0_25px_-5px_rgba(249,115,22,0.3)]">
                     <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                     </svg>
@@ -267,7 +267,7 @@ export function StatsSection({ prefersReducedMotion }: StatsSectionProps) {
                   />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="stat-icon w-12 h-12 bg-zinc-800/80 backdrop-blur-sm rounded-lg flex items-center justify-center text-zinc-400 border border-zinc-700/50 transition-all duration-500 group-hover:bg-zinc-800 group-hover:scale-110 group-hover:shadow-[0_0_25px_-5px_rgba(249,115,22,0.3)]" style={{ willChange: 'transform, color' }}>
+                  <div className="stat-icon w-12 h-12 bg-zinc-800/80 backdrop-blur-sm rounded-lg flex items-center justify-center text-zinc-400 border border-zinc-700/50 transition-all duration-500 group-hover:bg-zinc-800 group-hover:scale-110 group-hover:shadow-[0_0_25px_-5px_rgba(249,115,22,0.3)]">
                     <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                     </svg>

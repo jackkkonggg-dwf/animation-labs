@@ -25,6 +25,11 @@ if (typeof window !== 'undefined') {
   // Helps avoid iOS Safari address-bar "resize" refresh jitter with pinned sections
   ScrollTrigger.config({ ignoreMobileResize: true });
 
+  // Chrome-specific optimization: force3D defaults to "auto" which optimizes GPU usage
+  // Important: Do NOT use will-change: transform on animated elements as it interferes
+  // with ScrollTrigger's position calculations in Chrome (causes flashing/jitter)
+  gsap.defaults({ force3D: 'auto' });
+
   // Set global defaults for animations
   gsap.defaults({
     ease: 'power3.out',

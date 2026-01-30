@@ -212,6 +212,48 @@ return () => {
 };
 ```
 
+## GSAP Chrome Performance Fixes
+
+**Chrome-specific scrolling issues**: Chrome-based browsers may exhibit flashing or jitter during scroll animations. This is caused by rendering conflicts between GSAP ScrollTrigger and CSS properties.
+
+### Root Cause
+
+According to GSAP documentation:
+> **`will-change: transform` can interfere with `position: fixed` behavior in browsers**, irrespective of GSAP or ScrollTrigger. Chrome uses transform-based pinning by default, and `will-change` creates rendering conflicts.
+
+### The Fix: Remove `will-change` Inline Styles
+
+**NEVER use inline `will-change` styles on animated elements:**
+
+```tsx
+// ❌ WRONG - Causes flashing in Chrome
+<div style={{ willChange: 'transform, color' }}>...</div>
+
+// ✅ CORRECT - Let GSAP handle GPU optimization
+<div>...</div>
+```
+
+### Why This Works
+
+| Issue | Explanation |
+|-------|-------------|
+| `will-change` creates new stacking contexts | Interferes with ScrollTrigger's position calculations |
+| Chrome handles scroll on separate thread | `will-change` exacerbates synchronization issues |
+| GSAP's `force3D: "auto"` is sufficient | Already handles GPU layer optimization correctly |
+
+### Correct GSAP Configuration
+
+```typescript
+// In gsap-config.ts
+gsap.defaults({ force3D: 'auto' }); // Let GSAP manage GPU layers
+```
+
+### Additional Chrome Optimizations
+
+- Use `scrub: true` (direct scroll linkage) instead of `scrub: 1` (with smoothing)
+- Use `invalidateOnRefresh: true` for proper resize handling
+- Avoid `will-change`, `transform: translateZ(0)`, and other manual GPU hints on animated elements
+
 ## GSAP ScrollTrigger Pin Configuration Pattern
 
 **Critical for multiple pinned sections**: When using `pin: true` with multiple sequential sections, proper configuration is essential to prevent blank sections, premature triggers, and overlapping animations.

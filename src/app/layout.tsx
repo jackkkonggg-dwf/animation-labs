@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Geist_Mono, Inter, Playfair_Display, Space_Grotesk } from "next/font/google";
-import "./globals.css";
-import { GSAPProvider } from "@/app/providers/gsap-provider";
-import { Navbar } from "@/app/components/navigation/navbar";
+import { Geist_Mono, Inter, Playfair_Display, Space_Grotesk } from 'next/font/google';
+import './globals.css';
+import { GSAPProvider } from '@/app/providers/gsap-provider';
+import { NavigationProvider } from '@/app/providers/navigation-provider';
+import { Navbar } from '@/app/components/navigation/navbar';
+import { MobileMenu } from '@/app/components/navigation/mobile-menu';
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -53,8 +55,11 @@ export default function RootLayout({
     >
       <body className={`${geistMono.variable} antialiased`}>
         <GSAPProvider />
-        <Navbar />
-        <div className="relative mt-[72px]">{children}</div>
+        <NavigationProvider>
+          <Navbar />
+          <MobileMenu />
+          <div className="relative mt-[72px]">{children}</div>
+        </NavigationProvider>
       </body>
     </html>
   );

@@ -4,7 +4,7 @@
 
 'use client';
 
-import { useState, useEffect, useRef, createContext, useContext } from 'react';
+import { useState, useEffect, useRef, createContext, use } from 'react';
 import { ScrollTrigger } from '@/lib/gsap-config';
 
 // ============================================================================
@@ -21,7 +21,7 @@ interface DebugModeContextValue {
 const DebugModeContext = createContext<DebugModeContextValue | undefined>(undefined);
 
 export function useDebugMode(): DebugModeContextValue {
-  const context = useContext(DebugModeContext);
+  const context = use(DebugModeContext);
   if (!context) {
     throw new Error('useDebugMode must be used within DebugModeProvider');
   }

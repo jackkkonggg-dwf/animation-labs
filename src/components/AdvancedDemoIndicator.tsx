@@ -4,7 +4,7 @@
 
 'use client';
 
-import { useState, useEffect, useRef, createContext, useContext } from 'react';
+import { useState, useEffect, useRef, createContext, use } from 'react';
 import type { ReactElement } from 'react';
 import { gsap, ScrollTrigger } from '@/lib/gsap-config';
 
@@ -42,7 +42,7 @@ interface ActivePluginsContextValue {
 const ActivePluginsContext = createContext<ActivePluginsContextValue | undefined>(undefined);
 
 export function useActivePlugins(): ActivePluginsContextValue {
-  const context = useContext(ActivePluginsContext);
+  const context = use(ActivePluginsContext);
   if (!context) {
     throw new Error('useActivePlugins must be used within ActivePluginsProvider');
   }

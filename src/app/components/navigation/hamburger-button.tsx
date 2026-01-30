@@ -3,20 +3,17 @@
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap } from '@/lib/gsap-config';
+import { useNavigation } from '@/app/providers/navigation-provider';
 
-interface HamburgerButtonProps {
-  isOpen: boolean;
-  onToggle: () => void;
-}
-
-export function HamburgerButton({ isOpen, onToggle }: HamburgerButtonProps) {
+export function HamburgerButton() {
+  const { isMenuOpen, toggleMenu } = useNavigation();
   const topLineRef = useRef<HTMLSpanElement>(null);
   const middleLineRef = useRef<HTMLSpanElement>(null);
   const bottomLineRef = useRef<HTMLSpanElement>(null);
   const containerRef = useRef<HTMLButtonElement>(null);
 
   useGSAP(() => {
-    if (isOpen) {
+    if (isMenuOpen) {
       // Animate to X with aggressive motion
       gsap.to(topLineRef.current, {
         rotate: 45,
@@ -69,15 +66,15 @@ export function HamburgerButton({ isOpen, onToggle }: HamburgerButtonProps) {
         ease: 'back.out(1.7)',
       });
     }
-  }, [isOpen]);
+  }, [isMenuOpen]);
 
   return (
     <button
       ref={containerRef}
-      onClick={onToggle}
+      onClick={toggleMenu}
       className="relative w-14 h-12 flex flex-col items-center justify-center gap-1.5 z-50 group"
-      aria-label={isOpen ? 'Close menu' : 'Open menu'}
-      aria-expanded={isOpen}
+      aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
+      aria-expanded={isMenuOpen}
     >
       {/* Industrial corner accents */}
       <span className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-orange-500/50" />

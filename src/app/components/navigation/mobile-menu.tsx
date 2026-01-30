@@ -8,13 +8,10 @@ import { HamburgerButton } from './hamburger-button';
 import { MenuItem } from './menu-item';
 import { NAVIGATION_DATA } from '@/lib/navigation-data';
 import type { NavigationRoute } from '@/types/navigation';
+import { useNavigation } from '@/app/providers/navigation-provider';
 
-interface MobileMenuProps {
-  isOpen: boolean;
-  onToggle: () => void;
-}
-
-export function MobileMenu({ isOpen, onToggle }: MobileMenuProps) {
+export function MobileMenu() {
+  const { isMenuOpen, closeMenu } = useNavigation();
   const overlayRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const menuItemsRef = useRef<HTMLDivElement>(null);
@@ -32,7 +29,7 @@ export function MobileMenu({ isOpen, onToggle }: MobileMenuProps) {
   ];
 
   useGSAP(() => {
-    if (isOpen) {
+    if (isMenuOpen) {
       // Animate overlay in with scan effect
       gsap.to(overlayRef.current, {
         opacity: 1,
@@ -92,11 +89,11 @@ export function MobileMenu({ isOpen, onToggle }: MobileMenuProps) {
         ease: 'power4.in',
       });
     }
-  }, [isOpen]);
+  }, [isMenuOpen]);
 
   // Prevent body scroll when menu is open
   useEffect(() => {
-    if (isOpen) {
+    if (isMenuOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -105,17 +102,16 @@ export function MobileMenu({ isOpen, onToggle }: MobileMenuProps) {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [isOpen]);
+  }, [isMenuOpen]);
 
+  // Only render the portal menu overlay (HamburgerButton is in Navbar)
   return (
     <>
-      <HamburgerButton isOpen={isOpen} onToggle={onToggle} />
-
       {isMounted && createPortal(
         <div
           ref={overlayRef}
           className="fixed inset-0 bg-black z-9999 opacity-0 pointer-events-none"
-          onClick={onToggle}
+          onClick={closeMenu}
         >
           {/* Industrial grid pattern overlay */}
           <div
@@ -157,7 +153,7 @@ export function MobileMenu({ isOpen, onToggle }: MobileMenuProps) {
                   <MenuItem
                     key={route.id}
                     route={route}
-                    onClose={onToggle}
+                    onClose={closeMenu}
                   />
                 ))}
               </nav>

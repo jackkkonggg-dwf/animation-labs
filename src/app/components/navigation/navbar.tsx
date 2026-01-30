@@ -3,7 +3,7 @@
 import { memo, useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { MobileMenu } from './mobile-menu';
+import { HamburgerButton } from './hamburger-button';
 
 /**
  * NavbarProgress - Memoized progress bar component
@@ -28,10 +28,11 @@ const NavbarProgress = memo(function NavbarProgress({ scrollProgress }: { scroll
 /**
  * Navbar - Memoized navigation header
  * Prevents unnecessary re-renders during scroll events
+ *
+ * Navigation state is managed by NavigationProvider context.
  */
 export const Navbar = memo(function Navbar() {
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
 
   // Extract route ID from pathname (remove leading slash)
@@ -41,11 +42,6 @@ export const Navbar = memo(function Navbar() {
   const handleProgressUpdate = useCallback((event: Event) => {
     const customEvent = event as CustomEvent<number>;
     setScrollProgress(customEvent.detail);
-  }, []);
-
-  // Memoize menu toggle to prevent re-creating on every render
-  const handleMenuToggle = useCallback(() => {
-    setIsMenuOpen(prev => !prev);
   }, []);
 
   useEffect(() => {
@@ -81,7 +77,8 @@ export const Navbar = memo(function Navbar() {
             </div>
           </Link>
 
-          <MobileMenu isOpen={isMenuOpen} onToggle={handleMenuToggle} />
+          {/* Hamburger button for mobile menu */}
+          <HamburgerButton />
         </div>
       </header>
     </>

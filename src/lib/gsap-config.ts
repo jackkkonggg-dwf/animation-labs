@@ -22,15 +22,20 @@ if (typeof window !== 'undefined') {
     Observer
   );
 
+  // Helps avoid iOS Safari address-bar "resize" refresh jitter with pinned sections
+  ScrollTrigger.config({ ignoreMobileResize: true });
+
   // Set global defaults for animations
   gsap.defaults({
     ease: 'power3.out',
     duration: 0.5,
   });
 
-  // Normalize scroll to prevent flickering across browsers/devices
-  // especially on iOS Safari and mobile devices
-  // ScrollTrigger.normalizeScroll(true);
+  // Normalize scroll to prevent flickering on many mobile browsers (esp. iOS Safari).
+  // Keep it touch-only to avoid changing desktop scroll feel.
+  if (ScrollTrigger.isTouch) {
+    ScrollTrigger.normalizeScroll(true);
+  }
 }
 
 // Export GSAP and plugins for use in components

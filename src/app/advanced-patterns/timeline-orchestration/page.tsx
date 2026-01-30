@@ -258,18 +258,6 @@ export default function TimelineOrchestrationPage() {
   return (
     <div className="min-h-screen bg-zinc-950 py-20 px-4">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-2 h-8 bg-orange-500"></div>
-            <h1 className="text-4xl font-bold uppercase tracking-tight text-zinc-100">
-              Timeline Orchestration
-            </h1>
-          </div>
-          <p className="text-zinc-400 text-sm uppercase tracking-wide">
-            Complex Timeline Composition with Labels, Callbacks, and Independent Controls
-          </p>
-        </div>
 
         {/* Info Banner */}
         <div className="bg-zinc-900 border border-zinc-800 p-4 mb-8 flex items-center justify-between">

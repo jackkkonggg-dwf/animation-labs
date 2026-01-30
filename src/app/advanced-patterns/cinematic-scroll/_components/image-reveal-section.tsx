@@ -28,7 +28,8 @@ export function ImageRevealSection() {
         scrub: 1,
         pin: true,
         pinSpacing: true,
-        anticipatePin: 1,
+        // Slightly higher to reduce 1-frame "flash" with fast scroll + pin (GSAP docs)
+        anticipatePin: 2,
         invalidateOnRefresh: true,
       },
     });
@@ -127,7 +128,7 @@ export function ImageRevealSection() {
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef} className="relative h-screen overflow-hidden bg-gradient-to-br from-zinc-950 via-zinc-900 to-orange-950">
+    <section ref={containerRef} className="relative h-svh overflow-hidden bg-linear-to-br from-zinc-950 via-zinc-900 to-orange-950">
       {/* Particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(20)].map((_, i) => (

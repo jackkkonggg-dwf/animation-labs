@@ -10,7 +10,6 @@ export function VelocityScrollSection() {
   const scrollState = useScrollState({ updateInterval: 16 });
   const [displayVelocity, setDisplayVelocity] = useState(0);
   const smoothedVelocityRef = useRef({ value: 0 });
-  const meterTextRef = useRef<HTMLParagraphElement>(null);
   const currentVelocityRef = useRef(0);
   const [, startTransition] = useTransition();
 
@@ -25,8 +24,10 @@ export function VelocityScrollSection() {
     const elements = {
       cards: container.querySelectorAll('.velocity-card'),
       meter: container.querySelector('.velocity-meter') as HTMLElement,
-      meterText: meterTextRef.current,
     };
+
+    // Important: don't let React props fight GSAP. Set initial meter width here.
+    gsap.set(elements.meter, { width: '0%' });
 
     gsap.from(elements.cards, {
       y: 100,
@@ -66,10 +67,6 @@ export function VelocityScrollSection() {
       meterWidthSetter(meterPercent);
       meterBgSetter(isFast ? '#ef4444' : velocityInPxPerSecond > 700 ? '#f59e0b' : '#22c55e');
 
-      if (elements.meterText) {
-        elements.meterText.textContent = `${velocityInPxPerSecond.toFixed(0)} px/s`;
-      }
-
       const scale = 1 + Math.min(velocityInPxPerSecond * 0.0001, 0.3);
       cardsScaleSetter(scale);
 
@@ -90,7 +87,7 @@ export function VelocityScrollSection() {
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef} className="relative py-32 bg-gradient-to-br from-zinc-900 via-zinc-950 to-orange-950">
+    <section ref={containerRef} className="relative py-32 bg-linear-to-br from-zinc-900 via-zinc-950 to-orange-950">
       <div className="relative z-10 max-w-6xl mx-auto px-6">
         <p className="text-orange-500 text-sm font-mono uppercase tracking-[0.3em] mb-4">
           useScrollVelocity()
@@ -101,9 +98,9 @@ export function VelocityScrollSection() {
         </h2>
 
         <div className="mb-12 bg-zinc-800 rounded-full h-6 overflow-hidden border border-zinc-700">
-          <div className="velocity-meter h-full bg-green-500" style={{ width: `0%` }} />
+          <div className="velocity-meter h-full bg-green-500" />
         </div>
-        <p ref={meterTextRef} className="velocity-meter-text text-zinc-400 font-mono text-sm mb-12">
+        <p className="velocity-meter-text text-zinc-400 font-mono text-sm mb-12">
           {(displayVelocity * 1000).toFixed(0)} px/s
         </p>
 

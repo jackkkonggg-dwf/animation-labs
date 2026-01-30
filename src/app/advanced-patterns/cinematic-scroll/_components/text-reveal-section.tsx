@@ -26,7 +26,8 @@ export function TextRevealSection() {
         scrub: 1,
         pin: true,
         pinSpacing: true,
-        anticipatePin: 1,
+        // Slightly higher to reduce 1-frame "flash" with fast scroll + pin (GSAP docs)
+        anticipatePin: 2,
         invalidateOnRefresh: true,
       },
     });
@@ -88,7 +89,7 @@ export function TextRevealSection() {
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef} className="reveal-bg relative h-screen overflow-hidden bg-zinc-950">
+    <section ref={containerRef} className="reveal-bg relative h-svh overflow-hidden bg-zinc-950">
       {/* Animated circle */}
       <div className="reveal-circle absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl" />
 

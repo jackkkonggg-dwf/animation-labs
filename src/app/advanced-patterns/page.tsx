@@ -167,22 +167,6 @@ export default function AdvancedPatternsPage() {
 
   return (
     <main className="min-h-screen bg-zinc-950">
-      {/* Info banner */}
-      <div className="sticky top-[72px] z-40 bg-zinc-900/95 backdrop-blur border-b border-zinc-800">
-        <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <span className="text-orange-500 text-xs font-black tracking-[0.2em] uppercase">
-              Advanced Patterns
-            </span>
-            <span className="text-zinc-600">|</span>
-            <span className="text-zinc-400 text-sm">Expert-level GSAP demos</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-            <span className="text-zinc-500 text-xs font-mono">{ADVANCED_DEMOS.length} DEMOS</span>
-          </div>
-        </div>
-      </div>
 
       {/* Main content */}
       <section ref={containerRef} className="pt-32 md:pt-40 pb-16 px-4 md:px-6 relative overflow-hidden">

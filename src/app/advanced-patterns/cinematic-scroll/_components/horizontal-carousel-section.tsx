@@ -49,7 +49,8 @@ export function HorizontalCarouselSection() {
       scrub: 1,
       pin: true,
       pinSpacing: true,
-      anticipatePin: 1,
+      // Slightly higher to reduce 1-frame "flash" with fast scroll + pin (GSAP docs)
+      anticipatePin: 2,
       invalidateOnRefresh: true,
       animation: gsap.to(wrapper, {
         x: () => -scrollDistance,
@@ -105,7 +106,7 @@ export function HorizontalCarouselSection() {
   return (
     <section
       ref={containerRef}
-      className="horizontal-carousel-section h-screen w-full overflow-hidden bg-zinc-950"
+      className="horizontal-carousel-section h-svh w-full overflow-hidden bg-zinc-950"
     >
       <div
         ref={wrapperRef}
@@ -114,7 +115,7 @@ export function HorizontalCarouselSection() {
         {CAROUSEL_ITEMS.map((item) => (
           <div
             key={item.id}
-            className="carousel-panel flex-shrink-0 w-screen h-screen flex items-center justify-center px-6 md:px-12 relative"
+            className="carousel-panel shrink-0 w-screen h-svh flex items-center justify-center px-6 md:px-12 relative"
           >
             {/* Background accent */}
             <div className="absolute inset-0">

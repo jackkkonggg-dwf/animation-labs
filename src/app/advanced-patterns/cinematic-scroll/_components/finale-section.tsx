@@ -27,7 +27,8 @@ export function FinaleSection() {
         scrub: 1,
         pin: true,
         pinSpacing: true,
-        anticipatePin: 1,
+        // Slightly higher to reduce 1-frame "flash" with fast scroll + pin (GSAP docs)
+        anticipatePin: 2,
         invalidateOnRefresh: true,
       },
     });
@@ -97,7 +98,7 @@ export function FinaleSection() {
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef} className="relative h-screen overflow-hidden bg-zinc-950">
+    <section ref={containerRef} className="relative h-svh overflow-hidden bg-zinc-950">
       {/* Decorative shapes */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(12)].map((_, i) => (

@@ -27,7 +27,8 @@ export function HeroSection() {
         scrub: 1,
         pin: true,
         pinSpacing: true,
-        anticipatePin: 1,
+        // Slightly higher to reduce 1-frame "flash" with fast scroll + pin (GSAP docs)
+        anticipatePin: 2,
         invalidateOnRefresh: true,
       },
     });
@@ -99,9 +100,9 @@ export function HeroSection() {
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef} className="relative h-screen overflow-hidden">
+    <section ref={containerRef} className="relative h-svh overflow-hidden">
       {/* Background with parallax */}
-      <div className="hero-bg absolute inset-0 bg-gradient-to-br from-zinc-900 via-zinc-800 to-orange-950">
+      <div className="hero-bg absolute inset-0 bg-linear-to-br from-zinc-900 via-zinc-800 to-orange-950">
         <div className="absolute inset-0 opacity-20" style={{
           backgroundImage: `
             linear-gradient(to right, #ffffff 1px, transparent 1px),

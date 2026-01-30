@@ -12,8 +12,7 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
-import { ScrollTrigger } from '@/lib/gsap-config';
+import { useSyncExternalStore } from 'react';
 import { HeroSection } from './components/HeroSection';
 import { ServicesSection } from './components/ServicesSection';
 import { StatsSection } from './components/StatsSection';
@@ -22,40 +21,23 @@ import { NewsSection } from './components/NewsSection';
 import { CtaSection } from './components/CtaSection';
 import { setFinalStateIfReducedMotion } from './lib/reduced-motion';
 
+function subscribePrefersReducedMotion(onStoreChange: () => void) {
+  const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  mediaQuery.addEventListener('change', onStoreChange);
+  return () => mediaQuery.removeEventListener('change', onStoreChange);
+}
+
+function getPrefersReducedMotionSnapshot() {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
 export default function DWFLabsPage() {
   // US-026: Check for reduced motion preference
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-
-  useEffect(() => {
-    // Check if user prefers reduced motion
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReducedMotion(mediaQuery.matches);
-
-    // Listen for changes in preference
-    const handleChange = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
-    mediaQuery.addEventListener('change', handleChange);
-
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
-
-  // CRITICAL: Kill all ScrollTriggers when component unmounts/navigates away
-  // This prevents memory leaks and high CPU usage on other pages
-  useEffect(() => {
-    return () => {
-      const allTriggers = ScrollTrigger.getAll();
-      allTriggers.forEach((trigger) => {
-        trigger.kill(true); // true = also remove scroll listeners
-      });
-
-      // Also clear any matchMedia listeners
-      ScrollTrigger.clearMatchMedia();
-
-      // Debug logging to verify cleanup (remove in production)
-      if (process.env.NODE_ENV === 'development') {
-        console.log('[DWF Labs] Cleaned up', allTriggers.length, 'ScrollTriggers');
-      }
-    };
-  }, []);
+  const prefersReducedMotion = useSyncExternalStore(
+    subscribePrefersReducedMotion,
+    getPrefersReducedMotionSnapshot,
+    () => false,
+  );
 
   return (
     <main className="min-h-screen bg-zinc-950 overflow-x-hidden">
